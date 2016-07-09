@@ -38,6 +38,7 @@
             this.comboBox_DictionaryWords = new System.Windows.Forms.ComboBox();
             this.comboBox_DictionaryEncoding = new System.Windows.Forms.ComboBox();
             this.label_DictionaryEncoding = new System.Windows.Forms.Label();
+            this.button_AddToDB = new System.Windows.Forms.Button();
             this.groupBox_Dictionary.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +57,9 @@
             // 
             // textBox_DictionaryPath
             // 
-            this.textBox_DictionaryPath.Location = new System.Drawing.Point(44, 18);
+            this.textBox_DictionaryPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_DictionaryPath.Location = new System.Drawing.Point(44, 15);
             this.textBox_DictionaryPath.Name = "textBox_DictionaryPath";
             this.textBox_DictionaryPath.Size = new System.Drawing.Size(207, 20);
             this.textBox_DictionaryPath.TabIndex = 1;
@@ -64,7 +67,8 @@
             // 
             // button_OpenDictionary
             // 
-            this.button_OpenDictionary.Location = new System.Drawing.Point(257, 17);
+            this.button_OpenDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_OpenDictionary.Location = new System.Drawing.Point(257, 12);
             this.button_OpenDictionary.Name = "button_OpenDictionary";
             this.button_OpenDictionary.Size = new System.Drawing.Size(75, 23);
             this.button_OpenDictionary.TabIndex = 2;
@@ -74,8 +78,9 @@
             // 
             // button_LoadDictionary
             // 
+            this.button_LoadDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_LoadDictionary.Enabled = false;
-            this.button_LoadDictionary.Location = new System.Drawing.Point(257, 47);
+            this.button_LoadDictionary.Location = new System.Drawing.Point(257, 42);
             this.button_LoadDictionary.Name = "button_LoadDictionary";
             this.button_LoadDictionary.Size = new System.Drawing.Size(75, 23);
             this.button_LoadDictionary.TabIndex = 3;
@@ -85,6 +90,8 @@
             // 
             // groupBox_Dictionary
             // 
+            this.groupBox_Dictionary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_Dictionary.Controls.Add(this.textBox_DictionaryEntry);
             this.groupBox_Dictionary.Controls.Add(this.comboBox_DictionaryWords);
             this.groupBox_Dictionary.Controls.Add(this.button_LoadDictionary);
@@ -102,10 +109,12 @@
             // 
             // textBox_DictionaryEntry
             // 
-            this.textBox_DictionaryEntry.Location = new System.Drawing.Point(9, 108);
+            this.textBox_DictionaryEntry.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_DictionaryEntry.Location = new System.Drawing.Point(6, 108);
             this.textBox_DictionaryEntry.Multiline = true;
             this.textBox_DictionaryEntry.Name = "textBox_DictionaryEntry";
-            this.textBox_DictionaryEntry.Size = new System.Drawing.Size(461, 168);
+            this.textBox_DictionaryEntry.Size = new System.Drawing.Size(464, 168);
             this.textBox_DictionaryEntry.TabIndex = 6;
             // 
             // comboBox_DictionaryWords
@@ -119,9 +128,11 @@
             // 
             // comboBox_DictionaryEncoding
             // 
+            this.comboBox_DictionaryEncoding.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox_DictionaryEncoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_DictionaryEncoding.FormattingEnabled = true;
-            this.comboBox_DictionaryEncoding.Location = new System.Drawing.Point(71, 48);
+            this.comboBox_DictionaryEncoding.Location = new System.Drawing.Point(71, 44);
             this.comboBox_DictionaryEncoding.Name = "comboBox_DictionaryEncoding";
             this.comboBox_DictionaryEncoding.Size = new System.Drawing.Size(180, 21);
             this.comboBox_DictionaryEncoding.Sorted = true;
@@ -136,11 +147,22 @@
             this.label_DictionaryEncoding.TabIndex = 3;
             this.label_DictionaryEncoding.Text = "&Encoding:";
             // 
+            // button_AddToDB
+            // 
+            this.button_AddToDB.Location = new System.Drawing.Point(12, 301);
+            this.button_AddToDB.Name = "button_AddToDB";
+            this.button_AddToDB.Size = new System.Drawing.Size(75, 23);
+            this.button_AddToDB.TabIndex = 5;
+            this.button_AddToDB.Text = "&Add to...";
+            this.button_AddToDB.UseVisualStyleBackColor = true;
+            this.button_AddToDB.Click += new System.EventHandler(this.button_AddToDB_Click);
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(500, 316);
+            this.ClientSize = new System.Drawing.Size(500, 563);
+            this.Controls.Add(this.button_AddToDB);
             this.Controls.Add(this.groupBox_Dictionary);
             this.Name = "Form_Main";
             this.Text = "Add dictionary to database";
@@ -162,6 +184,7 @@
         private System.Windows.Forms.Label label_DictionaryEncoding;
         private System.Windows.Forms.ComboBox comboBox_DictionaryWords;
         private System.Windows.Forms.TextBox textBox_DictionaryEntry;
+        private System.Windows.Forms.Button button_AddToDB;
     }
 }
 

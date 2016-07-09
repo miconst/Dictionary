@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
+using MySql.Data;
+using MySql.Data.MySqlClient;
+
 namespace AddDictionaryToDB
 {
     public partial class Form_Main : Form
@@ -22,7 +25,7 @@ namespace AddDictionaryToDB
             {
                 var li = new EncodingListItem(ei.GetEncoding());
                 comboBox_DictionaryEncoding.Items.Add(li);
-                if(li.e.Equals(Encoding.UTF8))
+                if (li.e.Equals(Encoding.UTF8))
                 {
                     comboBox_DictionaryEncoding.SelectedItem = li;
                 }
@@ -32,7 +35,7 @@ namespace AddDictionaryToDB
 
         private void button_OpenDictionary_Click(object sender, EventArgs e)
         {
-            if(openFileDialog_Dictionary.ShowDialog() == DialogResult.OK)
+            if (openFileDialog_Dictionary.ShowDialog() == DialogResult.OK)
             {
                 textBox_DictionaryPath.Text = openFileDialog_Dictionary.FileName;
             }
@@ -59,7 +62,7 @@ namespace AddDictionaryToDB
                     }
                     else
                     {
-                        if(fi != null)
+                        if (fi != null)
                         {
                             fi.entry = entry.ToArray();
                             entry.Clear();
@@ -79,8 +82,6 @@ namespace AddDictionaryToDB
                 button_LoadDictionary.Enabled = true;
 
             }
-
-
         }
 
         private void textBox_DictionaryPath_TextChanged(object sender, EventArgs e)
@@ -92,6 +93,78 @@ namespace AddDictionaryToDB
         {
             DictionaryFileItem fi = (DictionaryFileItem)comboBox_DictionaryWords.SelectedItem;
             textBox_DictionaryEntry.Lines = fi.entry;
+        }
+
+        private void button_AddToDB_Click(object sender, EventArgs e)
+        {
+            ////////////////////////////
+            string DB_HOST = "localhost";
+            string DB_NAME = "dictionary"; //"publications";
+            string DB_USER = "test_user";
+            string DB_PASS = "12345670";
+
+            string connStr = string.Format("server={0};user={1};database={2};port=3306;password={3};charset=utf8;",
+                DB_HOST, DB_USER, DB_NAME, DB_PASS);
+
+            // Create a connection object.
+            MySqlConnection conn = new MySqlConnection(connStr);
+            try
+            {
+                // Open the connection.
+                conn.Open();
+
+                Encoding enc = ((EncodingListItem)comboBox_DictionaryEncoding.SelectedItem).e;
+
+                using (var sm = new StreamReader(textBox_DictionaryPath.Text, enc))
+                {
+                    button_LoadDictionary.Enabled = false;
+                    button_AddToDB.Enabled = false;
+
+                    MySqlCommand cmd = null;
+                    string query = "INSERT INTO words(auto, word, info, book) VALUES(NULL, @word, @info, '5')";
+                    string info = string.Empty;
+
+                    while (!sm.EndOfStream)
+                    {
+                        string s = sm.ReadLine();
+                        if (s.StartsWith("\t"))
+                        {
+                            info += s.Substring(1) + "\n";
+                        }
+                        else
+                        {
+                            if (info != string.Empty)
+                            {
+                                // Perform database operations here.
+                                //info = MySql.Data.MySqlClient.MySqlHelper.EscapeString(info);
+                                cmd.Parameters.AddWithValue("@info", info);
+                                cmd.ExecuteNonQuery();
+                                info = string.Empty;
+                            }
+                            cmd = new MySqlCommand(query, conn);
+                            //MySql.Data.MySqlClient.MySqlHelper.EscapeString(s);
+                            cmd.Parameters.AddWithValue("@word", s);
+                        }
+                    }
+                    if (info != string.Empty)
+                    {
+                        //info = MySql.Data.MySqlClient.MySqlHelper.EscapeString(info);
+                        cmd.Parameters.AddWithValue("@info", info);
+                        cmd.ExecuteNonQuery();
+                        info = string.Empty;
+                    }
+
+                    button_LoadDictionary.Enabled = true;
+                    button_AddToDB.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            // Close the connection to the database.
+            conn.Close();
+
         }
     }
 
