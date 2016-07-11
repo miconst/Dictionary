@@ -16,6 +16,8 @@ namespace AddDictionaryToDB
 {
     public partial class Form_Main : Form
     {
+        MySqlConnection conn;
+
         public Form_Main()
         {
             InitializeComponent();
@@ -49,6 +51,7 @@ namespace AddDictionaryToDB
             {
                 button_LoadDictionary.Enabled = false;
                 comboBox_DictionaryWords.BeginUpdate();
+                comboBox_DictionaryWords.Items.Clear();
 
                 DictionaryFileItem fi = null;
                 List<string> entry = new List<string>();
@@ -66,6 +69,12 @@ namespace AddDictionaryToDB
                         {
                             fi.entry = entry.ToArray();
                             entry.Clear();
+                            fi = null;
+
+                            if (comboBox_DictionaryWords.Items.Count >= 100)
+                            {
+                                break;
+                            }
                         }
                         fi = new DictionaryFileItem(s, null);
                         comboBox_DictionaryWords.Items.Add(fi);
@@ -79,6 +88,7 @@ namespace AddDictionaryToDB
                 }
 
                 comboBox_DictionaryWords.EndUpdate();
+                comboBox_DictionaryWords.SelectedIndex = 0;
                 button_LoadDictionary.Enabled = true;
 
             }
@@ -87,6 +97,7 @@ namespace AddDictionaryToDB
         private void textBox_DictionaryPath_TextChanged(object sender, EventArgs e)
         {
             button_LoadDictionary.Enabled = File.Exists(textBox_DictionaryPath.Text);
+            textBox_DB_DictionaryName_TextChanged(sender, e);
         }
 
         private void comboBox_DictionaryWords_SelectedIndexChanged(object sender, EventArgs e)
@@ -97,33 +108,46 @@ namespace AddDictionaryToDB
 
         private void button_AddToDB_Click(object sender, EventArgs e)
         {
-            ////////////////////////////
-            string DB_HOST = "localhost";
-            string DB_NAME = "dictionary"; //"publications";
-            string DB_USER = "test_user";
-            string DB_PASS = "12345670";
-
-            string connStr = string.Format("server={0};user={1};database={2};port=3306;password={3};charset=utf8;",
-                DB_HOST, DB_USER, DB_NAME, DB_PASS);
-
-            // Create a connection object.
-            MySqlConnection conn = new MySqlConnection(connStr);
             try
             {
-                // Open the connection.
-                conn.Open();
+                // Insert a new book into books table.
+                string query = "INSERT INTO books(id, name, info) VALUES(NULL, @name, @info)";
+                var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", textBox_DB_DictionaryName.Text);
+                cmd.Parameters.AddWithValue("@info", textBox_DB_DictionaryInfo.Text);
+                cmd.ExecuteNonQuery();
+                string table_name = "book_" + cmd.LastInsertedId.ToString();
 
+                // Create our book table.
+                string word_collation = comboBox_DB_Collation_Word.SelectedItem.ToString();
+                string desc_collation = comboBox_DB_Collation_Desc.SelectedItem.ToString();
+
+                query = "SELECT CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.COLLATIONS WHERE COLLATION_NAME=@name";
+                cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", word_collation);
+                string word_charset = cmd.ExecuteScalar().ToString();
+                cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", desc_collation);
+                string desc_charset = cmd.ExecuteScalar().ToString();
+
+                query = string.Format(
+                    "CREATE TABLE {0}(id INT NULL AUTO_INCREMENT,"
+                    + "word VARCHAR(128) CHARACTER SET {1} COLLATE {2} NOT NULL,"
+                    + "definition TEXT CHARACTER SET {3} COLLATE {4} NOT NULL,"
+                    + "PRIMARY KEY(id), INDEX(word)) ENGINE = MyISAM",
+                    table_name,
+                    word_charset, word_collation,
+                    desc_charset, desc_collation
+                    );
+                cmd = new MySqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
+
+                // Fill it in.
+                query = "INSERT INTO " + table_name + "(id, word, definition) VALUES(NULL, @word, @info)";
                 Encoding enc = ((EncodingListItem)comboBox_DictionaryEncoding.SelectedItem).e;
-
                 using (var sm = new StreamReader(textBox_DictionaryPath.Text, enc))
                 {
-                    button_LoadDictionary.Enabled = false;
-                    button_AddToDB.Enabled = false;
-
-                    MySqlCommand cmd = null;
-                    string query = "INSERT INTO words(auto, word, info, book) VALUES(NULL, @word, @info, '5')";
                     string info = string.Empty;
-
                     while (!sm.EndOfStream)
                     {
                         string s = sm.ReadLine();
@@ -153,17 +177,86 @@ namespace AddDictionaryToDB
                         cmd.ExecuteNonQuery();
                         info = string.Empty;
                     }
-
-                    button_LoadDictionary.Enabled = true;
-                    button_AddToDB.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                textBox_DatabaseLog.Text = ex.ToString();
             }
-            // Close the connection to the database.
-            conn.Close();
+        }
+
+        private void button_ConnectToDB_Click(object sender, EventArgs e)
+        {
+            ((Control)sender).Enabled = false;
+
+            ////////////////////////////
+            string DB_HOST = "localhost";
+            string DB_NAME = "dictionary";
+            string DB_USER = "test_user";
+            string DB_PASS = "12345670";
+
+            string connStr = string.Format("server={0};user={1};database={2};port=3306;password={3};charset=utf8;",
+                DB_HOST, DB_USER, DB_NAME, DB_PASS);
+
+            // Create a connection object.
+            conn = new MySqlConnection(connStr);
+            try
+            {
+                // Open the connection.
+                conn.Open();
+
+                string query = "SELECT DISTINCT COLLATION_NAME FROM INFORMATION_SCHEMA.COLLATIONS ORDER BY COLLATION_NAME";
+                var cmd = new MySqlCommand(query, conn);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+
+                comboBox_DB_Collation_Word.Update();
+                comboBox_DB_Collation_Word.Items.Clear();
+                comboBox_DB_Collation_Desc.Update();
+                comboBox_DB_Collation_Desc.Items.Clear();
+
+                while (rdr.Read())
+                {
+                    comboBox_DB_Collation_Word.Items.Add(rdr[0]);
+                    comboBox_DB_Collation_Desc.Items.Add(rdr[0]);
+                }
+                rdr.Close();
+
+                comboBox_DB_Collation_Word.SelectedItem = "utf16_unicode_ci";
+                comboBox_DB_Collation_Desc.SelectedItem = "utf16_unicode_ci";
+
+                comboBox_DB_Collation_Word.EndUpdate();
+                comboBox_DB_Collation_Desc.EndUpdate();
+
+            }
+            catch (Exception ex)
+            {
+                conn = null;
+                textBox_DatabaseLog.Text = ex.ToString();
+                ((Control)sender).Enabled = true;
+            }
+        }
+
+        private void textBox_DB_DictionaryName_TextChanged(object sender, EventArgs e)
+        {
+            button_AddToDB.Enabled
+                 = button_LoadDictionary.Enabled
+                && textBox_DB_DictionaryName.Text.Length > 0
+                && conn != null
+                ;
+        }
+
+        private void label_DB_DictionaryName_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label_DB_DictionaryInfo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox_DB_DictionaryInfo_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }
