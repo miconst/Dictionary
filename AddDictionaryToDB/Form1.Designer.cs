@@ -36,6 +36,8 @@
             this.groupBox_Dictionary = new System.Windows.Forms.GroupBox();
             this.textBox_DictionaryEntry = new System.Windows.Forms.TextBox();
             this.groupBox_Database = new System.Windows.Forms.GroupBox();
+            this.comboBox_DB_Dictionaries = new System.Windows.Forms.ComboBox();
+            this.button_DB_Replace = new System.Windows.Forms.Button();
             this.groupBox_DB_Collation = new System.Windows.Forms.GroupBox();
             this.comboBox_DB_Collation_Desc = new System.Windows.Forms.ComboBox();
             this.comboBox_DB_Collation_Word = new System.Windows.Forms.ComboBox();
@@ -45,7 +47,7 @@
             this.label_DB_DictionaryInfo = new System.Windows.Forms.Label();
             this.textBox_DatabaseLog = new System.Windows.Forms.TextBox();
             this.textBox_DB_DictionaryName = new System.Windows.Forms.TextBox();
-            this.button_AddToDB = new System.Windows.Forms.Button();
+            this.button_DB_Add = new System.Windows.Forms.Button();
             this.label_DB_DictionaryName = new System.Windows.Forms.Label();
             this.button_ConnectToDB = new System.Windows.Forms.Button();
             this.comboBox_DictionaryWords = new System.Windows.Forms.ComboBox();
@@ -129,12 +131,14 @@
             // groupBox_Database
             // 
             this.groupBox_Database.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox_Database.Controls.Add(this.comboBox_DB_Dictionaries);
+            this.groupBox_Database.Controls.Add(this.button_DB_Replace);
             this.groupBox_Database.Controls.Add(this.groupBox_DB_Collation);
             this.groupBox_Database.Controls.Add(this.textBox_DB_DictionaryInfo);
             this.groupBox_Database.Controls.Add(this.label_DB_DictionaryInfo);
             this.groupBox_Database.Controls.Add(this.textBox_DatabaseLog);
             this.groupBox_Database.Controls.Add(this.textBox_DB_DictionaryName);
-            this.groupBox_Database.Controls.Add(this.button_AddToDB);
+            this.groupBox_Database.Controls.Add(this.button_DB_Add);
             this.groupBox_Database.Controls.Add(this.label_DB_DictionaryName);
             this.groupBox_Database.Controls.Add(this.button_ConnectToDB);
             this.groupBox_Database.Location = new System.Drawing.Point(466, 0);
@@ -143,6 +147,26 @@
             this.groupBox_Database.TabIndex = 6;
             this.groupBox_Database.TabStop = false;
             this.groupBox_Database.Text = "Database";
+            // 
+            // comboBox_DB_Dictionaries
+            // 
+            this.comboBox_DB_Dictionaries.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_DB_Dictionaries.FormattingEnabled = true;
+            this.comboBox_DB_Dictionaries.Location = new System.Drawing.Point(9, 40);
+            this.comboBox_DB_Dictionaries.Name = "comboBox_DB_Dictionaries";
+            this.comboBox_DB_Dictionaries.Size = new System.Drawing.Size(169, 21);
+            this.comboBox_DB_Dictionaries.TabIndex = 8;
+            this.comboBox_DB_Dictionaries.SelectedIndexChanged += new System.EventHandler(this.comboBox_DB_Dictionaries_SelectedIndexChanged);
+            // 
+            // button_DB_Replace
+            // 
+            this.button_DB_Replace.Location = new System.Drawing.Point(494, 42);
+            this.button_DB_Replace.Name = "button_DB_Replace";
+            this.button_DB_Replace.Size = new System.Drawing.Size(75, 23);
+            this.button_DB_Replace.TabIndex = 7;
+            this.button_DB_Replace.Text = "&Replace";
+            this.button_DB_Replace.UseVisualStyleBackColor = true;
+            this.button_DB_Replace.Click += new System.EventHandler(this.button_DB_Replace_Click);
             // 
             // groupBox_DB_Collation
             // 
@@ -200,7 +224,6 @@
             this.textBox_DB_DictionaryInfo.Name = "textBox_DB_DictionaryInfo";
             this.textBox_DB_DictionaryInfo.Size = new System.Drawing.Size(244, 129);
             this.textBox_DB_DictionaryInfo.TabIndex = 5;
-            this.textBox_DB_DictionaryInfo.TextChanged += new System.EventHandler(this.textBox_DB_DictionaryInfo_TextChanged);
             // 
             // label_DB_DictionaryInfo
             // 
@@ -210,7 +233,6 @@
             this.label_DB_DictionaryInfo.Size = new System.Drawing.Size(62, 13);
             this.label_DB_DictionaryInfo.TabIndex = 3;
             this.label_DB_DictionaryInfo.Text = "Information:";
-            this.label_DB_DictionaryInfo.Click += new System.EventHandler(this.label_DB_DictionaryInfo_Click);
             // 
             // textBox_DatabaseLog
             // 
@@ -230,17 +252,17 @@
             this.textBox_DB_DictionaryName.TabIndex = 4;
             this.textBox_DB_DictionaryName.TextChanged += new System.EventHandler(this.textBox_DB_DictionaryName_TextChanged);
             // 
-            // button_AddToDB
+            // button_DB_Add
             // 
-            this.button_AddToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_AddToDB.Enabled = false;
-            this.button_AddToDB.Location = new System.Drawing.Point(493, 11);
-            this.button_AddToDB.Name = "button_AddToDB";
-            this.button_AddToDB.Size = new System.Drawing.Size(75, 23);
-            this.button_AddToDB.TabIndex = 5;
-            this.button_AddToDB.Text = "&Add";
-            this.button_AddToDB.UseVisualStyleBackColor = true;
-            this.button_AddToDB.Click += new System.EventHandler(this.button_AddToDB_Click);
+            this.button_DB_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_DB_Add.Enabled = false;
+            this.button_DB_Add.Location = new System.Drawing.Point(493, 11);
+            this.button_DB_Add.Name = "button_DB_Add";
+            this.button_DB_Add.Size = new System.Drawing.Size(75, 23);
+            this.button_DB_Add.TabIndex = 5;
+            this.button_DB_Add.Text = "&Add";
+            this.button_DB_Add.UseVisualStyleBackColor = true;
+            this.button_DB_Add.Click += new System.EventHandler(this.button_AddToDB_Click);
             // 
             // label_DB_DictionaryName
             // 
@@ -250,7 +272,6 @@
             this.label_DB_DictionaryName.Size = new System.Drawing.Size(38, 13);
             this.label_DB_DictionaryName.TabIndex = 2;
             this.label_DB_DictionaryName.Text = "&Name:";
-            this.label_DB_DictionaryName.Click += new System.EventHandler(this.label_DB_DictionaryName_Click);
             // 
             // button_ConnectToDB
             // 
@@ -321,7 +342,7 @@
         private System.Windows.Forms.Label label_DictionaryEncoding;
         private System.Windows.Forms.ComboBox comboBox_DictionaryWords;
         private System.Windows.Forms.TextBox textBox_DictionaryEntry;
-        private System.Windows.Forms.Button button_AddToDB;
+        private System.Windows.Forms.Button button_DB_Add;
         private System.Windows.Forms.GroupBox groupBox_Database;
         private System.Windows.Forms.TextBox textBox_DatabaseLog;
         private System.Windows.Forms.Button button_ConnectToDB;
@@ -334,6 +355,8 @@
         private System.Windows.Forms.ComboBox comboBox_DB_Collation_Word;
         private System.Windows.Forms.Label label__DB_Collation_Desc;
         private System.Windows.Forms.Label label__DB_Collation_Word;
+        private System.Windows.Forms.Button button_DB_Replace;
+        private System.Windows.Forms.ComboBox comboBox_DB_Dictionaries;
     }
 }
 

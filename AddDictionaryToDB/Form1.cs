@@ -108,39 +108,91 @@ namespace AddDictionaryToDB
 
         private void button_AddToDB_Click(object sender, EventArgs e)
         {
+            AddDictionaryToDB(false);
+        }
+
+        private void ExecuteNonQuery(MySqlCommand cmd)
+        {
+            textBox_DatabaseLog.Text += cmd.CommandText + "\r\n";
+            cmd.ExecuteNonQuery();
+            textBox_DatabaseLog.Text += "Ok.\r\n";
+        }
+
+        private object ExecuteScalar(MySqlCommand cmd)
+        {
+            textBox_DatabaseLog.Text += cmd.CommandText + "\r\n";
+            object obj = cmd.ExecuteScalar();
+            textBox_DatabaseLog.Text += "Ok.\r\n";
+            return obj;
+        }
+
+        private bool AddDictionaryToDB(bool replace)
+        {
             try
             {
-                // Insert a new book into books table.
-                string query = "INSERT INTO books(id, name, info) VALUES(NULL, @name, @info)";
-                var cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@name", textBox_DB_DictionaryName.Text);
-                cmd.Parameters.AddWithValue("@info", textBox_DB_DictionaryInfo.Text);
-                cmd.ExecuteNonQuery();
-                string table_name = "book_" + cmd.LastInsertedId.ToString();
+                string query;
+                MySqlCommand cmd;
+                string table_name = "book_";
 
-                // Create our book table.
-                string word_collation = comboBox_DB_Collation_Word.SelectedItem.ToString();
-                string desc_collation = comboBox_DB_Collation_Desc.SelectedItem.ToString();
+                if (replace)
+                {
+                    DictionaryDBItem it = (DictionaryDBItem)comboBox_DB_Dictionaries.SelectedItem;
+                    string name = textBox_DB_DictionaryName.Text;
+                    string info = textBox_DB_DictionaryInfo.Text;
+                    if (name != it.name || info != it.info)
+                    {
+                        query = "UPDATE books SET name=@name, info=@info WHERE id=@id";
+                        cmd = new MySqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@name", name);
+                        cmd.Parameters.AddWithValue("@info", info);
+                        cmd.Parameters.AddWithValue("@id", it.id);
 
-                query = "SELECT CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.COLLATIONS WHERE COLLATION_NAME=@name";
-                cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@name", word_collation);
-                string word_charset = cmd.ExecuteScalar().ToString();
-                cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@name", desc_collation);
-                string desc_charset = cmd.ExecuteScalar().ToString();
+                        ExecuteNonQuery(cmd);
 
-                query = string.Format(
-                    "CREATE TABLE {0}(id INT NULL AUTO_INCREMENT,"
-                    + "word VARCHAR(128) CHARACTER SET {1} COLLATE {2} NOT NULL,"
-                    + "definition TEXT CHARACTER SET {3} COLLATE {4} NOT NULL,"
-                    + "PRIMARY KEY(id), INDEX(word)) ENGINE = MyISAM",
-                    table_name,
-                    word_charset, word_collation,
-                    desc_charset, desc_collation
-                    );
-                cmd = new MySqlCommand(query, conn);
-                cmd.ExecuteNonQuery();
+                        it.name = name;
+                        it.info = info;
+                    }
+                    table_name += it.id;
+
+                    query = "TRUNCATE " + table_name;
+                    cmd = new MySqlCommand(query, conn);
+                    ExecuteNonQuery(cmd);
+                }
+                else
+                {
+                    // Insert a new book into books table.
+                    query = "INSERT INTO books(id, name, info) VALUES(NULL, @name, @info)";
+                    cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@name", textBox_DB_DictionaryName.Text);
+                    cmd.Parameters.AddWithValue("@info", textBox_DB_DictionaryInfo.Text);
+
+                    ExecuteNonQuery(cmd);
+                    table_name += cmd.LastInsertedId.ToString();
+
+                    // Create our book table.
+                    string word_collation = comboBox_DB_Collation_Word.SelectedItem.ToString();
+                    string desc_collation = comboBox_DB_Collation_Desc.SelectedItem.ToString();
+
+                    query = "SELECT CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.COLLATIONS WHERE COLLATION_NAME=@name";
+                    cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@name", word_collation);
+                    string word_charset = ExecuteScalar(cmd).ToString();
+                    cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@name", desc_collation);
+                    string desc_charset = ExecuteScalar(cmd).ToString();
+
+                    query = string.Format(
+                        "CREATE TABLE {0}(id INT NULL AUTO_INCREMENT,"
+                        + "word VARCHAR(128) CHARACTER SET {1} COLLATE {2} NOT NULL,"
+                        + "definition TEXT CHARACTER SET {3} COLLATE {4} NOT NULL,"
+                        + "PRIMARY KEY(id), INDEX(word)) ENGINE = MyISAM",
+                        table_name,
+                        word_charset, word_collation,
+                        desc_charset, desc_collation
+                        );
+                    cmd = new MySqlCommand(query, conn);
+                    ExecuteNonQuery(cmd);
+                }
 
                 // Fill it in.
                 query = "INSERT INTO " + table_name + "(id, word, definition) VALUES(NULL, @word, @info)";
@@ -166,22 +218,22 @@ namespace AddDictionaryToDB
                                 info = string.Empty;
                             }
                             cmd = new MySqlCommand(query, conn);
-                            //MySql.Data.MySqlClient.MySqlHelper.EscapeString(s);
                             cmd.Parameters.AddWithValue("@word", s);
                         }
                     }
                     if (info != string.Empty)
                     {
-                        //info = MySql.Data.MySqlClient.MySqlHelper.EscapeString(info);
                         cmd.Parameters.AddWithValue("@info", info);
                         cmd.ExecuteNonQuery();
                         info = string.Empty;
                     }
                 }
+                return true;
             }
             catch (Exception ex)
             {
-                textBox_DatabaseLog.Text = ex.ToString();
+                textBox_DatabaseLog.Text += ex.ToString() + "\r\n";
+                return false;
             }
         }
 
@@ -227,6 +279,24 @@ namespace AddDictionaryToDB
                 comboBox_DB_Collation_Word.EndUpdate();
                 comboBox_DB_Collation_Desc.EndUpdate();
 
+                query = "SELECT id, name, info FROM books";
+                cmd = new MySqlCommand(query, conn);
+                rdr = cmd.ExecuteReader();
+
+                comboBox_DB_Dictionaries.Update();
+                comboBox_DB_Dictionaries.Items.Clear();
+
+                while (rdr.Read())
+                {
+                    comboBox_DB_Dictionaries.Items.Add(new DictionaryDBItem(
+                        rdr[0].ToString(),
+                        rdr[1].ToString(),
+                        rdr[2].ToString())
+                    );
+                }
+                rdr.Close();
+
+                comboBox_DB_Dictionaries.EndUpdate();
             }
             catch (Exception ex)
             {
@@ -238,26 +308,23 @@ namespace AddDictionaryToDB
 
         private void textBox_DB_DictionaryName_TextChanged(object sender, EventArgs e)
         {
-            button_AddToDB.Enabled
+            button_DB_Add.Enabled
                  = button_LoadDictionary.Enabled
                 && textBox_DB_DictionaryName.Text.Length > 0
                 && conn != null
                 ;
         }
 
-        private void label_DB_DictionaryName_Click(object sender, EventArgs e)
+        private void comboBox_DB_Dictionaries_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            DictionaryDBItem it = (DictionaryDBItem)comboBox_DB_Dictionaries.SelectedItem;
+            textBox_DB_DictionaryName.Text = it.name;
+            textBox_DB_DictionaryInfo.Text = it.info;
         }
 
-        private void label_DB_DictionaryInfo_Click(object sender, EventArgs e)
+        private void button_DB_Replace_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void textBox_DB_DictionaryInfo_TextChanged(object sender, EventArgs e)
-        {
-
+            AddDictionaryToDB(true);
         }
     }
 
@@ -275,6 +342,25 @@ namespace AddDictionaryToDB
         public override string ToString()
         {
             return word;
+        }
+    }
+
+    public class DictionaryDBItem
+    {
+        public string id;
+        public string name;
+        public string info;
+
+        public DictionaryDBItem(string id, string name, string info)
+        {
+            this.id = id;
+            this.name = name;
+            this.info = info;
+        }
+
+        public override string ToString()
+        {
+            return name;
         }
     }
 
