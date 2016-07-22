@@ -1,4 +1,4 @@
-Selectors
+selector
 	1. The element Selector
 		selects elements based on the element name.
 		p { text-align: center; color: red; }
@@ -19,10 +19,10 @@ Selectors
 	4. Grouping Selectors
 	To group selectors, separate each selector with a comma.
 		h1, h2, p { text-align: center; color: red; }
-Comments
+comment
 	A CSS comment starts with /* and ends with */. Comments can also span multiple lines.
 		p { color: red; /* This is a comment */ text-align: center; }
-Insert CSS
+link
 	1. External Style Sheet
 	A page must include a reference to the external CSS-file inside the <link> element. The <link> element goes inside the <head> section.
 		<head><link rel="stylesheet" type="text/css" href="mystyle.css"></head>
@@ -41,7 +41,7 @@ Insert CSS
 	2) External and internal style sheets (in the head section)
 	3) Browser default
 	So, an inline style (inside a specific HTML element) has the highest priority, which means that it will override a style defined inside the <head> tag, or in an external style sheet, or a browser default value.
-Colors
+color
 	1. Color Names
 	HTML and CSS supports 140 standard color names.
 		http://www.w3schools.com/colors/colors_names.asp
@@ -53,7 +53,7 @@ Colors
 	RGB values are specified using hexadecimal color values in the form: #RRGGBB, where RR (red), GG (green) and BB (blue) are hexadecimal values between 00 and FF (same as decimal 0-255).
 		#FF0000 is displayed as red
 	Note: HEX values are case-insensitive: "#ff0000" is the same as "FF0000".
-Backgrounds
+background
 	1. Background Color
 	The background-color property specifies the background color of an element.
 		body { background-color: lightblue; }
@@ -74,7 +74,7 @@ Backgrounds
 	4) background-attachment,
 	5) background-position
 	It does not matter if one of the property values is missing, as long as the other ones are in this order.
-Borders
+border
 	1. Border Style
 	The border-style property specifies what kind of border to display. The following values are allowed: dotted, dashed, solid, double, groove, ridge, inset, outset, none, hidden.
 	When using the border-style property the order of the border sides is:
@@ -107,8 +107,9 @@ Borders
 	6. Rounded Borders
 	The border-radius property is used to add rounded borders to an element.
 		p { border: 2px solid red; border-radius: 5px; }
-Margins
-	The margin properties set the size of the white space outside the border. There are CSS properties for setting the margin for each side of an element:
+margin
+	The margin properties set the size of the white space outside the border.
+	There are CSS properties for setting the margin for each side of an element:
 	1) margin-top,
 	2) margin-right,
 	3) margin-bottom,
@@ -126,5 +127,93 @@ Margins
 	The margin may be inherited from the parent element.
 		p.one { margin-left: inherit; }
 	Note: Top and bottom margins of elements are sometimes collapsed into a single margin that is equal to the largest of the two margins. This does not happen on horizontal margins (left and right)! Only vertical margins (top and bottom)!
-
+padding
+	The padding clears an area around the content (inside the border) of an element.
+	There are CSS properties for setting the padding for each side of an element:
+	1) padding-top,
+	2) padding-right,
+	3) padding-bottom,
+	4) padding-left.
+		p { padding-top: 5px; padding-right: 3px; padding-bottom: 5px; padding-left: 8px; }
+	The padding property is a shorthand property.
+		p { padding: 50px 30px 50px 80px; }
+	How it works:
+	1) one value: all four paddings are that value;
+	2) two values: (top and bottom), (right and left);
+	3) three values: top, (right and left), bottom;
+	4) four values: top, right, bottom, left;
+		div { padding: 25px 50px 75px; }
+	inherit - specifies that the padding should be inherited from the parent element.
+		p.one { padding-left: inherit; }
+height and width
+	The height and width properties are used to set the height and width of an element.
+	The height and width can be set to auto (this is default. Means that the browser calculates the height and width), or be specified in length values, like px, cm, etc., or in percent (%) of the containing block.
+		div { height: 200px; width: 50%; background-color: powderblue; }
+	Note: The height and width properties do not include padding, borders, or margins; they set the height/width of the area inside the padding, border, and margin of the element!
+	The max-width property is used to set the maximum width of an element.
+		div { max-width: 500px; height: 100px; }
+	Note: The value of the max-width property overrides width.
+box model
+	All HTML elements can be considered as boxes. In CSS, the term "box model" is used when talking about design and layout. The CSS box model is essentially a box that wraps around every HTML element. It consists of: margins, borders, padding, and the actual content.
+	The box model allows us to add a border around elements, and to define space between elements.
+		div { width: 300px; border: 25px solid green; padding: 25px; margin: 25px; }
+	The total width of an element should be calculated like this: Total element width = width + left padding + right padding + left border + right border + left margin + right margin
+	The total height of an element should be calculated like this: Total element height = height + top padding + bottom padding + top border + bottom border + top margin + bottom margin
+outline
+	The CSS outline properties specify the style, color, and width of an outline. An outline is a line that is drawn around elements (outside the borders) to make the element "stand out". However, the outline property is different from the border property - The outline is NOT a part of an element's dimensions; the element's total width and height is not affected by the width of the outline.
+	1. Outline Style
+	The outline-style property specifies the style of the outline.
+	It can have one of the following values: dotted, dashed, solid, double, groove, ridge, inset, outset, none, hidden.
+		p { border: 1px solid black; outline-color: red; outline-style: double; }
+	2. Outline Color
+	The outline-color property is used to set the color of the outline. The color can be set by: name, RGB, Hex, invert - performs a color inversion (which ensures that the outline is visible, regardless of color background).
+		p { border: 1px solid black; outline-style: double; outline-color: red; }
+	3. Outline Width
+	The outline-width property specifies the width of the outline. The width can be set as a specific size (in px, pt, cm, em, etc) or by using one of the three pre-defined values: thin, medium, or thick.
+		p { border: 1px solid black; outline-style: double; outline-color: red; outline-width: thick; }
+	4. Shorthand property
+	The outline property is a shorthand property for the following individual outline properties:
+	1) outline-width,
+	2) outline-style (required),
+	3) outline-color.
+		p { border: 1px solid black; outline: 5px dotted red; }
+text
+	1. Text Color
+	The color property is used to set the color of the text. The default text color for a page is defined in the body selector.
+		body { color: blue; }
+		h1 { color: green; }
+	Note: For W3C compliant CSS: If you define the color property, you must also define the background-color.
+	2. Text Alignment
+	The text-align property is used to set the horizontal alignment of a text. A text can be left or right aligned, centered, or justified. When the text-align property is set to "justify", each line is stretched so that every line has equal width, and the left and right margins are straight (like in magazines and newspapers).
+		h1 { text-align: center; }
+		h2 { text-align: left; }
+		h3 { text-align: right; }
+		div { text-align: justify; }
+	3. Text Decoration
+	The text-decoration property is used to set or remove decorations from text. Values: none, overline, line-through, underline. The value text-decoration: none; is often used to remove underlines from links.
+		a { text-decoration: none; }
+	Note: It is not recommended to underline text that is not a link, as this often confuses the reader.
+	4. Text Transformation
+	The text-transform property is used to specify uppercase and lowercase letters in a text. It can be used to turn everything into uppercase or lowercase letters, or capitalize the first letter of each word. Values: uppercase, lowercase, capitalize.
+		p.uppercase { text-transform: uppercase; }
+		p.lowercase { text-transform: lowercase; }
+		p.capitalize { text-transform: capitalize; }
+	5. Text Indentation
+	The text-indent property is used to specify the indentation of the first line of a text.
+		p { text-indent: 50px; }
+	6. Letter Spacing
+	The letter-spacing property is used to specify the space between the characters in a text.
+		h1 { letter-spacing: 3px; }
+		h2 { letter-spacing: -3px; }
+	7. Line Height
+	The line-height property is used to specify the space between lines.
+		p.small { line-height: 0.8; }
+		p.big { line-height: 1.8; }
+	8. Text Direction
+	The direction property is used to change the text direction of an element.
+		div { direction: rtl; }
+	9. Word Spacing
+	The word-spacing property is used to specify the space between the words in a text.
+		h1 { word-spacing: 10px; }
+		h2 { word-spacing: -5px; }
 	

@@ -255,8 +255,11 @@ namespace AddDictionaryToDB
             try
             {
                 // Open the connection.
+                textBox_DatabaseLog.Text += "Openning the conection...\r\n";
                 conn.Open();
+                textBox_DatabaseLog.Text += "Ok.\r\n";
 
+                textBox_DatabaseLog.Text += "Reading COLLATION_NAME from INFORMATION_SCHEMA.COLLATIONS...\r\n";
                 string query = "SELECT DISTINCT COLLATION_NAME FROM INFORMATION_SCHEMA.COLLATIONS ORDER BY COLLATION_NAME";
                 var cmd = new MySqlCommand(query, conn);
                 MySqlDataReader rdr = cmd.ExecuteReader();
@@ -272,6 +275,7 @@ namespace AddDictionaryToDB
                     comboBox_DB_Collation_Desc.Items.Add(rdr[0]);
                 }
                 rdr.Close();
+                textBox_DatabaseLog.Text += "Ok.\r\n";
 
                 comboBox_DB_Collation_Word.SelectedItem = "utf16_unicode_ci";
                 comboBox_DB_Collation_Desc.SelectedItem = "utf16_unicode_ci";
@@ -279,6 +283,7 @@ namespace AddDictionaryToDB
                 comboBox_DB_Collation_Word.EndUpdate();
                 comboBox_DB_Collation_Desc.EndUpdate();
 
+                textBox_DatabaseLog.Text += "Reading from dictionary.books...\r\n";
                 query = "SELECT id, name, info FROM books";
                 cmd = new MySqlCommand(query, conn);
                 rdr = cmd.ExecuteReader();
@@ -295,13 +300,15 @@ namespace AddDictionaryToDB
                     );
                 }
                 rdr.Close();
+                textBox_DatabaseLog.Text += "Ok.\r\n";
 
+                comboBox_DB_Dictionaries.SelectedIndex = 0;
                 comboBox_DB_Dictionaries.EndUpdate();
             }
             catch (Exception ex)
             {
                 conn = null;
-                textBox_DatabaseLog.Text = ex.ToString();
+                textBox_DatabaseLog.Text += ex.ToString() + "\r\n";
                 ((Control)sender).Enabled = true;
             }
         }
