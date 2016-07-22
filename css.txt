@@ -216,4 +216,160 @@ text
 	The word-spacing property is used to specify the space between the words in a text.
 		h1 { word-spacing: 10px; }
 		h2 { word-spacing: -5px; }
-	
+font
+	In CSS, there are two types of font family names:
+	1) generic family - a group of font families with a similar look (like "Serif" or "Monospace")
+	a. Serif (Serif fonts have small lines at the ends on some characters);
+	b. Sans-serif (These fonts do not have the lines at the ends of characters);
+	c. Monospace (All characters have the same width);
+	2) font family - a specific font family (like "Times New Roman", "Georgia", "Arial", "Verdana", "Courier New", or "Lucida Console")
+	Note: On computer screens, sans-serif fonts are considered easier to read than serif fonts.
+	1. Font Family
+	The font family of a text is set with the font-family property.
+	The font-family property should hold several font names as a "fallback" system. If the browser does not support the first font, it tries the next font, and so on. More than one font family is specified in a comma-separated list.
+		p { font-family: "Times New Roman", Times, serif; }
+	Note: If the name of a font family is more than one word, it must be in quotation marks, like: "Times New Roman".
+	2. Font Style
+	The font-style property is mostly used to specify italic text. This property has three values:
+	1) normal
+	2) italic
+	3) oblique - The text is "leaning" (oblique is very similar to italic, but less supported)
+		p.normal { font-style: normal; }
+		p.italic { font-style: italic; }
+	3. Font Size
+	The font-size property sets the size of the text. The font-size value can be an absolute, or relative size.
+	1) Absolute size:
+	a. Sets the text to a specified size
+	b. Does not allow a user to change the text size in all browsers (bad for accessibility reasons)
+	c. Absolute size is useful when the physical size of the output is known
+	2) Relative size:
+	a. Sets the size relative to surrounding elements
+	b. Allows a user to change the text size in browsers
+	Note: If you do not specify a font size, the default size for normal text, like paragraphs, is 16px (16px=1em).
+		p { font-size: 14px; }
+	To allow users to resize the text (in the browser menu), use em instead of pixels. 1em is equal to the current font size. The default text size in browsers is 16px. So, the default size of 1em is 16px. The size can be calculated from pixels to em using this formula: pixels/16=em
+		p { font-size: 0.875em; /* 14px/16=0.875em */ }
+	The solution that works in all browsers, is to set a default font-size in percent for the <body> element:
+		body { font-size: 100%; } p { font-size: 0.875em; }
+	4. Font Weight
+	The font-weight property specifies the weight of a font.
+		p.normal { font-weight: normal; }
+		p.thick { font-weight: bold; }
+	5. Font Variant
+	The font-variant property specifies whether or not a text should be displayed in a small-caps font. In a small-caps font, all lowercase letters are converted to uppercase letters. However, the converted uppercase letters appears in a smaller font size than the original uppercase letters in the text.
+		p.normal { font-variant: normal; }
+		p.small { font-variant: small-caps; }
+hyperlink
+	1. Styling Links
+	Links can be styled with any CSS property (e.g. color, font-family, background, etc.).
+		a { color: hotpink; }
+	In addition, links can be styled differently depending on what state they are in. The four links states are:
+	1) a:link - a normal, unvisited link
+		a:link { color: red; }
+	2) a:visited - a link the user has visited
+		a:visited { color: green; }
+	3) a:hover - a link when the user mouses over it
+		a:hover { color: hotpink; }
+	4) a:active - a link the moment it is clicked
+		a:active { color: blue; }
+	When setting the style for several link states, there are some order rules:
+	1) a:hover MUST come after a:link and a:visited
+	2) a:active MUST come after a:hover
+	2. Text Decoration
+	The text-decoration property is mostly used to remove underlines from links.
+		a:link { text-decoration: none; }
+	3. Background Color
+	The background-color property can be used to specify a background color for links.
+		a:link { background-color: yellow; }
+	4. Link Buttons
+	Several CSS properties must be combined to display links as boxes/buttons:
+		a:link, a:visited { background-color: #f44336; color: white; padding: 14px 25px; text-align: center; text-decoration: none; display: inline-block; }
+		a:hover, a:active { background-color: red; }
+list
+	In HTML, there are two main types of lists:
+	1) unordered lists (<ul>) - the list items are marked with bullets
+	2) ordered lists (<ol>) - the list items are marked with numbers or letters
+	The CSS list properties allow you to:
+	1) Set different list item markers for ordered lists
+	2) Set different list item markers for unordered lists
+	3) Set an image as the list item marker
+	4) Add background colors to lists and list items
+	1. List Item Markers
+	The list-style-type property specifies the type of list item marker.
+		ul.a { list-style-type: circle; }
+		ul.b { list-style-type: square; }
+		ol.c { list-style-type: upper-roman; }
+		ol.d { list-style-type: lower-alpha; }
+	The list-style-image property specifies an image as the list item marker.
+		ul { list-style-image: url('sqpurple.gif'); }
+	The list-style-position property specifies whether the list-item markers should appear inside or outside the content flow.
+		ul { list-style-position: inside; }
+	2. Shorthand property
+	The list-style property is a shorthand property. It is used to set all the list properties in one declaration.
+		ul { list-style: square inside url("sqpurple.gif"); }
+	The order of the property values are:
+	1) list-style-type (if a list-style-image is specified, the value of this property will be displayed if the image for some reason cannot be displayed)
+	2) list-style-position (specifies whether the list-item markers should appear inside or outside the content flow)
+	3) list-style-image (specifies an image as the list item marker)
+	If one of the property values above are missing, the default value for the missing property will be inserted, if any.
+	3. Styling List With Colors
+	We can also style lists with colors, to make them look a little more interesting. Anything added to the <ol> or <ul> tag, affects the entire list, while properties added to the <li> tag will affect the individual list items.
+		ol { background: #ff9999; padding: 20px; }
+		ol li { background: #ffe5e5; padding: 5px; margin-left: 35px; }
+		ul { background: #3399ff; padding: 20px; }
+		ul li { background: #cce5ff; margin: 5px; }
+table
+	1. Table Borders
+	To specify table borders in CSS, use the border property.
+		table, th, td { border: 1px solid black; }
+	The border-collapse property sets whether the table borders should be collapsed into a single border.
+		table { border-collapse: collapse; }
+	For a border around the table, only specify the border property for <table>.
+		table { border: 1px solid black; }
+	2. Table Width and Height
+	Width and height of a table are defined by the width and height properties.
+		table { width: 100%; }
+		th { height: 50px; }
+	3. Alignment
+	The text-align property sets the horizontal alignment (like left, right, or center) of the content in <th> or <td>. By default, the content of <th> elements are center-aligned and the content of <td> elements are left-aligned.
+		th { text-align: left; }
+	The vertical-align property sets the vertical alignment (like top, bottom, or middle) of the content in <th> or <td>. By default, the vertical alignment of the content in a table is middle (for both <th> and <td> elements).
+		td { height: 50px; vertical-align: bottom; }
+	4. Table Padding
+	To control the space between the border and the content in a table, use the padding property on <td> and <th> elements.
+		th, td { padding: 15px; text-align: left; }
+	5. Horizontal Dividers
+	Add the border-bottom property to <th> and <td> for horizontal dividers.
+		th, td { border-bottom: 1px solid #ddd; }
+	6. Hoverable Table
+	Use the :hover selector on <tr> to highlight table rows on mouse over.
+		tr:hover { background-color: #f5f5f5 }
+	7. Striped Tables
+	For zebra-striped tables, use the nth-child() selector and add a background-color to all even (or odd) table rows.
+		tr:nth-child(even) { background-color: #f2f2f2 }
+	8. Table Color
+	You can specify the background color and text color of <th> elements.
+		th { background-color: #4CAF50; color: white; }
+	9. Responsive Table
+	A responsive table will display a horizontal scroll bar if the screen is too small to display the full content. Add a container element (like <div>) with overflow-x:auto around the <table> element to make it responsive.
+		<div style="overflow-x:auto;"> <table></table> </div>
+display
+	The display property is the most important CSS property for controlling layout. It specifies if/how an element is displayed.
+	Every HTML element has a default display value depending on what type of element it is. The default display value for most elements is block or inline.
+	1. Block-level Elements
+	A block-level element always starts on a new line and takes up the full width available (stretches out to the left and right as far as it can).
+	Examples of block-level elements: <div>, <h1> - <h6>, <p>, <form>, <header>, <footer>, <section>
+	2. Inline Elements
+	An inline element does not start on a new line and only takes up as much width as necessary.
+	Examples of inline elements: <span>, <a>, <img>
+	3. Display: none;
+	display: none; is commonly used with JavaScript to hide and show elements without deleting and recreating them. The <script> element use display: none; as its default.
+	4. Override The Default Display Value
+	Changing an inline element to a block element, or vice versa, can be useful for making the page look a specific way, and still follow the web standards.
+		/* making inline <li> elements for horizontal menus */ li { display: inline; }
+	Note: Setting the display property of an element only changes how the element is displayed, NOT what kind of element it is. So, an inline element with display: block; is not allowed to have other block elements inside it.
+	5. Hide an Element - display:none or visibility:hidden?
+	Hiding an element can be done by setting the display property to none. The element will be hidden, and the page will be displayed as if the element is not there.
+		h1.hidden { display: none; }
+	visibility:hidden; also hides an element. However, the element will still take up the same space as before. The element will be hidden, but still affect the layout!
+		h1.hidden { visibility: hidden; }
