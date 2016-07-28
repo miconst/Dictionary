@@ -417,3 +417,278 @@ overflow
 	1) overflow-x specifies what to do with the left/right edges of the content.
 	2) overflow-y specifies what to do with the top/bottom edges of the content.
 		div { overflow-x: hidden; /* Hide horizontal scrollbar */ overflow-y: scroll; /* Add vertical scrollbar */ }
+float
+	The float property specifies whether or not an element should float. In its simplest use, the float property can be used to wrap text around images.
+		img { float: right; margin: 0 0 10px 10px; }
+	The clear property is used to control the behavior of floating elements. Elements after a floating element will flow around it. To avoid this, use the clear property. The clear property specifies on which sides of an element floating elements are not allowed to float
+		div { clear: left; }
+	The clearfix Hack - overflow: auto;
+	If an element is taller than the element containing it, and it is floated, it will overflow outside of its container. Then we can add overflow: auto; to the containing element to fix this problem.
+		.clearfix { overflow: auto; }
+inline-block
+	inline-block is like inline but it can have a width and a height.
+		.floating-box { display: inline-block; width: 150px; height: 75px; margin: 10px; border: 3px solid #73AD21; }
+align
+	1. Center Align Elements.
+	To horizontally center a block element (like <div>), use margin: auto; Setting the width of the element will prevent it from stretching out to the edges of its container. The element will then take up the specified width, and the remaining space will be split equally between the two margins.
+		.center { margin: auto; width: 50%; border: 3px solid green; padding: 10px; }
+	Note: Center aligning has no effect if the width property is not set (or set to 100%).
+	2. Center Align Text.
+	To just center the text inside an element, use text-align: center;
+		.center { text-align: center; border: 3px solid green; }
+	3. Center an Image.
+	To center an image, use margin: auto; and make it into a block element.
+		img { display: block; margin: auto; width: 40%; }
+	4. Left and Right Align.
+	1) position: absolute;
+		.right { position: absolute; right: 0px; width: 300px; border: 3px solid #73AD21; padding: 10px; }
+	Note: Absolute positioned elements are removed from the normal flow, and can overlap elements.
+	2) float property
+		.right { float: right; width: 300px; border: 3px solid #73AD21; padding: 10px; }
+	5. Center Vertically.
+	There are many ways to center an element vertically.
+	1) top and bottom padding.
+		.center { padding: 70px 0; border: 3px solid green; }
+	2) To center both vertically and horizontally, use padding and text-align: center.
+		.center { padding: 70px 0; border: 3px solid green; text-align: center; }
+	3) line-height property with a value that is equal to the height property.
+		.center { line-height: 200px; height: 200px; border: 3px solid green; text-align: center; }
+		/* If the text has multiple lines, add the following: */
+		.center p { line-height: 1.5; display: inline-block; vertical-align: middle; }
+	4) positioning and the transform property.
+		.center { height: 200px; position: relative; border: 3px solid green; }
+		.center p { margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+combinators
+	A CSS selector can contain more than one simple selector. Between the simple selectors, we can include a combinator.
+	There are four different combinators in CSS3: descendant selector (space), child selector (>), adjacent sibling selector (+), general sibling selector (~).
+	1. Descendant Selector
+	The descendant selector matches all elements that are descendants of a specified element.
+		/* selecting all <p> elements inside <div> elements */ div p { background-color: yellow; }
+	2. Child Selector
+	The child selector selects all elements that are the immediate children of a specified element.
+		/* selecting all <p> elements that are immediate children of a <div> element */ div > p { background-color: yellow; }
+	3. Adjacent Sibling Selector
+	The adjacent sibling selector selects all elements that are the adjacent siblings of a specified element. Sibling elements must have the same parent element, and "adjacent" means "immediately following".
+		/* selecting all <p> elements that are placed immediately after <div> elements */ div + p { background-color: yellow; }
+	4. General Sibling Selector
+	The general sibling selector selects all elements that are siblings of a specified element.
+		/* selecting all <p> elements that are siblings of <div> elements */ div ~ p { background-color: yellow; }
+pseudo-class
+	A pseudo-class is used to define a special state of an element.
+	For example, it can be used to:
+	1) Style an element when a user mouses over it;
+	2) Style visited and unvisited links differently;
+	3) Style an element when it gets focus;
+	1. Syntax
+	The syntax of pseudo-classes: selector:pseudo-class { property:value; }
+		div:hover { background-color: blue; }
+	Pseudo-classes can be combined with CSS classes.
+		a.highlight:hover { color: #ff0000; }
+		/* simple tooltip hover */ p { display: none; } div:hover p { display: block; }
+	2. The :first-child Pseudo-class
+	The :first-child pseudo-class matches a specified element that is the first child of another element.
+		/* the selector matches any <p> element that is the first child of any element */ p:first-child { color: blue; }
+	3. The :lang Pseudo-class
+	The :lang pseudo-class allows you to define special rules for different languages.
+pseudo-element
+	A pseudo-element is used to style specified parts of an element.
+	For example, it can be used to:
+	1) Style the first letter, or line, of an element
+	2) Insert content before, or after, the content of an element
+	1. Syntax
+	The syntax of pseudo-elements: selector::pseudo-element { property:value; }
+	Pseudo-elements can be combined with CSS classes.
+		p.intro::first-letter { color: #ff0000; font-size:200%; }
+	Note: The double colon replaced the single-colon notation for pseudo-elements in CSS3 (::first-line versus :first-line).
+	2. The ::first-line Pseudo-element
+	The ::first-line pseudo-element is used to add a special style to the first line of a text.
+		/* the first line of the text in all <p> elements */ p::first-line { color: #ff0000; font-variant: small-caps; }
+	Note: The ::first-line pseudo-element can only be applied to block-level elements.
+	The following properties apply to the ::first-line pseudo-element:
+	1) font properties
+	2) color properties
+	3) background properties
+	4) word-spacing
+	5) letter-spacing
+	6) text-decoration
+	7) vertical-align
+	8) text-transform
+	9) line-height
+	10) clear
+	3. The ::first-letter Pseudo-element
+	The ::first-letter pseudo-element is used to add a special style to the first letter of a text.
+		/* formating the first letter of the text in all <p> elements */ p::first-letter { color: #ff0000; font-size: xx-large; }
+	Note: The ::first-letter pseudo-element can only be applied to block-level elements.
+	The following properties apply to the ::first-letter pseudo- element:
+	1) font properties
+	2) color properties 
+	3) background properties
+	4) margin properties
+	5) padding properties
+	6) border properties
+	7) text-decoration
+	8) vertical-align (only if "float" is "none")
+	9) text-transform
+	10) line-height
+	11) float
+	12) clear
+	4. Multiple Pseudo-elements
+	Several pseudo-elements can also be combined.
+		p::first-letter { color: #ff0000; } p::first-line { font-variant: small-caps; }
+	5. The ::before Pseudo-element
+	The ::before pseudo-element can be used to insert some content before the content of an element.
+		/* inserting an image before the content of each <h1> element */ h1::before { content: url(smiley.gif); }
+	6. The ::after Pseudo-element
+	The ::after pseudo-element can be used to insert some content after the content of an element.
+		/* inserting an image after the content of each <h1> element */ h1::after { content: url(smiley.gif); }
+	7. The ::selection Pseudo-element
+	The ::selection pseudo-element matches the portion of an element that is selected by a user.
+	This properties can be applied to ::selection: color, background, cursor, and outline.
+		/* making the selected text red on a yellow background */ ::selection { color: red; background: yellow; }
+opacity
+	The opacity property specifies the opacity/transparency of an element. It can take a value from 0.0 - 1.0. The lower value, the more transparent.
+	Note: IE8 and earlier use filter:alpha(opacity=x). The x can take a value from 0 - 100. A lower value makes the element more transparent.
+		img { opacity: 0.5; filter: alpha(opacity=50); /* For IE8 and earlier */ }
+	The opacity property is often used together with the :hover selector to change the opacity on mouse-over.
+		img:hover { opacity: 1.0; filter: alpha(opacity=100); /* For IE8 and earlier */ }
+navigation
+	1. List of Links
+	A navigation bar needs standard HTML as a base. For example we will build the navigation bar from a standard HTML list. A navigation bar is basically a list of links, so using the <ul> and <li> elements makes perfect sense.
+	<ul>
+	 <li><a href="default.asp">Home</a></li>
+	 <li><a href="news.asp">News</a></li>
+	 <li><a href="contact.asp">Contact</a></li>
+	 <li><a href="about.asp">About</a></li>
+	</ul>
+	Removing the bullets and the margins and padding from the list.
+	ul { list-style-type: none; margin: 0; padding: 0; }
+	2. Vertical Navigation Bar
+	To build a vertical navigation bar, you can style the <a> elements inside the list, in addition to the code above.
+		li a { display: block; width: 60px; }
+	Or you can also set the width of <ul>, and remove the width of <a>, as they will take up the full width available when displayed as block elements.
+		ul { list-style-type: none; margin: 0; padding: 0; width: 60px; } li a { display: block; }
+		/* Change the link color on hover */ li a:hover { background-color: #555; color: white; }
+	1) Active/Current Navigation Link
+	Add an "active" class to the current link to let the user know which page he/she is on.
+		.active { background-color: #4CAF50; color: white; }
+	2) Center Links & Add Borders
+	Add text-align:center to <li> or <a> to center the links. Add the border property to <ul> add a border around the navbar. If you also want borders inside the navbar, add a border-bottom to all <li> elements, except for the last one.
+		ul { border: 1px solid #555; } li { text-align: center; border-bottom: 1px solid #555; } li:last-child { border-bottom: none; }
+	3) Full-height Fixed Vertical Navbar
+	Create a full-height, "sticky" side navigation.
+		ul { list-style-type: none; margin: 0; padding: 0; width: 25%; background-color: #f1f1f1; height: 100%; /* Full height */ position: fixed; /* Make it stick, even on scroll */ overflow: auto; /* Enable scrolling if the sidenav has too much content */ }
+	Note: This might not work properly on mobile devices.
+	3. Horizontal Navigation Bar
+	There are two ways to create a horizontal navigation bar. Using inline or floating list items.
+	1) Inline List Items
+	One way to build a horizontal navigation bar is to specify the <li> elements as inline, in addition to the "standard" code above.
+		li { display: inline; }
+	2) Floating List Items
+	Another way of creating a horizontal navigation bar is to float the <li> elements, and specify a layout for the navigation links.
+		li { float: left; } a { display: block; padding: 8px; background-color: #dddddd; }
+	Add the background-color to <ul> instead of each <a> element if you want a full-width background color:
+		ul { background-color: #dddddd; }
+dropdown
+	1. Basic Dropdown
+	Create a dropdown box that appears when the user moves the mouse over an element.
+	.dropdown { position: relative; display: inline-block; }
+	.dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); padding: 12px 16px; z-index: 1; }
+	.dropdown:hover .dropdown-content { display: block; }
+	<div class="dropdown"><span>Mouse over me</span><div class="dropdown-content"><p>Hello World!</p></div></div>
+	2. Dropdown Menu
+	Create a dropdown menu that allows the user to choose an option from a list.
+	/* Style The Dropdown Button */ .dropbtn { background-color: #4CAF50; color: white; padding: 16px; font-size: 16px; border: none; cursor: pointer; }
+	/* The container <div> - needed to position the dropdown content */ .dropdown { position: relative; display: inline-block; }
+	/* Dropdown Content (Hidden by Default) */ .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); }
+	/* Links inside the dropdown */ .dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; }
+	/* Change color of dropdown links on hover */ .dropdown-content a:hover {background-color: #f1f1f1}
+	/* Show the dropdown menu on hover */ .dropdown:hover .dropdown-content { display: block; }
+	/* Change the background color of the dropdown button when the dropdown content is shown */ .dropdown:hover .dropbtn { background-color: #3e8e41; }
+	<div class="dropdown"><button class="dropbtn">Dropdown</button><div class="dropdown-content"><a href="#">Link 1</a><a href="#">Link 2</a><a href="#">Link 3</a></div></div>
+	If you want the dropdown menu to go from right to left, instead of left to right, add right: 0;
+		.dropdown-content { right: 0; }
+tooltip
+	1. Basic Tooltip
+	Create a tooltip that appears when the user moves the mouse over an element.
+	/* Tooltip container */ .tooltip { position: relative; display: inline-block; border-bottom: 1px dotted black; }
+	/* Tooltip text */ .tooltip .tooltiptext { visibility: hidden; width: 120px; background-color: black; color: #fff; text-align: center; padding: 5px 0; border-radius: 6px; position: absolute; z-index: 1; }
+	/* Show the tooltip text when you mouse over the tooltip container */ .tooltip:hover .tooltiptext { visibility: visible; }
+	<div class="tooltip">Hover over me<span class="tooltiptext">Tooltip text</span></div>
+	2. Tooltip Arrows
+	To create an arrow that should appear from a specific side of the tooltip, add "empty" content after tooltip, with the pseudo-element class ::after together with the content property. The arrow itself is created using borders. This will make the tooltip look like a speech bubble.
+		.tooltip .tooltiptext::after { content: " "; position: absolute; top: 100%; /* At the bottom of the tooltip */ left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: black transparent transparent transparent; }
+	3. Fade In Tooltips (Animation)
+	If you want to fade in the tooltip text when it is about to be visible, you can use the CSS3 transition property together with the opacity property, and go from being completely invisible to 100% visible, in a number of specified seconds.
+		.tooltip .tooltiptext { opacity: 0; transition: opacity 1s; } .tooltip:hover .tooltiptext { opacity: 1; }
+sprite
+	An image sprite is a collection of images put into a single image. A web page with many images can take a long time to load and generates multiple server requests. Using image sprites will reduce the number of server requests and save bandwidth. With CSS, we can show just the part of the image we need.
+		#home { width: 46px; height: 44px; background: url(img_navsprites.gif) 0 0; }
+attribute
+	It is possible to style HTML elements that have specific attributes or attribute values.
+	1. CSS [attribute] Selector
+	The [attribute] selector is used to select elements with a specified attribute.
+		a[target] { background-color: yellow; }
+	2. CSS [attribute="value"] Selector
+	The [attribute="value"] selector is used to select elements with a specified attribute and value.
+		a[target="_blank"] { background-color: yellow; }
+	3. CSS [attribute~="value"] Selector
+	The [attribute~="value"] selector is used to select elements with an attribute value containing a specified word.
+		[title~="flower"] { border: 5px solid yellow; }
+	4. CSS [attribute|="value"] Selector
+	The [attribute|="value"] selector is used to select elements with the specified attribute starting with the specified value.
+		[class|="top"] { background: yellow; }
+	5. CSS [attribute^="value"] Selector
+	The [attribute^="value"] selector is used to select elements whose attribute value begins with a specified value.
+	Note: The value does not have to be a whole word!
+		[class^="top"] { background: yellow; }
+	6. CSS [attribute$="value"] Selector
+	The [attribute$="value"] selector is used to select elements whose attribute value ends with a specified value.
+	Note: The value does not have to be a whole word!
+		[class$="test"] { background: yellow; }
+	7. CSS [attribute*="value"] Selector
+	The [attribute*="value"] selector is used to select elements whose attribute value contains a specified value.
+	Note: The value does not have to be a whole word!
+		[class*="te"] { background: yellow; }
+form
+	1. Styling Input Fields
+	Use the width property to determine the width of the input field.
+		input { width: 100%; }
+	To style a specific input type, use attribute selectors:
+	1) input[type=text] - will only select text fields;
+	2) input[type=password] - will only select password fields;
+	3) input[type=number] - will only select number fields;
+	2. Padded Inputs
+	Use the padding property to add space inside the text field.
+	Tip: When you have many inputs after each other, you might also want to add some margin, to add more space outside of them.
+		input[type=text] { width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box; }
+	3. Bordered Inputs
+	Use the border property to change the border size and color, and use the border-radius property to add rounded corners.
+		input[type=text] { border: 2px solid red; border-radius: 4px; }
+	4. Colored Inputs
+	Use the background-color property to add a background color to the input, and the color property to change the text color.
+		input[type=text] { background-color: #3CBC8D; color: white; }
+	5. Focused Inputs
+	By default, some browsers will add a blue outline around the input when it gets focus (clicked on). To remove this behavior add outline: none; to the input. Use the :focus selector to do something with the input field when it gets focus.
+		input[type=text]:focus { background-color: lightblue; }
+		input[type=text]:focus { border: 3px solid #555; }
+	6. Input with icon/image
+	To add an icon inside the input, use the background-image property and position it with the background-position property. Also add a large left padding to reserve the space of the icon.
+		input[type=text] { background-color: white; background-image: url('icon.png'); background-position: 10px 10px; background-repeat: no-repeat; padding-left: 40px; }
+	7. Animated Search Input
+	Use the CSS3 transition property to animate the width of the search input when it gets focus.
+		input[type=text] { -webkit-transition: width 0.4s ease-in-out; transition: width 0.4s ease-in-out; }
+		input[type=text]:focus { width: 100%; }
+counter
+	CSS counters are like "variables". The variable values can be incremented by CSS rules (which will track how many times they are used).
+	Counters have the following properties:
+	1) counter-reset - Creates or resets a counter;
+	2) counter-increment - Increments a counter value;
+	3) content - Inserts generated content;
+	4) counter() or counters() function - Adds the value of a counter to an element;
+	To use a CSS counter, it must first be created with counter-reset.
+		body { counter-reset: section; } h2::before { counter-increment: section; content: "Section " counter(section) ": "; }
+	1. Nesting Counters
+		body { counter-reset: section; } h1 { counter-reset: subsection; } h1::before { counter-increment: section; content: "Section " counter(section) ". "; } h2::before { counter-increment: subsection; content: counter(section) "." counter(subsection) " "; }
+	A counter can also be useful to make outlined lists because a new instance of a counter is automatically created in child elements.
+		ol { counter-reset: section; list-style-type: none; } li::before { counter-increment: section; content: counters(section,".") " "; }
+
