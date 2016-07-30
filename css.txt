@@ -53,6 +53,16 @@ color
 	RGB values are specified using hexadecimal color values in the form: #RRGGBB, where RR (red), GG (green) and BB (blue) are hexadecimal values between 00 and FF (same as decimal 0-255).
 		#FF0000 is displayed as red
 	Note: HEX values are case-insensitive: "#ff0000" is the same as "FF0000".
+	4. CSS3 Colors
+	CSS3 introduces: RGBA colors, HSL colors, HSLA colors, opacity.
+	1) RGBA color values are an extension of RGB color values with an alpha channel - which specifies the opacity for a color. The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (fully opaque).
+		#p1 { background-color: rgba(255, 0, 0, 0.3); }  /* red with opacity */
+	2) HSL(hue, saturation, lightness). Hue is a degree on the color wheel from 0 to 360 (0 (or 360) is red, 120 is green, 240 is blue); Saturation is a percentage value: 100% is the full color. Lightness is also a percentage; 0% is dark (black) and 100% is white.
+		#p2 { background-color: hsl(120, 100%, 75%); }  /* light green */
+	3) HSLA color values are an extension of HSL color values with an alpha channel - which specifies the opacity for a color.
+		#p3 { background-color: hsla(120, 100%, 25%, 0.3); }  /* dark green with opacity */
+	4) The CSS3 opacity property sets the opacity for a specified RGB value. It must be a number between 0.0 (fully transparent) and 1.0 (fully opaque).
+		#p3 { background-color:rgb(0,0,255); opacity:0.6; }  /* blue with opacity */
 background
 	1. Background Color
 	The background-color property specifies the background color of an element.
@@ -216,6 +226,19 @@ text
 	The word-spacing property is used to specify the space between the words in a text.
 		h1 { word-spacing: 10px; }
 		h2 { word-spacing: -5px; }
+	10. CSS3 text-overflow
+	It specifies how overflowed content that is not displayed should be signaled to the user. It can be clipped or it can be rendered as an ellipsis (...).
+		p.test1 { white-space: nowrap; width: 200px; border: 1px solid #000000; overflow: hidden; text-overflow: clip; }
+		p.test2 { white-space: nowrap; width: 200px; border: 1px solid #000000; overflow: hidden; text-overflow: ellipsis; }
+	You can display the overflowed content when hovering over the element.
+		div.test:hover { text-overflow: inherit; overflow: visible; }
+	11. CSS3 word-wrap
+	It allows long words to be able to be broken and wrap onto the next line.
+		p { word-wrap: break-word; }
+	12. CSS3 word-break
+	It specifies line breaking rules.
+		p.test1 { word-break: keep-all; }
+		p.test2 { word-break: break-all; }
 font
 	In CSS, there are two types of font family names:
 	1) generic family - a group of font families with a similar look (like "Serif" or "Monospace")
@@ -259,6 +282,16 @@ font
 	The font-variant property specifies whether or not a text should be displayed in a small-caps font. In a small-caps font, all lowercase letters are converted to uppercase letters. However, the converted uppercase letters appears in a smaller font size than the original uppercase letters in the text.
 		p.normal { font-variant: normal; }
 		p.small { font-variant: small-caps; }
+	6. CSS3 @font-face rule
+	It allows to use fonts that are not installed on the user's computer.
+		@font-face { font-family: my_font; src: url(sansation_light.woff); } div { font-family: my_font; }
+	@font-face descriptors:
+	1) font-family:name; Required. Defines a name for the font;
+	2) src:URL; Required. Defines the URL of the font file;
+	3) font-stretch: normal, condensed, ultra-condensed, extra-condensed, semi-condensed, expanded, semi-expanded, extra-expanded, ultra-expanded; Optional. Defines how the font should be stretched. Default is "normal";
+	4) font-style: normal, italic, oblique; Optional. Defines how the font should be styled. Default is "normal";
+	5) font-weight: normal, bold, [100-900]; Optional. Defines the boldness of the font. Default is "normal";
+	6) unicode-range: range; Optional. Defines the range of UNICODE characters the font supports. Default is "U+0-10FFFF";
 hyperlink
 	1. Styling Links
 	Links can be styled with any CSS property (e.g. color, font-family, background, etc.).
@@ -691,4 +724,245 @@ counter
 		body { counter-reset: section; } h1 { counter-reset: subsection; } h1::before { counter-increment: section; content: "Section " counter(section) ". "; } h2::before { counter-increment: subsection; content: counter(section) "." counter(subsection) " "; }
 	A counter can also be useful to make outlined lists because a new instance of a counter is automatically created in child elements.
 		ol { counter-reset: section; list-style-type: none; } li::before { counter-increment: section; content: counters(section,".") " "; }
+border-radius
+	With CSS3, you can give any element "rounded corners", by using the border-radius property.
+	Rounded corners for:
+	1) an element with a specified background color.
+		#rcorners1 { border-radius: 25px; background: #73AD21; padding: 20px; width: 200px; height: 150px; }
+	2) an element with a border.
+		#rcorners2 { border-radius: 25px; border: 2px solid #73AD21; padding: 20px; width: 200px; height: 150px; }
+	3) an element with a background image.
+		#rcorners3 { border-radius: 25px; background: url(paper.gif); background-position: left top; background-repeat: repeat; padding: 20px; width: 200px; height: 150px; }
+	The border-radius property is a shorthand property for the border-top-left-radius, border-top-right-radius, border-bottom-right-radius and border-bottom-left-radius properties.
+	Here are the rules:
+	1) One value: all four corners are rounded equally;
+	2) Two values: top-left and bottom-right corner, top-right and bottom-left corner;
+	3) Three values: top-left, top-right and bottom-left, bottom-right;
+	4) Four values: top-left, top-right, bottom-right, bottom-left corner;
+border-image
+	The CSS3 border-image property allows you to specify an image to be used instead of the normal border around an element.
+	The property has three parts:
+	1) The image to use as the border;
+	2) Where to slice the image;
+	3) Define whether the middle sections should be repeated or stretched;
+	The border-image property takes the image and slices it into nine sections, like a tic-tac-toe board. It then places the corners at the corners, and the middle sections are repeated or stretched as you specify.
+	Note: For border-image to work, the element also needs the border property set!
+		#borderimg { border: 10px solid transparent; padding: 15px; border-image: url(border.png) 30 round; }
+	The border-image property is a shorthand property for the border-image-source, border-image-slice, border-image-width, border-image-outset and border-image-repeat properties.
+background
+	CSS3 contains a few new background properties, which allow greater control of the background element.
+	New CSS3 properties: background-size, background-origin, background-clip.
+	CSS3 allows you to add multiple background images for an element, through the background-image property. The different background images are separated by commas, and the images are stacked on top of each other, where the first image is closest to the viewer.
+		#example1 { background-image: url(img_flwr.gif), url(paper.gif); background-position: right bottom, left top; background-repeat: no-repeat, repeat; }
+	Multiple background images can be specified using either the individual background properties or the background shorthand property.
+		#example1 { background: url(img_flwr.gif) right bottom no-repeat, url(paper.gif) left top repeat; }
+	The CSS3 background-size property allows you to specify the size of background images. Before CSS3, the size of a background image was the actual size of the image. CSS3 allows us to re-use background images in different contexts. The size can be specified in lengths, percentages, or by using one of the two keywords: contain or cover.
+		#div1 { background: url(img_flower.jpg); background-size: 100px 80px; background-repeat: no-repeat; }
+	The contain keyword scales the background image to be as large as possible (but both its width and its height must fit inside the content area). As such, depending on the proportions of the background image and the background positioning area, there may be some areas of the background which are not covered by the background image.
+		#div1 { background: url(img_flower.jpg); background-size: contain; background-repeat: no-repeat; }
+	The cover keyword scales the background image so that the content area is completely covered by the background image (both its width and height are equal to or exceed the content area). As such, some parts of the background image may not be visible in the background positioning area.
+		#div2 { background: url(img_flower.jpg); background-size: cover; background-repeat: no-repeat; }
+	The background-size property also accepts multiple values for background size (using a comma-separated list), when working with multiple backgrounds.
+		#example1 { background: url(img_flwr.gif) left top no-repeat, url(img_flwr.gif) right bottom no-repeat, url(paper.gif) left top repeat; background-size: 50px, 130px, auto; }
+	Full Size Background Image. It covers the entire browser window at all times.
+		html { background: url(img_flower.jpg) no-repeat center fixed; background-size: cover; }
+background-origin
+	The CSS3 background-origin property specifies where the background image is positioned.
+	It takes three different values:
+	1) border-box - the background image starts from the upper left corner of the border;
+	2) padding-box - (default) the background image starts from the upper left corner of the padding edge;
+	3) content-box - the background image starts from the upper left corner of the content;
+		#example1 { border: 10px solid black; padding: 35px; background: url(img_flwr.gif); background-repeat: no-repeat; background-origin: content-box; }
+background-clip
+	The CSS3 background-clip property specifies the painting area of the background.
+	It takes three different values:
+	1) border-box - (default) the background is painted to the outside edge of the border;
+	2) padding-box - the background is painted to the outside edge of the padding;
+	3) content-box - the background is painted within the content box;
+		#example1 { border: 10px dotted black; padding: 35px; background: yellow; background-clip: content-box; }
+gradient
+	CSS3 gradients let you display smooth transitions between two or more specified colors.
+	CSS3 defines two types of gradients: Linear Gradients (goes down/up/left/right/diagonally), Radial Gradients (defined by their center).
+	1) Linear Gradients.
+	To create a linear gradient you must define at least two color stops. Color stops are the colors you want to render smooth transitions among. You can also set a starting point and a direction (or an angle) along with the gradient effect.
+	Syntax: background: linear-gradient(direction, color-stop1, color-stop2, ...);
+		#grad { background: red; /* For browsers that do not support gradients */ background: linear-gradient(red, yellow); }
+		#grad { background: linear-gradient(to right, red , yellow); }
+		#grad { background: linear-gradient(to bottom right, red, yellow); }
+		#grad { background: linear-gradient(red, yellow, green); /* Multiple Color Stops */ }
+		#grad { background: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet); }
+	If you want more control over the direction of the gradient, you can define an angle, instead of the predefined directions (to bottom, to top, to right, to left, to bottom right, etc.).
+		#grad { background: linear-gradient(-90deg, red, yellow); }
+	CSS3 gradients also support transparency, which can be used to create fading effects.
+		#grad { background: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1)); }
+	The repeating-linear-gradient() function is used to repeat linear gradients.
+		#grad { background: repeating-linear-gradient(red, yellow 10%, green 20%); }
+	2) Radial Gradients
+	A radial gradient is defined by its center. To create a radial gradient you must also define at least two color stops.
+	Syntax: background: radial-gradient(shape size at position, start-color, ..., last-color);
+		#grad { background: red; /* For browsers that do not support gradients */ background: radial-gradient(red, yellow, green); }
+		#grad { background: radial-gradient(red 5%, yellow 15%, green 60%); }
+		#grad { background: radial-gradient(circle, red, yellow, green); }
+	The size parameter defines the size of the gradient. It can take four values: closest-side, farthest-side, closest-corner, farthest-corner.
+		#grad1 { background: radial-gradient(closest-side at 60% 55%, red, yellow, black); }
+		#grad2 { background: radial-gradient(farthest-side at 60% 55%, red, yellow, black); }
+	The repeating-radial-gradient() function is used to repeat radial gradients.
+		#grad { background: repeating-radial-gradient(red, yellow 10%, green 15%); }
+shadow
+	With CSS3 you can add shadow to text and to elements. The following properties are available: text-shadow, box-shadow.
+	1) text-shadow
+	It applies shadow to text.
+		h1 { text-shadow: 2px /* horizontal */ 2px /* vertical */ 5px /* blur */ red /* color */; }
+	To add more than one shadow to the text, you can add a comma-separated list of shadows.
+		h1 { text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF; }
+	2) box-shadow
+	It applies shadow to elements.
+		div { box-shadow: 10px 10px 5px grey; }
+		div.card { width: 250px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); text-align: center; }
+transform
+	CSS3 transforms allow you to translate, rotate, scale, and skew elements.
+	A transformation is an effect that lets an element change shape, size and position. CSS3 supports 2D and 3D transformations.
+	1. CSS3 2D Transforms
+	2D transformation methods: translate(), rotate(), scale(), skewX(), skewY(), matrix().
+	1) translate()
+	It moves an element from its current position (according to the parameters given for the X-axis and the Y-axis).
+		div { transform: translate(50px, 100px); }
+	2) rotate()
+	It rotates an element clockwise or counter-clockwise according to a given degree.
+		div { transform: rotate(20deg); }
+	3) scale()
+	It increases or decreases the size of an element (according to the parameters given for the width and height).
+		div { transform: scale(2, 3); }
+	4) skew(), skewX(), skewY()
+	They skew an element along the X or Y-axis by the given angle.
+		div { transform: skew(20deg, 10deg); }
+		div { transform: skewX(20deg); }
+	5) matrix()
+	It combines all the 2D transform methods into one.
+		div { transform: matrix(1, -0.3, 0, 1, 0, 0); }
+	2. CSS3 3D Transforms
+	3D transformation methods: rotateX(), rotateY(), rotateZ(). They rotate an element around its X, Y or Z-axis at a given degree.
+		div { transform: rotateX(150deg); }
+transition
+	CSS3 transitions allows to change property values smoothly (from one value to another), over a given duration.
+	To create a transition effect, you must specify two things:
+	1) the CSS property(ies) you want to add an effect to;
+	2) the duration of the effect(s)
+	The transition effect will start when the specified CSS property (width) changes value.
+		div { width: 100px; height: 100px; background: red; transition: width 2s; } div:hover { width: 300px; }
+	transition is a shorthand property for: transition-property, transition-duration, transition-timing-function and transition-delay.
+	Note: If the duration part is not specified, the transition will have no effect, because the default value is 0.
+	transition-timing-function
+	specifies the speed curve of the transition effect. It can have the following values:
+	1) ease - specifies a transition effect with a slow start, then fast, then end slowly (this is default);
+	2) linear - specifies a transition effect with the same speed from start to end;
+	3) ease-in - specifies a transition effect with a slow start;
+	4) ease-out - specifies a transition effect with a slow end;
+	5) ease-in-out - specifies a transition effect with a slow start and end;
+	6) cubic-bezier(n,n,n,n) - lets you define your own values in a cubic-bezier function.
+		#div3 {transition-timing-function: ease-in;}
+	transition-delay
+	specifies a delay (in seconds) for the transition effect.
+		div { transition-delay: 1s; }
+animation
+	An animation lets an element gradually change from one style to another.
+	To use CSS3 animation, you must first specify some keyframes for the animation. Keyframes hold what styles the element will have at certain times.
+		@keyframes example { from {background-color: red;} to {background-color: yellow;} }
+		div { width: 100px; height: 100px; background-color: red; animation-name: example; animation-duration: 4s; }
+	Note: If the animation-duration property is not specified, the animation will have no effect, because the default value is 0.
+	It is also possible to use percent. By using percent, you can add as many style changes as you like.
+		@keyframes example { 0% {background-color: red;} 25% {background-color: yellow;} 50% {background-color: blue;} 100% {background-color: green;} }
+	animation-delay property specifies a delay for the start of an animation.
+		div { animation-name: example; animation-duration: 4s; animation-delay: 2s; }
+	animation-iteration-count property specifies the number of times an animation should run. Use the value "infinite" to make the animation continue for ever.
+		div { animation-iteration-count: 3; }
+		div { animation-iteration-count: infinite; }
+	animation-direction property is used to let an animation run in reverse direction or alternate cycles.
+		div { animation-direction: reverse; }
+		div { animation-direction: alternate; }
+	animation-timing-function property specifies the speed curve of the animation. It can have the following values:
+	1) ease - specifies an animation with a slow start, then fast, then end slowly (this is default);
+	2) linear - specifies an animation with the same speed from start to end;
+	3) ease-in - specifies an animation with a slow start;
+	4) ease-out - specifies an animation with a slow end;
+	5) ease-in-out - specifies an animation with a slow start and end;
+	6) cubic-bezier(n,n,n,n) - lets you define your own values in a cubic-bezier function;
+		#div {animation-timing-function: ease-in-out;}
+	animation is a shorthand property for animation effects.
+		div { animation: example 5s linear 2s infinite alternate; }
+filter
+	The CSS3 filter property adds visual effects (like blur and saturation) to an element.
+		img { filter: grayscale(100%); }
+	Filter Functions:  none, blur(), brightness(), contrast(), drop-shadow(), grayscale(), hue-rotate(), invert(), opacity(), saturate(), sepia(), url();
+button
+	Button styling: background-color, border, border-radius, color, padding, text-align, text-decoration, display, font-size;
+	:hover selector is used to change the style of a button when you move the mouse over it.
+	Tip: Use the transition-duration property to determine the speed of the "hover" effect.
+	box-shadow property is used to add shadows to a button.
+		.button1 { box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); }
+		.button2:hover { box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); }
+	opacity property is used to add transparency to a button (creates a "disabled" look).
+	Tip: add the cursor property with a value of "not-allowed", which will display a "no parking sign" when you mouse over the button.
+		.disabled { opacity: 0.6; cursor: not-allowed; }
+	width property is used to change the width of a button.
+		.button1 {width: 250px;}
+	float:left is used to create a button group.
+		.button { float: left; border: 1px solid green }
+box-sizing
+	The CSS3 box-sizing property allows us to include the padding and border in an element's total width and height.
+		* { box-sizing: border-box; }
+flexbox
+	Flexible boxes, or flexbox, is a new layout mode in CSS3.
+	Use of flexbox ensures that elements behave predictably when the page layout must accommodate different screen sizes and different display devices. For many applications, the flexible box model provides an improvement over the block model in that it does not use floats, nor do the flex container's margins collapse with the margins of its contents.
+	1. Flexbox Concepts
+	Flexbox consists of flex containers and flex items.
+	A flex container is declared by setting the display property of an element to either flex (rendered as a block) or inline-flex (rendered as inline). Inside a flex container there is one or more flex items.
+	Note: Everything outside a flex container and inside a flex item is rendered as usual. Flexbox defines how flex items are laid out inside a flex container.
+	Flex items are positioned inside a flex container along a flex line. By default there is only one flex line per flex container.
+		.flex-container { display: flex; width: 200px; height: 250px; background-color: lightgrey; }
+		.flex-item { background-color: cornflowerblue; width: 100px; height: 100px; margin: 10px; }
+	2. flex-direction
+	The flex-direction property specifies the direction of the flexible items inside the flex container.
+	Values:
+	1) left-to-right, top-to-bottom (default);
+	2) row-reverse - If the writing-mode (direction) is left to right, the flex items will be laid out right to left;
+	3) column - If the writing system is horizontal, the flex items will be laid out vertically;
+	4) column-reverse - Same as column, but reversed;
+	3. justify-content
+	The justify-content property horizontally aligns the flexible container's items when the items do not use all available space on the main-axis.
+	Values:
+	1) flex-start - Default value. Items are positioned at the beginning of the container;
+	2) flex-end - Items are positioned at the end of the container;
+	3) center - Items are positioned at the center of the container;
+	4) space-between - Items are positioned with space between the lines;
+	5) space-around - Items are positioned with space before, between, and after the lines;
+	4. align-items
+	The align-items property vertically aligns the flexible container's items when the items do not use all available space on the cross-axis.
+	Values:
+	1) stretch - Default value. Items are stretched to fit the container;
+	2) flex-start - Items are positioned at the top of the container;
+	3) flex-end - Items are positioned at the bottom of the container;
+	4) center - Items are positioned at the center of the container (vertically);
+	5) baseline - Items are positioned at the baseline of the container;
+	5. flex-wrap
+	The flex-wrap property specifies whether the flex items should wrap or not, if there is not enough room for them on one flex line.
+	Values:
+	1) nowrap - Default value. The flexible items will not wrap;
+	2) wrap - The flexible items will wrap if necessary;
+	3) wrap-reverse - The flexible items will wrap, if necessary, in reverse order;
+	6. align-content
+	The align-content property modifies the behavior of the flex-wrap property. It is similar to align-items, but instead of aligning flex items, it aligns flex lines.
+	Values:
+	1) stretch - Default value. Lines stretch to take up the remaining space;
+	2) flex-start - Lines are packed toward the start of the flex container;
+	3) flex-end - Lines are packed toward the end of the flex container;
+	4) center - Lines are packed toward the center of the flex container;
+	5) space-between - Lines are evenly distributed in the flex container;
+	6) space-around - Lines are evenly distributed in the flex container, with half-size spaces on either end;
+	7. Flex Item Properties
+	Values: order, margin, align-self, flex.
+
+
+
+
 
