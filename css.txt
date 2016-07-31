@@ -961,8 +961,22 @@ flexbox
 	6) space-around - Lines are evenly distributed in the flex container, with half-size spaces on either end;
 	7. Flex Item Properties
 	Values: order, margin, align-self, flex.
-
-
-
-
-
+media
+	The @media rule, introduced in CSS2, made it possible to define different style rules for different media types. You could have one set of style rules for computer screens, one for printers, one for handheld devices, one for television-type devices, and so on.
+	Note: Unfortunately these media types never got a lot of support by devices, other than the print media type.
+	Media queries in CSS3 extend the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device.
+	Media queries can be used to check many things, such as: width and height of the viewport, width and height of the device, orientation (is the tablet/phone in landscape or portrait mode?), resolution.
+	Syntax: A media query consists of a media type and can contain one or more expressions, which resolve to either true or false.
+		@media not|only mediatype and (expressions) { CSS-Code; }
+	The result of the query is true if the specified media type matches the type of device the document is being displayed on and all expressions in the media query are true. When a media query is true, the corresponding style sheet or style rules are applied, following the normal cascading rules. Unless you use the not or only operators, the media type is optional and the all type will be implied.
+	You can also have different stylesheets for different media.
+		<link rel="stylesheet" media="mediatype and|not|only (expressions)" href="print.css">
+	CSS3 Media Types:
+	1) all; Used for all media type devices;
+	2) print; Used for printers;
+	3) screen; Used for computer screens, tablets, smart-phones etc.;
+	4) speech; Used for screenreaders that "reads" the page out loud;
+		@media screen and (min-width: 480px) { body { background-color: lightgreen; } }
+		@media screen and (min-width: 480px) { #leftsidebar {width: 200px; float: left;} #main {margin-left:216px;} }
+		@media screen and (max-width: 699px) and (min-width: 520px) { ul li a { padding-left: 30px; background: url(email-icon.png) left center no-repeat; } }
+		@media screen and (max-width: 1000px) and (min-width: 700px) { ul li a:before { content: "Email: "; font-style: italic; color: #666666; } }
