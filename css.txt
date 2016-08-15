@@ -434,7 +434,7 @@ position
 	When elements are positioned, they can overlap other elements. The z-index property specifies the stack order of an element (which element should be placed in front of, or behind, the others). An element can have a positive or negative stack order. An element with greater stack order is always in front of an element with a lower stack order.
 		img { position: absolute; left: 0px; top: 0px; z-index: -1; }
 	Note: If two positioned elements overlap without a z-index specified, the element positioned last in the HTML code will be shown on top.
-overflow 
+overflow
 	overflow property specifies whether to clip content or to add scrollbars when the content of an element is too big to fit in a specified area.
 	Note: The overflow property only works for block elements with a specified height.
 	The overflow property has the following values: visible (default), hidden, scroll, auto.
