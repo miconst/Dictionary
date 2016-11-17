@@ -1,0 +1,858 @@
+abstract
+	The abstract modifier indicates that the thing being modified has a missing or incomplete implementation.
+	The abstract modifier can be used with classes, methods, properties, indexers, and events.
+	Use the abstract modifier in a class declaration to indicate that a class is intended only to be a base class of other classes. Members marked as abstract, or included in an abstract class, must be implemented by classes that derive from the abstract class.
+		abstract class ShapesClass { abstract public int Area(); }
+		class Square : ShapesClass { int side = 0; public override int Area() { return side * side; } }
+	Abstract classes have the following features:
+	1) An abstract class cannot be instantiated.
+	2) An abstract class may contain abstract methods and accessors.
+	3) It is not possible to modify an abstract class with the sealed modifier because the two modifers have opposite meanings. The sealed modifier prevents a class from being inherited and the abstract modifier requires a class to be inherited.
+	4) A non-abstract class derived from an abstract class must include actual implementations of all inherited abstract methods and accessors.
+	Use the abstract modifier in a method or property declaration to indicate that the method or property does not contain implementation.
+	Abstract methods have the following features:
+	1) An abstract method is implicitly a virtual method.
+	2) Abstract method declarations are only permitted in abstract classes.
+	3) Because an abstract method declaration provides no actual implementation, there is no method body; the method declaration simply ends with a semicolon and there are no curly braces ({ }) following the signature. The implementation is provided by an overriding method, which is a member of a non-abstract class.
+		public abstract void MyMethod();
+	4) It is an error to use the static or virtual modifiers in an abstract method declaration.
+	Abstract properties behave like abstract methods, except for the differences in declaration and invocation syntax:
+	1) It is an error to use the abstract modifier on a static property.
+	2) An abstract inherited property can be overridden in a derived class by including a property declaration that uses the override modifier.
+	An abstract class must provide implementation for all interface members.
+	An abstract class that implements an interface might map the interface methods onto abstract methods.
+		interface I { void M(); }
+		abstract class C : I { public abstract void M(); }
+as
+	You can use the as operator to perform certain types of conversions between compatible reference types or nullable types.
+		class A {}
+		class B : A {}
+		B b = new B();
+		A a = b as A;
+	The as operator is like a cast operation. However, if the conversion isn't possible, it returns null instead of raising an exception.
+	Note: the as operator performs only reference conversions, nullable conversions, and boxing conversions. The as operator can't perform other conversions, such as user-defined conversions, which should instead be performed by using cast expressions.
+base
+	The base keyword is used to access members of the base class from within a derived class:
+	1) Call a method on the base class that has been overridden by another method.
+	2) Specify which base-class constructor should be called when creating instances of the derived class.
+	A base class access is permitted only in a constructor, an instance method, or an instance property accessor. It is an error to use the base keyword from within a static method.
+	The base class that is accessed is the base class specified in the class declaration.
+bool
+	The bool keyword is an alias of System.Boolean. It is used to declare variables to store the Boolean values, true and false.
+	Note: If you require a Boolean variable that can also have a value of null, use bool?.
+	The default value of a bool variable is false. The default value of a bool? variable is null.
+	Note: There is no conversion between the bool type and other types.
+break
+	The break statement terminates the closest enclosing loop or switch statement in which it appears. Control is passed to the statement that follows the terminated statement, if any.
+byte
+	The byte keyword is an alias of System.Byte. It denotes an unsigned 8-bit integral type that stores values in the range from 0 to 255.
+	Conversions:
+	There is a predefined implicit conversion from byte to short, ushort, int, uint, long, ulong, float, double, or decimal.
+	You cannot implicitly convert non-literal numeric types of larger storage size to byte. Also, there is no implicit conversion from floating-point types to byte.
+case
+	Each switch section contains one or more case labels followed by one or more statements.
+	Each case label specifies a constant value. The switch statement transfers control to the switch section whose case label matches the value of the switch expression.
+catch
+	The try-catch statement consists of a try block followed by one or more catch clauses, which specify handlers for different exceptions.
+	When an exception is thrown, the common language runtime (CLR) looks for the catch statement that handles this exception. If the currently executing method does not contain such a catch block, the CLR looks at the method that called the current method, and so on up the call stack. If no catch block is found, then the CLR displays an unhandled exception message to the user and stops execution of the program.
+	Although the catch clause can be used without arguments to catch any type of exception, this usage is not recommended. In general, you should only catch those exceptions that you know how to recover from. Therefore, you should always specify an object argument derived from System.Exception.
+		catch (InvalidCastException e) { }
+	It is possible to use more than one specific catch clause in the same try-catch statement. In this case, the order of the catch clauses is important because the catch clauses are examined in order. Catch the more specific exceptions before the less specific ones. The compiler produces an error if you order your catch blocks so that a later block can never be reached.
+	Using catch arguments is one way to filter for the exceptions you want to handle. You can also use a predicate expression that further examines the exception to decide whether to handle it. If the predicate expression returns false, then the search for a handler continues.
+		catch (ArgumentException e) when (e.ParamName == "mask") { }
+	A throw statement can be used in a catch block to re-throw the exception that is caught by the catch statement.
+		catch (IOException e) { throw; }
+	You can catch one exception and throw a different exception.
+		catch (InvalidCastException e) { throw new YourCustomException("Put your error message here.", e); }
+char
+	The char keyword is used to declare an instance of the System.Char structure that the .NET Framework uses to represent a Unicode character. The value of a Char object is a 16-bit numeric (ordinal) value.
+	Unicode characters are used to represent most of the written languages throughout the world.
+	Constants of the char type can be written as character literals, hexadecimal escape sequence, or Unicode representation. You can also cast the integral character codes.
+		char c = 'X';      // Character literal
+		char c = '\x0058'; // Hexadecimal
+		char c = (char)88; // Cast from integral type
+		char c = '\u0058'; // Unicode
+	A char can be implicitly converted to ushort, int, uint, long, ulong, float, double, or decimal. However, there are no implicit conversions from other types to the char type.
+	The System.Char type provides several static methods for working with char values.
+checked
+	The checked keyword is used to explicitly enable overflow checking for integral-type arithmetic operations and conversions.
+	By default, an expression that contains only constant values causes a compiler error if the expression produces a value that is outside the range of the destination type. If the expression contains one or more non-constant values, the compiler does not detect the overflow.
+		int i1 = 2147483647 + 10; // compiler error CS0220 because 2147483647 is the maximum value for integers.
+		int ten = 10; int i2 = 2147483647 + ten; // not a compiler error.
+	Overflow checking can be enabled by compiler options, environment configuration, or use of the checked keyword.
+		Console.WriteLine(checked(2147483647 + ten)); // Checked expression.
+		checked { int i3 = 2147483647 + ten; } // Checked block.
+	The unchecked keyword can be used to prevent overflow checking.
+class
+	Classes are declared using the keyword class.
+	Only single inheritance is allowed in C#. In other words, a class can inherit implementation from one base class only. However, a class can implement more than one interface.
+	Classes that you declare directly within a namespace, not nested within other classes, can be either public or internal. Classes are internal by default.
+	Class members, including nested classes, can be public, protected internal, protected, internal, or private. Members are private by default.
+const
+	You use the const keyword to declare a constant field or a constant local. Constant fields and locals aren't variables and may not be modified. Constants can be numbers, Boolean values, strings, or a null reference. Don’t create a constant to represent information that you expect to change at any time. For example, don’t use a constant field to store the price of a service, a product version number, or the brand name of a company. These values can change over time, and because compilers propagate constants, other code compiled with your libraries will have to be recompiled to see the changes.
+	The type of a constant declaration specifies the type of the members that the declaration introduces. The initializer of a constant local or a constant field must be a constant expression that can be implicitly converted to the target type.
+	A constant expression is an expression that can be fully evaluated at compile time. Therefore, the only possible values for constants of reference types are string and a null reference.
+	The constant declaration can declare multiple constants.
+		public const double x = 1.0, y = 2.0, z = 3.0;
+	The static modifier is not allowed in a constant declaration.
+	Note: The readonly keyword differs from the const keyword. A const field can only be initialized at the declaration of the field. A readonly field can be initialized either at the declaration or in a constructor. Therefore, readonly fields can have different values depending on the constructor used. Also, although a const field is a compile-time constant, the readonly field can be used for run-time constants.
+		public static readonly uint t = (uint)DateTime.Now.Ticks;
+continue
+	The continue statement passes control to the next iteration of the enclosing while, do, for, or foreach statement in which it appears.
+decimal
+	The decimal keyword indicates a 128-bit data type. Compared to floating-point types, the decimal type has more precision and a smaller range, which makes it appropriate for financial and monetary calculations.
+	Approximate Range: (-7.9 x 10^28 to 7.9 x 10^28).
+	Precision: 28-29 significant digits.
+	If you want a numeric real literal to be treated as decimal, use the suffix m or M.
+		decimal myMoney = 300.5m;
+	Without the suffix m, the number is treated as a double and generates a compiler error.
+	Conversions.
+	The integral types are implicitly converted to decimal and the result evaluates to decimal. Therefore you can initialize a decimal variable using an integer literal, without the suffix.
+		decimal myMoney = 300;
+	There is no implicit conversion between floating-point types and the decimal type; therefore, a cast must be used to convert between these two types.
+		double x = (double)myMoney;
+		myMoney = (decimal)x;
+	You can also mix decimal and numeric integral types in the same expression. However, mixing decimal and floating-point types without a cast causes a compilation error.
+	Formatting Decimal Output.
+	You can format the results by using the String.Format method, or through the Console.Write method, which calls String.Format(). The currency format is specified by using the standard currency format string "C" or "c".
+default
+	The default keyword can be used in the switch statement or in generic code:
+	1) The switch statement: Specifies the default label.
+	2) Generic code: Specifies the default value of the type parameter. This will be null for reference types and zero for value types.
+		T temp = default(T);
+delegate
+	The declaration of a delegate type is similar to a method signature. It has a return value and any number of parameters of any type.
+		public delegate void TestDelegate(string message);
+		public delegate int TestDelegate(MyType m, long num);
+	A delegate is a reference type that can be used to encapsulate a named or an anonymous method. Delegates are similar to function pointers in C++; however, delegates are type-safe and secure.
+	Delegates are the basis for Events.
+	A delegate can be instantiated by associating it either with a named or anonymous method.
+	The delegate must be instantiated with a method or lambda expression that has a compatible return type and input parameters. For use with anonymous methods, the delegate and the code to be associated with it are declared together.
+do
+	The do statement executes a statement or a block of statements repeatedly until a specified expression evaluates to false. The body of the loop must be enclosed in braces, {}, unless it consists of a single statement. In that case, the braces are optional.
+		int x = 0; do { x++; } while (x < 5);
+	Unlike the while statement, a do-while loop is executed one time before the conditional expression is evaluated.
+	At any point in the do-while block, you can break out of the loop using the break statement. You can step directly to the while expression evaluation statement by using the continue statement. If the while expression evaluates to true, execution continues at the first statement in the loop. If the expression evaluates to false, execution continues at the first statement after the do-while loop.
+	A do-while loop can also be exited by the goto, return, or throw statements.
+double
+	The double keyword is an alias of System.Double. It signifies a simple type that stores 64-bit floating-point values.
+	Approximate range: ±5.0 × 10^−324 to ±1.7 × 10^308.
+	Precision: 15-16 digits.
+	By default, a real numeric literal on the right side of the assignment operator is treated as double. However, if you want an integer number to be treated as double, use the suffix d or D.
+		double x = 3D;
+	Conversions.
+	You can mix numeric integral types and floating-point types in an expression. In this case, the integral types are converted to floating-point types. The evaluation of the expression is performed according to the following rules:
+	1) If one of the floating-point types is double, the expression evaluates to double, or bool in relational or Boolean expressions.
+	2) If there is no double type in the expression, it evaluates to float, or bool in relational or Boolean expressions.
+	A floating-point expression can contain the following sets of values:
+	1) Positive and negative zero.
+	2) Positive and negative infinity.
+	3) Not-a-Number value (NaN).
+	4) The finite set of nonzero values.
+enum
+	The enum keyword is used to declare an enumeration, a distinct type that consists of a set of named constants called the enumerator list.
+	Usually it is best to define an enum directly within a namespace so that all classes in the namespace can access it with equal convenience. However, an enum can also be nested within a class or struct.
+	By default, the first enumerator has the value 0, and the value of each successive enumerator is increased by 1.
+		enum Days {Sat, Sun, Mon, Tue, Wed, Thu, Fri};
+	Enumerators can use initializers to override the default values.
+		enum Days {Sat=1, Sun, Mon, Tue, Wed, Thu, Fri};
+	Every enumeration type has an underlying type, which can be any integral type except char. The default underlying type of enumeration elements is int. To declare an enum of another integral type, such as byte, use a colon after the identifier followed by the type.
+		enum Days : byte {Sat=1, Sun, Mon, Tue, Wed, Thu, Fri};
+	The approved types for an enum are byte, sbyte, short, ushort, int, uint, long, or ulong.
+	A variable of enum type can be assigned any value in the range of the underlying type; the values are not limited to the named constants.
+	The underlying type specifies how much storage is allocated for each enumerator. However, an explicit cast is necessary to convert from enum type to an integral type.
+		int x = (int)Days.Sun;
+	When you apply System.FlagsAttribute ([Flags]) to an enumeration that contains elements that can be combined with a bitwise OR operation, the attribute affects the behavior of the enum when it is used with some tools.
+event
+	The event keyword is used to declare an event in a publisher class.
+	Events are a special kind of multicast delegate that can only be invoked from within the class or struct where they are declared (the publisher class). If other classes or structs subscribe to the event, their event handler methods will be called when the publisher class raises the event.
+	Events can be marked as public, private, protected, internal, or protected internal. These access modifiers define how users of the class can access the event.
+	The following keywords apply to events:
+	1) static - Makes the event available to callers at any time, even if no instance of the class exists.
+	2) virtual - Allows derived classes to override the event behavior by using the override keyword.
+	3) sealed - Specifies that for derived classes it is no longer virtual.
+	4) abstract - The compiler will not generate the add and remove event accessor blocks and therefore derived classes must provide their own implementation.
+explicit
+	The explicit keyword declares a user-defined type conversion operator that must be invoked with a cast.
+		class Fahrenheit { public static explicit operator Celsius(Fahrenheit fahr) { return new Celsius((5.0f / 9.0f) * (fahr.degrees - 32)); }}
+	The conversion operator converts from a source type to a target type. The source type provides the conversion operator. Unlike implicit conversion, explicit conversion operators must be invoked by means of a cast. If a conversion operation can cause exceptions or lose information, you should mark it explicit. This prevents the compiler from silently invoking the conversion operation with possibly unforeseen consequences.
+	Omitting the cast results in compile-time error CS0266.
+extern
+	The extern modifier is used to declare a method that is implemented externally. A common use of the extern modifier is with the DllImport attribute when you are using Interop services to call into unmanaged code. In this case, the method must also be declared as static.
+		[DllImport("avifil32.dll")] private static extern void AVIFileInit();
+	The extern keyword can also define an external assembly alias, which makes it possible to reference different versions of the same component from within a single assembly.
+	It is an error to use the abstract and extern modifiers together to modify the same member. Using the extern modifier means that the method is implemented outside the C# code, whereas using the abstract modifier means that the method implementation is not provided in the class.
+false
+	1. Literal.
+	Represents the boolean value false.
+	2. Operator.
+	Returns the bool value true to indicate that an operand is false and returns false otherwise.
+finally
+	By using a finally block, you can clean up any resources that are allocated in a try block, and you can run code even if an exception occurs in the try block. Typically, the statements of a finally block run when control leaves a try statement. The transfer of control can occur as a result of normal execution, of execution of a break, continue, goto, or return statement, or of propagation of an exception out of the try statement.
+	Within a handled exception, the associated finally block is guaranteed to be run. However, if the exception is unhandled, execution of the finally block is dependent on how the exception unwind operation is triggered. That, in turn, is dependent on how your computer is set up.
+	Usually, when an unhandled exception ends an application, whether or not the finally block is run is not important. However, if you have statements in a finally block that must be run even in that situation, one solution is to add a catch block to the try-finally statement. Alternatively, you can catch the exception that might be thrown in the try block of a try-finally statement higher up the call stack. That is, you can catch the exception in the method that calls the method that contains the try-finally statement, or in the method that calls that method, or in any method in the call stack. If the exception is not caught, execution of the finally block depends on whether the operating system chooses to trigger an exception unwind operation.
+	C# also contains the using statement, which provides similar functionality for IDisposable objects in a convenient syntax.
+fixed
+	The fixed statement prevents the garbage collector from relocating a movable variable. The fixed statement is only permitted in an unsafe context. Fixed can also be used to create fixed size buffers.
+	The fixed statement sets a pointer to a managed variable and "pins" that variable during the execution of the statement. Without fixed, pointers to movable managed variables would be of little use since garbage collection could relocate the variables unpredictably. The C# compiler only lets you assign a pointer to a managed variable in a fixed statement.
+		unsafe static void TestMethod() { Point pt = new Point(); fixed (int* p = &pt.x) { *p = 1; }}
+	You can initialize a pointer by using an array, a string, a fixed-size buffer, or the address of a variable.
+	You can initialize multiple pointers, as long as they are all of the same type.
+		fixed (byte* ps = srcarray, pd = dstarray) {...}
+	To initialize pointers of different types, simply nest fixed statements.
+		fixed (int* p1 = &point.x) { fixed (double* p2 = &arr[5]) {...}}
+	After the code in the statement is executed, any pinned variables are unpinned and subject to garbage collection. Therefore, do not point to those variables outside the fixed statement.
+	Note: Pointers initialized in fixed statements cannot be modified.
+	In unsafe mode, you can allocate memory on the stack, where it is not subject to garbage collection and therefore does not need to be pinned. For more information, see stackalloc.
+float
+	The float keyword (System.Single) signifies a simple type that stores 32-bit floating-point values.
+	Approximate range: -3.4 × 10^38 to +3.4 × 10^38.
+	Precision: 7 digits.
+	By default, a real numeric literal on the right side of the assignment operator is treated as double. Therefore, to initialize a float variable, use the suffix f or F.
+		float x = 3.5F;
+	If you do not use the suffix, you will get a compilation error because you are trying to store a double value into a float variable.
+	Conversions.
+	You can mix numeric integral types and floating-point types in an expression. In this case, the integral types are converted to floating-point types.
+	The evaluation of the expression is performed according to the following rules:
+	1) If one of the floating-point types is double, the expression evaluates to double or bool in relational or Boolean expressions.
+	2) If there is no double type in the expression, the expression evaluates to float or bool in relational or Boolean expressions.
+	A floating-point expression can contain the following sets of values:
+	1) Positive and negative zero
+	2) Positive and negative infinity
+	3) Not-a-Number value (NaN)
+	4) The finite set of nonzero values
+for
+	By using a for loop, you can run a statement or a block of statements repeatedly until a specified expression evaluates to false. This kind of loop is useful for iterating over arrays and for other applications in which you know in advance how many times you want the loop to iterate.
+	Every for statement defines initializer, condition, and iterator sections. These sections usually determine how many times the loop iterates.
+		for (initializer; condition; iterator) body
+	All of the expressions that define a for statement are optional.
+		for (;;) {...} // an infinite loop
+foreach
+	The foreach statement repeats a group of embedded statements for each element in an array or an object collection that implements the System.Collections.IEnumerable or System.Collections.Generic.IEnumerable<T> interface.
+	The foreach statement is used to iterate through the collection to get the information that you want, but can not be used to add or remove items from the source collection to avoid unpredictable side effects. If you need to add or remove items from the source collection, use a for loop.
+	The embedded statements continue to execute for each element in the array or collection. After the iteration has been completed for all the elements in the collection, control is transferred to the next statement following the foreach block.
+	At any point within the foreach block, you can break out of the loop by using the break keyword, or step to the next iteration in the loop by using the continue keyword.
+	A foreach loop can also be exited by the goto, return, or throw statements.
+		int[] arr = new int[] { 0, 1, 2, 3 }; foreach (int x in arr) {...}
+goto
+	The goto statement transfers the program control directly to a labeled statement.
+	A common use of goto is to transfer control to a specific switch-case label or the default label in a switch statement.
+	The goto statement is also useful to get out of deeply nested loops.
+		switch (n) { case 1: break; case 2: goto case 1; default: break; }
+		for (int i = 0; i < 2; i++) for (int j = 0; j < 2; j++) { goto Found; } Found:
+if
+	An if statement identifies which statement to run based on the value of a Boolean expression.
+		if (condition) {...} else {...}
+implicit
+	The implicit keyword is used to declare an implicit user-defined type conversion operator. Use it to enable implicit conversions between a user-defined type and another type, if the conversion is guaranteed not to cause a loss of data.
+	By eliminating unnecessary casts, implicit conversions can improve source code readability. However, because implicit conversions do not require programmers to explicitly cast from one type to the other, care must be taken to prevent unexpected results. In general, implicit conversion operators should never throw exceptions and never lose information so that they can be used safely without the programmer's awareness. If a conversion operator cannot meet those criteria, it should be marked explicit.
+in
+	1. foreach
+	The foreach statement repeats a group of embedded statements for each element in an array or an object collection that implements the System.Collections.IEnumerable or System.Collections.Generic.IEnumerable<T> interface. The foreach statement is used to iterate through the collection to get the information that you want, but can not be used to add or remove items from the source collection to avoid unpredictable side effects. If you need to add or remove items from the source collection, use a for loop.
+	2. Generic Modifier
+	For generic type parameters, the in keyword specifies that the type parameter is contravariant. You can use the in keyword in generic interfaces and delegates.
+		interface IContravariant<in A> { } // Contravariant interface.
+		public delegate void DContravariant<in A>(A argument); // Contravariant delegate.
+	Contravariance enables you to use a less derived type than that specified by the generic parameter. This allows for implicit conversion of classes that implement variant interfaces and implicit conversion of delegate types. Covariance and contravariance in generic type parameters are supported for reference types, but they are not supported for value types.
+	A type can be declared contravariant in a generic interface or delegate if it is used only as a type of method arguments and not used as a method return type. ref and out parameters cannot be variant.
+	An interface that has a contravariant type parameter allows its methods to accept arguments of less derived types than those specified by the interface type parameter. For example, because in .NET Framework 4, in the IComparer<T> interface, type T is contravariant, you can assign an object of the IComparer(Of Person) type to an object of the IComparer(Of Employee) type without using any special conversion methods if Employee inherits Person.
+	A contravariant delegate can be assigned another delegate of the same type, but with a less derived generic type parameter.
+int
+	The int keyword denotes a signed 32-bit integral type (System.Int32).
+	Range: -2,147,483,648 to 2,147,483,647.
+	An integer literal has no suffix, its type is the first of these types in which its value can be represented: int, uint, long, ulong.
+	Conversions.
+	There is a predefined implicit conversion from int to long, float, double, or decimal.
+	There is a predefined implicit conversion from sbyte, byte, short, ushort, or char to int.
+	Note: there is no implicit conversion from floating-point types to int.
+interface
+	An interface contains only the signatures of methods, properties, events or indexers. A class or struct that implements the interface must implement the members of the interface that are specified in the interface definition.
+	An interface can be a member of a namespace or a class and can contain signatures of the following members:
+	1) Methods
+	2) Properties
+	3) Indexers
+	4) Events
+	An interface can inherit from one or more base interfaces.
+	When a base type list contains a base class and interfaces, the base class must come first in the list.
+	A class that implements an interface can explicitly implement members of that interface. An explicitly implemented member cannot be accessed through a class instance, but only through an instance of the interface.
+		interface IPoint { int X { get; set; } int Y { get; set; } }
+		class Point : IPoint { int x, y; public int X { get { return x; } set { x = value; } } public int y { get { return y; } set { y = value; } } }
+internal
+	The internal keyword is an access modifier for types and type members. Internal types or members are accessible only within files in the same assembly.
+		public class A { internal static int x = 0; }
+	Types or members that have access modifier protected internal can be accessed from the current assembly or from types that are derived from the containing class.
+	A common use of internal access is in component-based development because it enables a group of components to cooperate in a private manner without being exposed to the rest of the application code. For example, a framework for building graphical user interfaces could provide Control and Form classes that cooperate by using members with internal access. Since these members are internal, they are not exposed to code that is using the framework.
+	It is an error to reference a type or a member with internal access outside the assembly within which it was defined.
+is
+	Checks if an object is compatible with a given type.
+		if (obj is MyObject) {...}
+	An is expression evaluates to true if the provided expression is non-null, and the provided object can be cast to the provided type without causing an exception to be thrown.
+	The is keyword causes a compile-time warning if the expression is known to always be true or to always be false, but typically evaluates type compatibility at run time.
+	The is operator cannot be overloaded.
+	Note: the is operator only considers reference conversions, boxing conversions, and unboxing conversions. Other conversions, such as user-defined conversions, are not considered.
+	Anonymous methods are not allowed on the left side of the is operator. This exception includes lambda expressions.
+lock
+	The lock keyword marks a statement block as a critical section by obtaining the mutual-exclusion lock for a given object, executing a statement, and then releasing the lock. The following example includes a lock statement.
+		class A { private Object thisLock = new Object(); public void Test() { lock (thisLock) {...}}}
+	The lock keyword ensures that one thread does not enter a critical section of code while another thread is in the critical section. If another thread tries to enter a locked code, it will wait, block, until the object is released.
+	The lock keyword calls Enter at the start of the block and Exit at the end of the block. A ThreadInterruptedException is thrown if Interrupt interrupts a thread that is waiting to enter a lock statement.
+	In general, avoid locking on a public type, or instances beyond your code's control. The common constructs lock (this), lock (typeof (MyType)), and lock ("myLock") violate this guideline:
+	1) lock (this) is a problem if the instance can be accessed publicly.
+	2) lock (typeof (MyType)) is a problem if MyType is publicly accessible.
+	3) lock("myLock") is a problem because any other code in the process using the same string, will share the same lock.
+	Best practice is to define a private object to lock on, or a private static object variable to protect data common to all instances.
+	You can't use the await keyword in the body of a lock statement.
+long
+	The long keyword (System.Int64) denotes a signed 64-bit integral type.
+	Range: –9,223,372,036,854,775,808 to 9,223,372,036,854,775,807.
+	When an integer literal has no suffix, its type is the first of these types in which its value can be represented: int, uint, long, ulong.
+		long x = 4294967296;
+	You can also use the suffix L with the long.
+		long x = 4294967296L;
+	When you use the suffix L, the type of the literal integer is determined to be either long or ulong according to its size.
+	A common use of the suffix is with calling overloaded methods. Using the suffix L guarantees that the correct type is called.
+	You can use the long type with other numeric integral types in the same expression, in which case the expression is evaluated as long (or bool in the case of relational or Boolean expressions).
+	Note: You can also use the lowercase letter "l" as a suffix. However, this generates a compiler warning because the letter "l" is easily confused with the digit "1." Use "L" for clarity.
+	Conversions.
+	There is a predefined implicit conversion from long to float, double, or decimal. Otherwise a cast must be used.
+	There is a predefined implicit conversion from sbyte, byte, short, ushort, int, uint, or char to long.
+	Note: there is no implicit conversion from floating-point types to long.
+namespace
+	The namespace keyword is used to declare a scope that contains a set of related objects. You can use a namespace to organize code elements and to create globally unique types.
+		namespace SpaceA { class ClassA {} interface InterfaceA {} namespace SpaceB { class ClassB {}}}
+	Within a namespace, you can declare one or more of the following types:
+	1) another namespace
+	2) class
+	3) interface
+	4) struct
+	5) enum
+	6) delegate
+	Whether or not you explicitly declare a namespace in a C# source file, the compiler adds a default namespace. This unnamed namespace, sometimes referred to as the global namespace, is present in every file. Any identifier in the global namespace is available for use in a named namespace.
+	Namespaces implicitly have public access and this is not modifiable.
+	It is possible to define a namespace in two or more declarations.
+		namespace MyCompany.Proj1 { class MyClass {}} namespace MyCompany.Proj1 { class MyClass1 {}}
+new
+	In C#, the new keyword can be used as an operator, a modifier, or a constraint.
+	1. new Operator
+	Used to create objects and invoke constructors.
+		Class1 obj  = new Class1();
+	It is also used to create instances of anonymous types.
+		var query = from cust in customers select new {Name = cust.Name, Address = cust.PrimaryAddress};
+	The new operator is also used to invoke the default constructor for value types.
+		int i = new int();
+	The new operator cannot be overloaded.
+	If the new operator fails to allocate memory, it throws the exception, OutOfMemoryException.
+	Note: Value-type objects such as structs are created on the stack, while reference-type objects such as classes are created on the heap. Both types of objects are destroyed automatically, but objects based on value types are destroyed when they go out of scope, whereas objects based on reference types are destroyed at an unspecified time after the last reference to them is removed. For reference types that consume fixed resources such as large amounts of memory, file handles, or network connections, it is sometimes desirable to employ deterministic finalization to ensure that the object is destroyed as soon as possible.
+	2. new Modifier
+	Used to hide an inherited member from a base class member.
+	When used as a declaration modifier, the new keyword explicitly hides a member that is inherited from a base class. When you hide an inherited member, the derived version of the member replaces the base class version. Although you can hide members without using the new modifier, you get a compiler warning. If you use new to explicitly hide a member, it suppresses this warning.
+	To hide an inherited member, declare it in the derived class by using the same member name, and modify it with the new keyword.
+	public class A { public int x; public void Invoke() { } } public class B : A { new public void Invoke() { } }
+	Name hiding through inheritance takes one of the following forms:
+	1) Generally, a constant, field, property, or type that is introduced in a class or struct hides all base class members that share its name. There are special cases. For example, if you declare a new field with name N to have a type that is not invocable, and a base type declares N to be a method, the new field does not hide the base declaration in invocation syntax.
+	2) A method introduced in a class or struct hides properties, fields, and types that share that name in the base class. It also hides all base class methods that have the same signature.
+	3) An indexer introduced in a class or struct hides all base class indexers that have the same signature.
+	It is an error to use both new and override on the same member, because the two modifiers have mutually exclusive meanings. The new modifier creates a new member with the same name and causes the original member to become hidden. The override modifier extends the implementation for an inherited member.
+	Using the new modifier in a declaration that does not hide an inherited member generates a warning.
+	3. new Constraint
+	Used to restrict types that might be used as arguments for a type parameter in a generic declaration.
+	The new constraint specifies that any type argument in a generic class declaration must have a public parameterless constructor. To use the new constraint, the type cannot be abstract.
+		class ItemFactory<T> where T : new() { public T GetNewItem() { return new T(); }}
+	Note: When you use the new() constraint with other constraints, it must be specified last.
+null
+	The null keyword is a literal that represents a null reference, one that does not refer to any object. null is the default value of reference-type variables. Ordinary value types cannot be null. However, C# 2.0 introduced nullable value types.
+object
+	The object type is an alias for Object in the .NET Framework. In the unified type system of C#, all types, predefined and user-defined, reference types and value types, inherit directly or indirectly from Object. You can assign values of any type to variables of type object. When a variable of a value type is converted to object, it is said to be boxed. When a variable of type object is converted to a value type, it is said to be unboxed.
+	Variables of type object can accept values of any data type and how variables of type object can use methods on Object from the .NET Framework.
+operator
+	Use the operator keyword to overload a built-in operator or to provide a user-defined conversion in a class or struct declaration.
+		class Fraction { int num, den; public Fraction(int num, int den); public static Fraction operator +(Fraction a, Fraction b); }
+out
+	You can use the out contextual keyword in two contexts (each is a link to detailed information), as a parameter modifier or in generic type parameter declarations in interfaces and delegates.
+	1. Parameter modifier
+	The out keyword causes arguments to be passed by reference. This is like the ref keyword, except that ref requires that the variable be initialized before it is passed. To use an out parameter, both the method definition and the calling method must explicitly use the out keyword.
+		static void Method(out int i) { i = 42; }
+		int value; Method(out value);
+	Although variables passed as out arguments do not have to be initialized before being passed, the called method is required to assign a value before the method returns.
+	Although the ref and out keywords cause different run-time behavior, they are not considered part of the method signature at compile time. Therefore, methods cannot be overloaded if the only difference is that one method takes a ref argument and the other takes an out argument. Overloading can be done, however, if one method takes a ref or out argument and the other uses neither.
+	Properties are not variables and therefore cannot be passed as out parameters.
+	You can't use the ref and out keywords for the following kinds of methods:
+	1) Async methods, which you define by using the async modifier.
+	2) Iterator methods, which include a yield return or yield break statement.
+	Note: Declaring an out method is useful when you want a method to return multiple values.
+	2. Generic modifier
+	For generic type parameters, the out keyword specifies that the type parameter is covariant. You can use the out keyword in generic interfaces and delegates.
+	Covariance enables you to use a more derived type than that specified by the generic parameter. This allows for implicit conversion of classes that implement variant interfaces and implicit conversion of delegate types. Covariance and contravariance are supported for reference types, but they are not supported for value types.
+	An interface that has a covariant type parameter enables its methods to return more derived types than those specified by the type parameter. For example, because in .NET Framework 4, in IEnumerable<T>, type T is covariant, you can assign an object of the IEnumerabe(Of String) type to an object of the IEnumerable(Of Object) type without using any special conversion methods.
+	A covariant delegate can be assigned another delegate of the same type, but with a more derived generic type parameter.
+		interface ICovariant<out R> { } // Covariant interface.
+		interface IExtCovariant<out R> : ICovariant<R> { } // Extending covariant interface.
+		class Sample<R> : ICovariant<R> { } // Implementing covariant interface.
+	In a generic interface, a type parameter can be declared covariant if it satisfies the following conditions:
+	1) The type parameter is used only as a return type of interface methods and not used as a type of method arguments.
+	Note: There is one exception to this rule. If in a covariant interface you have a contravariant generic delegate as a method parameter, you can use the covariant type as a generic type parameter for this delegate.
+	2) The type parameter is not used as a generic constraint for the interface methods.
+	In a generic delegate, a type can be declared covariant if it is used only as a method return type and not used for method arguments.
+override
+	The override modifier is required to extend or modify the abstract or virtual implementation of an inherited method, property, indexer, or event.
+	An override method provides a new implementation of a member that is inherited from a base class. The method that is overridden by an override declaration is known as the overridden base method. The overridden base method must have the same signature as the override method.
+	You cannot override a non-virtual or static method. The overridden base method must be virtual, abstract, or override.
+	An override declaration cannot change the accessibility of the virtual method. Both the override method and the virtual method must have the same access level modifier.
+	You cannot use the new, static, or virtual modifiers to modify an override method.
+	An overriding property declaration must specify exactly the same access modifier, type, and name as the inherited property, and the overridden property must be virtual, abstract, or override.
+params
+	By using the params keyword, you can specify a method parameter that takes a variable number of arguments.
+	You can send a comma-separated list of arguments of the type specified in the parameter declaration or an array of arguments of the specified type. You also can send no arguments. If you send no arguments, the length of the params list is zero.
+	No additional parameters are permitted after the params keyword in a method declaration, and only one params keyword is permitted in a method declaration.
+		public static void UseParams(params int[] list) {...}
+		public static void UseParams2(params object[] list) {...}
+		UseParams(1, 2, 3, 4);
+		UseParams2(1, 'a', "test");
+		int[] myIntArray = { 5, 6, 7, 8, 9 }; UseParams(myIntArray);
+private
+	The private keyword is a member access modifier. Private access is the least permissive access level. Private members are accessible only within the body of the class or the struct in which they are declared.
+	Nested types in the same body can also access those private members.
+	It is a compile-time error to reference a private member outside the class or the struct in which it is declared.
+protect
+	The protected keyword is a member access modifier. A protected member is accessible within its class and by derived class instances.
+	A protected member of a base class is accessible in a derived class only if the access occurs through the derived class type.
+	Note: struct members cannot be protected because the struct cannot be inherited.
+public
+	The public keyword is an access modifier for types and type members. Public access is the most permissive access level. There are no restrictions on accessing public members.
+readonly
+	The readonly keyword is a modifier that you can use on fields. When a field declaration includes a readonly modifier, assignments to the fields introduced by the declaration can only occur as part of the declaration or in a constructor in the same class.
+	You can assign a value to a readonly field only in the following contexts:
+	1) When the variable is initialized in the declaration.
+	2) For an instance field, in the instance constructors of the class that contains the field declaration, or for a static field, in the static constructor of the class that contains the field declaration. These are also the only contexts in which it is valid to pass a readonly field as an out or ref parameter.
+	Note: The readonly keyword is different from the const keyword. A const field can only be initialized at the declaration of the field. A readonly field can be initialized either at the declaration or in a constructor. Therefore, readonly fields can have different values depending on the constructor used. Also, while a const field is a compile-time constant, the readonly field can be used for runtime constants.
+		public static readonly uint timeStamp = (uint)DateTime.Now.Ticks;
+ref
+	The ref keyword causes an argument to be passed by reference, not by value. The effect of passing by reference is that any change to the parameter in the called method is reflected in the calling method. For example, if the caller passes a local variable expression or an array element access expression, and the called method replaces the object to which the ref parameter refers, then the caller’s local variable or the array element now refer to the new object.
+	Note: Do not confuse the concept of passing by reference with the concept of reference types. The two concepts are not the same. A method parameter can be modified by ref regardless of whether it is a value type or a reference type. There is no boxing of a value type when it is passed by reference.
+	To use a ref parameter, both the method definition and the calling method must explicitly use the ref keyword.
+		Method(ref val);
+	An argument that is passed to a ref parameter must be initialized before it is passed. This differs from out parameters, whose arguments do not have to be explicitly initialized before they are passed.
+	Members of a class can't have signatures that differ only by ref and out. A compiler error occurs if the only difference between two members of a type is that one of them has a ref parameter and the other has an out parameter.
+	However, overloading can be done when one method has a ref or out parameter and the other has a value parameter.
+	In other situations that require signature matching, such as hiding or overriding, ref and out are part of the signature and don't match each other.
+	Properties are not variables. They are methods, and cannot be passed to ref parameters.
+	You can't use the ref and out keywords for the following kinds of methods:
+	1) Async methods, which you define by using the async modifier.
+	2) Iterator methods, which include a yield return or yield break statement.
+return
+	The return statement terminates execution of the method in which it appears and returns control to the calling method. It can also return an optional value. If the method is a void type, the return statement can be omitted.
+	If the return statement is inside a try block, the finally block, if one exists, will be executed before control returns to the calling method.
+sbyte
+	The sbyte keyword (System.SByte) indicates a signed 8-bit integral type.
+	Range: -128 to 127.
+	Conversions.
+	There is a predefined implicit conversion from sbyte to short, int, long, float, double, or decimal.
+	You cannot implicitly convert nonliteral numeric types of larger storage size to sbyte.
+	Note: there is no implicit conversion from floating-point types to sbyte.
+sealed
+	When applied to a class, the sealed modifier prevents other classes from inheriting from it.
+		sealed class B : A {}
+	You can also use the sealed modifier on a method or property that overrides a virtual method or property in a base class. This enables you to allow classes to derive from your class and prevent them from overriding specific virtual methods or properties.
+		class Y : X { sealed protected override void F() {...} }
+	When you define new methods or properties in a class, you can prevent deriving classes from overriding them by not declaring them as virtual.
+	It is an error to use the abstract modifier with a sealed class, because an abstract class must be inherited by a class that provides an implementation of the abstract methods or properties.
+	When applied to a method or property, the sealed modifier must always be used with override.
+	Because structs are implicitly sealed, they cannot be inherited.
+	To determine whether to seal a class, method, or property, you should generally consider the following two points:
+	1) The potential benefits that deriving classes might gain through the ability to customize your class.
+	2) The potential that deriving classes could modify your classes in such a way that they would no longer work correctly or as expected.
+short
+	The short keyword (System.Int16) denotes a signed 16-bit integral data type.
+	Range: -32,768 to 32,767.
+	Conversions.
+	There is a predefined implicit conversion from short to int, long, float, double, or decimal.
+	You cannot implicitly convert nonliteral numeric types of larger storage size to short.
+	There is no implicit conversion from floating-point types to short.
+sizeof
+	Used to obtain the size in bytes for an unmanaged type. Unmanaged types include the built-in types that are listed in the table that follows, and also the following:
+	1) Enum types;
+	2) Pointer types;
+	3) User-defined structs that do not contain any fields or properties that are reference types;
+		int intSize = sizeof(int); // Constant value 4.
+	The sizeof operator cannot be overloaded. The values returned by the sizeof operator are of type int.
+	The following table shows the constant values that are substituted for sizeof expressions that have certain built-in types as operands.
+	sizeof(bool)     = 1
+	sizeof((s)byte)  = 1
+	sizeof(char)     = 2 (Unicode)
+	sizeof((u)short) = 2
+	sizeof((u)int)   = 4
+	sizeof((u)long)  = 8
+	sizeof(float)    = 4
+	sizeof(double)   = 8
+	sizeof(decimal)  = 16
+	For all other types, including structs, the sizeof operator can be used only in unsafe code blocks. Although you can use the Marshal.SizeOf method, the value returned by this method is not always the same as the value returned by sizeof. Marshal.SizeOf returns the size after the type has been marshaled, whereas sizeof returns the size as it has been allocated by the common language runtime, including any padding.
+stackalloc
+	The stackalloc keyword is used in an unsafe code context to allocate a block of memory on the stack. This memory is not subject to garbage collection and therefore does not have to be pinned (by using fixed). The lifetime of the memory block is limited to the lifetime of the method that defines it. You cannot free the memory before the method returns.
+		int* block = stackalloc int[100];
+	The keyword is valid only in local variable initializers.
+	Because pointer types are involved, stackalloc requires unsafe context.
+	stackalloc is like _alloca in the C run-time library.
+	Security.
+	Unsafe code is less secure than safe alternatives. However, the use of stackalloc automatically enables buffer overrun detection features in the common language runtime (CLR). If a buffer overrun is detected, the process is terminated as quickly as possible to minimize the chance that malicious code is executed.
+static
+	Use the static modifier to declare a static member, which belongs to the type itself rather than to a specific object. The static modifier can be used with classes, fields, methods, properties, operators, events, and constructors, but it cannot be used with indexers, destructors, or types other than classes.
+	A constant or type declaration is implicitly a static member.
+	A static member cannot be referenced through an instance. Instead, it is referenced through the type name.
+	While an instance of a class contains a separate copy of all instance fields of the class, there is only one copy of each static field.
+	It is not possible to use this to reference static methods or property accessors.
+	If the static keyword is applied to a class, all the members of the class must be static.
+	Classes and static classes may have static constructors. Static constructors are called at some point between when the program starts and the class is instantiated.
+	Note: The static keyword has more limited uses than in C++.
+string
+	The string type represents a sequence of zero or more Unicode characters. string is an alias for String in the .NET Framework.
+	Although string is a reference type, the equality operators (== and !=) are defined to compare the values of string objects, not references. This makes testing for string equality more intuitive.
+	The + operator concatenates strings.
+		string a = "good " + "morning";
+	Strings are immutable--the contents of a string object cannot be changed after the object is created, although the syntax makes it appear as if you can do this.
+	The [] operator can be used for readonly access to individual characters of a string.
+		char x = str[2];
+	String literals are of type string and can be written in two forms, quoted and @-quoted. Quoted string literals are enclosed in double quotation marks (").
+		"good morning"  // a string literal
+	String literals can contain any character literal. Escape sequences are included.
+		string a = "\\\u0066\n";
+	Note: The escape code \udddd (where dddd is a four-digit number) represents the Unicode character U+dddd. Eight-digit Unicode escape codes are also recognized: \Udddddddd.
+	Verbatim string literals start with @ and are also enclosed in double quotation marks.
+		@"good morning"  // a string literal
+	The advantage of verbatim strings is that escape sequences are not processed, which makes it easy to write, for example, a fully qualified file name.
+	To include a double quotation mark in an @-quoted string, double it.
+		@"""Ahoy!"" cried the captain." // "Ahoy!" cried the captain.
+struct
+	A struct type is a value type that is typically used to encapsulate small groups of related variables, such as the coordinates of a rectangle or the characteristics of an item in an inventory.
+	Structs can also contain constructors, constants, fields, methods, properties, indexers, operators, events, and nested types, although if several such members are required, you should consider making your type a class instead.
+	Structs can implement an interface but they cannot inherit from another struct. For that reason, struct members cannot be declared as protected.
+switch
+	The switch statement is a control statement that selects a switch section to execute from a list of candidates.
+	A switch statement includes one or more switch sections. Each switch section contains one or more case labels followed by one or more statements.
+	Each case label specifies a constant value. The switch statement transfers control to the switch section whose case label matches the value of the switch expression. If no case label contains a matching value, control is transferred to the default section, if there is one. If there is no default section, no action is taken and control is transferred outside the switch statement.
+	A switch statement can include any number of switch sections, and each section can have one or more case labels. However, no two case labels may contain the same constant value.
+	Execution of the statement list in the selected switch section begins with the first statement and proceeds through the statement list, typically until a jump statement, such as a break, goto case, return, or throw, is reached. At that point, control is transferred outside the switch statement or to another case label.
+	Unlike C++, C# does not allow execution to continue from one switch section to the next. C# requires the end of switch sections, including the final one, to be unreachable. That is, unlike some other languages, your code may not fall through into the next switch section.
+this
+	The this keyword refers to the current instance of the class and is also used as a modifier of the first parameter of an extension method.
+	The following are common uses of this:
+	1) To qualify members hidden by similar names.
+		public Employee(string name) { this.name = name; }
+	2) To pass an object as a parameter to other methods.
+		CalcTax(this);
+	3) To declare indexers.
+		public int this[int index] { get { return array[index]; } set { array[index] = value; }}
+	Static member functions, because they exist at the class level and not as part of an object, do not have a this pointer. It is an error to refer to this in a static method.
+throw
+	The throw statement is used to signal the occurrence of an anomalous situation (exception) during the program execution.
+	The thrown exception is an object whose class is derived from System.Exception.
+		class MyException : System.Exception {}
+		throw new MyException();
+	Usually the throw statement is used with try-catch or try-finally statements. A throw statement can be used in a catch block to re-throw the exception that the catch block caught. In this case, the throw statement does not take an exception operand.
+true
+	Used as an overloaded operator or as a literal.
+	1. true Operator
+	Returns the bool value true to indicate that an operand is true and returns false otherwise.
+	A type that overloads the true and false operators can be used for the controlling expression in if, do, while, and for statements and in conditional expressions.
+	If a type defines operator true, it must also define operator false.
+	A type cannot directly overload the conditional logical operators (&& and ||), but an equivalent effect can be achieved by overloading the regular logical operators and operators true and false.
+	2. true Literal
+	Represents the boolean value true.
+try
+	The try-catch statement consists of a try block followed by one or more catch clauses, which specify handlers for different exceptions.
+typeof
+	Used to obtain the System.Type object for a type.
+		System.Type type = typeof(int);
+	To obtain the run-time type of an expression, you can use the .NET Framework method GetType.
+		int i = 0; System.Type type = i.GetType();
+	The typeof operator cannot be overloaded.
+	The typeof operator can also be used on open generic types. Types with more than one type parameter must have the appropriate number of commas in the specification.
+		string s = method.ReturnType.GetInterface(typeof(System.Collections.Generic.IEnumerable<>).FullName);
+uint
+	The uint keyword (System.UInt32) signifies an unsigned 32-bit integral type.
+	Range: 0 to 4,294,967,295
+	Note: The uint type is not CLS-compliant. Use int whenever possible.
+	When an integer literal has no suffix, its type is the first of these types in which its value can be represented: int, uint, long, ulong. You can also use the suffix u or U. When you use the suffix U or u, the type of the literal is determined to be either uint or ulong according to the numeric value of the literal.
+		Console.WriteLine(44U.GetType());
+		Console.WriteLine(323442434344U.GetType());
+	Conversions.
+	There is a predefined implicit conversion from uint to long, ulong, float, double, or decimal.
+	There is a predefined implicit conversion from byte, ushort, or char to uint. Otherwise you must use a cast.
+	Note: there is no implicit conversion from floating-point types to uint.
+ulong
+	The ulong keyword (System.UInt64) denotes an unsigned 64-bit integral type.
+	Range: 0 to 18,446,744,073,709,551,615
+	When an integer literal has no suffix, its type is the first of these types in which its value can be represented: int, uint, long, ulong.
+	You can also use suffixes to specify the type of the literal according to the following rules:
+	1) If you use L or l, the type of the literal integer will be either long or ulong according to its size.
+	2) If you use U or u, the type of the literal integer will be either uint or ulong according to its size.
+	3) If you use UL, ul, Ul, uL, LU, lu, Lu, or lU, the type of the literal integer will be ulong.
+		Console.WriteLine((123UL + 456).GetType());
+	A common use of the suffix is with calling overloaded methods. Using a suffix with the ulong parameter guarantees that the correct type is called.
+	Conversions.
+	There is a predefined implicit conversion from ulong to float, double, or decimal.
+	There is a predefined implicit conversion from byte, ushort, uint, or char to ulong.
+	There is no implicit conversion from ulong to any integral type.
+	There is no implicit conversion from floating-point types to ulong.
+unchecked
+	The unchecked keyword is used to suppress overflow-checking for integral-type arithmetic operations and conversions.
+	In an unchecked context, if an expression produces a value that is outside the range of the destination type, the overflow is not flagged.
+	Expressions that contain non-constant terms are unchecked by default at compile time and run time.
+	Because checking for overflow takes time, the use of unchecked code in situations where there is no danger of overflow might improve performance. However, if overflow is a possibility, a checked environment should be used.
+unsafe
+	The unsafe keyword denotes an unsafe context, which is required for any operation involving pointers.
+	You can use the unsafe modifier in the declaration of a type or a member. The entire textual extent of the type or member is therefore considered an unsafe context.
+		unsafe static void FastCopy(byte[] src, byte[] dst, int count) {...} // Unsafe context: can use pointers here.
+	The scope of the unsafe context extends from the parameter list to the end of the method, so pointers can also be used in the parameter list.
+		unsafe static void FastCopy ( byte* ps, byte* pd, int count ) {...}
+	You can also use an unsafe block to enable the use of an unsafe code inside this block.
+		unsafe {...} // Unsafe context: can use pointers here.
+	To compile unsafe code, you must specify the /unsafe compiler option. Unsafe code is not verifiable by the common language runtime.
+ushort
+	The ushort keyword (System.UInt16) indicates an unsigned 16-bit integral data type.
+	Range: 0 to 65,535
+	Conversions.
+	There is a predefined implicit conversion from ushort to int, uint, long, ulong, float, double, or decimal.
+	There is a predefined implicit conversion from byte or char to ushort. Otherwise a cast must be used to perform an explicit conversion.
+	There is no implicit conversion from floating-point types to ushort.
+using
+	The using keyword has two major uses:
+	1. using Directive
+	The using directive has three uses:
+	1) To allow the use of types in a namespace so that you do not have to qualify the use of a type in that namespace.
+		using System.Text;
+	2) To allow you to access static members of a type without having to qualify the access with the type name.
+		using static System.Math;
+	3) To create an alias for a namespace or a type. This is called a using alias directive.
+		using Project = PC.MyCompany.Project;
+	Note: A using alias directive cannot have an open generic type on the right hand side. For example, you cannot create a using alias for a List<T>, but you can create one for a List<int>
+	Using static imports only accessible static members and nested types declared in the specified type. Inherited members are not imported.
+	Using static makes extension methods declared in the specified type available for extension method lookup. However, the names of the extension methods are not imported into scope for unqualified reference in code.
+	Methods with the same name imported from different types by different using static directives in the same compilation unit or namespace form a method group. Overload resolution within these method groups follows normal C# rules.
+	Remarks
+	The scope of a using directive is limited to the file in which it appears.
+	Create a using alias to make it easier to qualify an identifier to a namespace or type. The right side of a using alias directive must always be a fully-qualified type regardless of the using directives that come before it.
+	Create a using directive to use the types in a namespace without having to specify the namespace. A using directive does not give you access to any namespaces that are nested in the namespace you specify.
+	2. using Statement
+	Provides a convenient syntax that ensures the correct use of IDisposable objects.
+		using (Font fnt = new Font("Arial", 10.0f)) {...}
+	Remarks
+	File and Font are examples of managed types that access unmanaged resources (in this case file handles and device contexts). There are many other kinds of unmanaged resources and class library types that encapsulate them. All such types must implement the IDisposable interface.
+	As a rule, when you use an IDisposable object, you should declare and instantiate it in a using statement. The using statement calls the Dispose method on the object in the correct way, and (when you use it as shown earlier) it also causes the object itself to go out of scope as soon as Dispose is called. Within the using block, the object is read-only and cannot be modified or reassigned.
+	The using statement ensures that Dispose is called even if an exception occurs while you are calling methods on the object. You can achieve the same result by putting the object inside a try block and then calling Dispose in a finally block; in fact, this is how the using statement is translated by the compiler.
+	Multiple instances of a type can be declared in a using statement.
+		using (Font fnt1 = new Font("Arial", 10.0f), fnt2 = new Font("Arial", 10.0f)) {...}
+	You can instantiate the resource object and then pass the variable to the using statement, but this is not a best practice. In this case, the object remains in scope after control leaves the using block even though it will probably no longer have access to its unmanaged resources. In other words, it will no longer be fully initialized. If you try to use the object outside the using block, you risk causing an exception to be thrown. For this reason, it is generally better to instantiate the object in the using statement and limit its scope to the using block.
+virtual
+	The virtual keyword is used to modify a method, property, indexer, or event declaration and allow for it to be overridden in a derived class.
+	The implementation of a virtual member can be changed by an overriding member in a derived class.
+	When a virtual method is invoked, the run-time type of the object is checked for an overriding member. The overriding member in the most derived class is called, which might be the original member, if no derived class has overridden the member.
+	By default, methods are non-virtual. You cannot override a non-virtual method.
+	You cannot use the virtual modifier with the static, abstract, private, or override modifiers.
+	Virtual properties behave like abstract methods, except for the differences in declaration and invocation syntax:
+	1) It is an error to use the virtual modifier on a static property.
+	2) A virtual inherited property can be overridden in a derived class by including a property declaration that uses the override modifier.
+void
+	When used as the return type for a method, void specifies that the method doesn't return a value.
+	void isn't allowed in the parameter list of a method.
+	void is also used in an unsafe context to declare a pointer to an unknown type.
+	void is an alias for the .NET Framework System.Void type.
+volatile
+	The volatile keyword indicates that a field might be modified by multiple threads that are executing at the same time. Fields that are declared volatile are not subject to compiler optimizations that assume access by a single thread. This ensures that the most up-to-date value is present in the field at all times.
+	The volatile modifier is usually used for a field that is accessed by multiple threads without using the lock statement to serialize access.
+	The volatile keyword can be applied to fields of these types:
+	1) Reference types.
+	2) Pointer types (in an unsafe context). Note that although the pointer itself can be volatile, the object that it points to cannot. In other words, you cannot declare a "pointer to volatile."
+	3) Types such as sbyte, byte, short, ushort, int, uint, char, float, and bool.
+	4) An enum type with one of the following base types: byte, sbyte, short, ushort, int, or uint.
+	5) Generic type parameters known to be reference types.
+	6) IntPtr and UIntPtr.
+	The volatile keyword can only be applied to fields of a class or struct. Local variables cannot be declared volatile.
+while
+	The while statement executes a statement or a block of statements until a specified expression evaluates to false.
+	Because the test of the while expression takes place before each execution of the loop, a while loop executes zero or more times. This differs from the do loop, which executes one or more times.
+	A while loop can be terminated when a break, goto, return, or throw statement transfers control outside the loop. To pass control to the next iteration without exiting the loop, use the continue statement.
+add
+	The add contextual keyword is used to define a custom event accessor that is invoked when client code subscribes to your event. If you supply a custom add accessor, you must also supply a remove accessor.
+	You do not typically need to provide your own custom event accessors. The accessors that are automatically generated by the compiler when you declare an event are sufficient for most scenarios.
+		class Events : IDrawingObject { event EventHandler PreDrawEvent; event EventHandler IDrawingObject.OnDraw { add { lock (PreDrawEvent) { PreDrawEvent += value; } } remove { lock (PreDrawEvent) { PreDrawEvent -= value; }}}}
+alias
+	You might have to reference two versions of assemblies that have the same fully-qualified type names. For example, you might have to use two or more versions of an assembly in the same application. By using an external assembly alias, the namespaces from each assembly can be wrapped inside root-level namespaces named by the alias, which enables them to be used in the same file.
+	To reference two assemblies with the same fully-qualified type names, an alias must be specified at a command prompt.
+		/r:GridV1=grid.dll
+		/r:GridV2=grid20.dll
+	This creates the external aliases. To use these aliases from within a program, reference them by using the extern keyword.
+		extern alias GridV1;
+		extern alias GridV2;
+	Each extern alias declaration introduces an additional root-level namespace that parallels (but does not lie within) the global namespace. Thus types from each assembly can be referred to without ambiguity by using their fully qualified name, rooted in the appropriate namespace-alias.
+ascending
+	The ascending contextual keyword is used in the orderby clause in query expressions to specify that the sort order is from smallest to largest. Because ascending is the default sort order, you do not have to specify it.
+		IEnumerable<string> sortAscendingQuery = from vegetable in vegetables orderby vegetable ascending select vegetable;
+async
+	Use the async modifier to specify that a method, lambda expression, or anonymous method is asynchronous. If you use this modifier on a method or expression, it's referred to as an async method.
+		public async Task<int> ExampleMethodAsync() {...}
+	The method runs synchronously until it reaches its first await expression, at which point the method is suspended until the awaited task is complete. In the meantime, control returns to the caller of the method.
+	If the method that the async keyword modifies doesn't contain an await expression or statement, the method executes synchronously. A compiler warning alerts you to any async methods that don't contain await, because that situation might indicate an error.
+	The async keyword is contextual in that it's a keyword only when it modifies a method, a lambda expression, or an anonymous method. In all other contexts, it's interpreted as an identifier.
+	An async method can have a return type of Task, Task<TResult>, or void. The method can't declare any ref or out parameters, but it can call methods that have such parameters.
+	You specify Task<TResult> as the return type of an async method if the return statement of the method specifies an operand of type TResult. You use Task if no meaningful value is returned when the method is completed. That is, a call to the method returns a Task, but when the Task is completed, any await expression that's awaiting the Task evaluates to void.
+	You use the void return type primarily to define event handlers, which require that return type. The caller of a void-returning async method can't await it and can't catch exceptions that the method throws.
+await
+	The await operator is applied to a task in an asynchronous method to suspend the execution of the method until the awaited task completes. The task represents ongoing work.
+	The asynchronous method in which await is used must be modified by the async keyword. Such a method, defined by using the async modifier, and usually containing one or more await expressions, is referred to as an async method.
+	The task to which the await operator is applied typically is the return value from a call to a method that implements the Task-Based Asynchronous Pattern. Examples include values of type Task or Task<TResult>.
+	If await is applied to the result of a method call that returns a Task<TResult>, then the type of the await expression is TResult. If await is applied to the result of a method call that returns a Task, then the type of the await expression is void.
+	An await expression does not block the thread on which it is executing. Instead, it causes the compiler to sign up the rest of the async method as a continuation on the awaited task. Control then returns to the caller of the async method. When the task completes, it invokes its continuation, and execution of the async method resumes where it left off.
+	An await expression can occur only in the body of an immediately enclosing method, lambda expression, or anonymous method that is marked by an async modifier. The term await serves as a keyword only in that context. Elsewhere, it is interpreted as an identifier. Within the method, lambda expression, or anonymous method, an await expression cannot occur in the body of a synchronous function, in a query expression,, in the block of a lock statement, or in an unsafe context.
+	Exceptions
+	Most async methods return a Task or Task<TResult>. The properties of the returned task carry information about its status and history, such as whether the task is complete, whether the async method caused an exception or was canceled, and what the final result is. The await operator accesses those properties.
+	If you await a task-returning async method that causes an exception, the await operator rethrows the exception.
+	If you await a task-returning async method that's canceled, the await operator rethrows an OperationCanceledException.
+	A single task that is in a faulted state can reflect multiple exceptions. For example, the task might be the result of a call to Task.WhenAll. When you await such a task, the await operation rethrows only one of the exceptions. However, you can't predict which of the exceptions is rethrown.
+descending
+	The descending contextual keyword is used in the orderby clause in query expressions to specify that the sort order is from largest to smallest.
+		IEnumerable<string> sortDescendingQuery = from vegetable in vegetables orderby vegetable descending select vegetable;
+dynamic
+	The dynamic type enables the operations in which it occurs to bypass compile-time type checking. Instead, these operations are resolved at run time. The dynamic type simplifies access to COM APIs such as the Office Automation APIs, and also to dynamic APIs such as IronPython libraries, and to the HTML Document Object Model (DOM).
+	Type dynamic behaves like type object in most circumstances. However, operations that contain expressions of type dynamic are not resolved or type checked by the compiler. The compiler packages together information about the operation, and that information is later used to evaluate the operation at run time. As part of the process, variables of type dynamic are compiled into variables of type object. Therefore, type dynamic exists only at compile time, not at run time.
+		dynamic dyn = 1; System.Console.WriteLine(dyn.GetType());
+	The dynamic keyword can appear directly or as a component of a constructed type in the following situations:
+	1) In declarations, as the type of a property, field, indexer, parameter, return value, local variable, or type constraint.
+	2) In explicit type conversions, as the target type of a conversion.
+	3) In any context where types serve as values, such as on the right side of an is operator or an as operator, or as the argument to typeof as part of a constructed type.
+from
+	A query expression must begin with a from clause. Additionally, a query expression can contain sub-queries, which also begin with a from clause. The from clause specifies the following:
+	1) The data source on which the query or sub-query will be run.
+	2) A local range variable that represents each element in the source sequence.
+	Both the range variable and the data source are strongly typed. The data source referenced in the from clause must have a type of IEnumerable, IEnumerable<T>, or a derived type such as IQueryable<T>.
+		int[] numbers = { 5, 4, 1, 3, 0 }; var low = from num in numbers where num < 5 select num;
+	The Range Variable
+	The compiler infers the type of the range variable when the data source implements IEnumerable<T>. For example, if the source has a type of IEnumerable<Customer>, then the range variable is inferred to be Customer. The only time that you must specify the type explicitly is when the source is a non-generic IEnumerable type such as ArrayList.
+	The range variable is like an iteration variable in a foreach statement except for one very important difference: a range variable never actually stores data from the source. It just a syntactic convenience that enables the query to describe what will occur when the query is executed.
+	Compound from Clauses
+	In some cases, each element in the source sequence may itself be either a sequence or contain a sequence. For example, your data source may be an IEnumerable<Student> where each student object in the sequence contains a list of test scores. To access the inner list within each Student element, you can use compound from clauses. The technique is like using nested foreach statements. You can add where or orderby clauses to either from clause to filter the results.
+		var scoreQuery = from student in students from score in student.Scores where score > 90 select new { Last = student.LastName, score };
+	Using Multiple from Clauses to Perform Joins
+	A compound from clause is used to access inner collections in a single data source. However, a query can also contain multiple from clauses that generate supplemental queries from independent data sources. This technique enables you to perform certain types of join operations that are not possible by using the join clause.
+		var joinQuery1 = from upper in upperCase from lower in lowerCase select new { upper, lower };
+		var joinQuery2 = from lower in lowerCase where lower != 'x' from upper in upperCase select new { lower, upper };
+get
+	The get keyword defines an accessor method in a property or indexer that retrieves the value of the property or the indexer element.
+		class TimePeriod { private double seconds; public double Seconds { get { return seconds; } set { seconds = value; }}}
+		class TimePeriod { public double Hours { get; set; }} // a get accessor in an auto-implemented property
+global
+	The global contextual keyword, when it comes before the :: operator, refers to the global namespace, which is the default namespace for any C# program and is otherwise unnamed.
+		class TestClass : global::TestApp {}
+group
+	The group clause returns a sequence of IGrouping<TKey, TElement> objects that contain zero or more items that match the key value for the group. For example, you can group a sequence of strings according to the first letter in each string. In this case, the first letter is the key and has a type char, and is stored in the Key property of each IGrouping<TKey, TElement> object. The compiler infers the type of the key.
+	You can end a query expression with a group clause.
+		var studentQuery = from student in students group student by student.Last[0];
+	To perform additional query operations on each group, you can specify a temporary identifier by using the into contextual keyword. When you use into, you must continue with the query, and eventually end it with either a select statement or another group clause.
+		var studentQuery = from student in students group student by student.Last[0] into g orderby g.Key select g;
+	Enumerating the Results of a Group Query
+	Because the IGrouping<TKey, TElement> objects produced by a group query are essentially a list of lists, you must use a nested foreach loop to access the items in each group. The outer loop iterates over the group keys, and the inner loop iterates over each item in the group itself. A group may have a key but no elements.
+		foreach (IGrouping<char, Student> studentGroup in studentQuery) { Console.WriteLine(studentGroup.Key); foreach (var student in studentGroup) {...}}
+	Key Types
+	Group keys can be any type, such as a string, a built-in numeric type, or a user-defined named type or anonymous type.
+	Remarks
+	At compile time, group clauses are translated into calls to the GroupBy<TSource, TKey> method.
+into
+	The into contextual keyword can be used to create a temporary identifier to store the results of a group, join or select clause into a new identifier. This identifier can itself be a generator for additional query commands. When used in a group or select clause, the use of the new identifier is sometimes referred to as a continuation.
+		string[] words = { "apples", "blueberries", "oranges", "bananas", "apricots"};
+		var wordGroups = from w in words group w by w[0] into fruitGroup where fruitGroup.Count() >= 2 select new { FirstLetter = fruitGroup.Key, Words = fruitGroup.Count() };
+	The use of into in a group clause is only necessary when you want to perform additional query operations on each group.
+join
+	The join clause is useful for associating elements from different source sequences that have no direct relationship in the object model. The only requirement is that the elements in each source share some value that can be compared for equality. For example, a food distributor might have a list of suppliers of a certain product, and a list of buyers. A join clause can be used, for example, to create a list of the suppliers and buyers of that product who are all in the same specified region.
+	A join clause takes two source sequences as input. The elements in each sequence must either be or contain a property that can be compared to a corresponding property in the other sequence. The join clause compares the specified keys for equality by using the special equals keyword. All joins performed by the join clause are equijoins. The shape of the output of a join clause depends on the specific type of join you are performing. The following are three most common join types:
+	1) Inner join
+		var innerJoinQuery = from category in categories join prod in products on category.ID equals prod.CategoryID select new { ProductName = prod.Name, Category = category.Name }; //produces flat sequence
+	2) Group join
+		var innerGroupJoinQuery = from category in categories join prod in products on category.ID equals prod.CategoryID into prodGroup select new { CategoryName = category.Name, Products = prodGroup };
+	A group join produces a hierarchical result sequence, which associates elements in the left source sequence with one or more matching elements in the right side source sequence. A group join has no equivalent in relational terms; it is essentially a sequence of object arrays.
+	If no elements from the right source sequence are found to match an element in the left source, the join clause will produce an empty array for that item. Therefore, the group join is still basically an inner-equijoin except that the result sequence is organized into groups.
+	If you just select the results of a group join, you can access the items, but you cannot identify the key that they match on. Therefore, it is generally more useful to select the results of the group join into a new type that also has the key name.
+	3) Left outer join
+	In a left outer join, all the elements in the left source sequence are returned, even if no matching elements are in the right sequence. To perform a left outer join in LINQ, use the DefaultIfEmpty method in combination with a group join to specify a default right-side element to produce if a left-side element has no matches. You can use null as the default value for any reference type, or you can specify a user-defined default type.
+		var leftOuterJoinQuery = from category in categories join prod in products on category.ID equals prod.CategoryID into prodGroup from item in prodGroup.DefaultIfEmpty(new Product { Name = String.Empty, CategoryID = 0 }) select new { CatName = category.Name, ProdName = item.Name };
+	The equals operator
+	A join clause performs an equijoin. In other words, you can only base matches on the equality of two keys. Other types of comparisons such as "greater than" or "not equals" are not supported. To make clear that all joins are equijoins, the join clause uses the equals keyword instead of the == operator. The equals keyword can only be used in a join clause and it differs from the == operator in one important way. With equals, the left key consumes the outer source sequence, and the right key consumes the inner source. The outer source is only in scope on the left side of equals and the inner source sequence is only in scope on the right side.
+	Non-Equijoins
+	You can perform non-equijoins, cross joins, and other custom join operations by using multiple from clauses to introduce new sequences independently into a query.
+	Joins on object collections vs. relational tables
+	In a LINQ query expression, join operations are performed on object collections. Object collections cannot be "joined" in exactly the same way as two relational tables. In LINQ, explicit join clauses are only required when two source sequences are not tied by any relationship. When working with LINQ to SQL, foreign key tables are represented in the object model as properties of the primary table. For example, in the Northwind database, the Customer table has a foreign key relationship with the Orders table. When you map the tables to the object model, the Customer class has an Orders property that contains the collection of Orders associated with that Customer. In effect, the join has already been done for you.
+	Composite Keys
+	You can test for equality of multiple values by using a composite key. Composite keys can be also used in a group clause.
+	Remarks
+	A join clause that is not followed by into is translated into a Join<TOuter, TInner, TKey, TResult> method call. A join clause that is followed by into is translated to a GroupJoin<TOuter, TInner, TKey, TResult> method call.
+let
+	In a query expression, it is sometimes useful to store the result of a sub-expression in order to use it in subsequent clauses. You can do this with the let keyword, which creates a new range variable and initializes it with the result of the expression you supply. Once initialized with a value, the range variable cannot be used to store another value. However, if the range variable holds a queryable type, it can be queried.
+		var earlyBirdQuery = from sentence in strings let words = sentence.Split(' ') from word in words let w = word.ToLower() where w[0] == 'a' || w[0] == 'e' select word;
+orderby
+	In a query expression, the orderby clause causes the returned sequence or subsequence (group) to be sorted in either ascending or descending order. Multiple keys can be specified in order to perform one or more secondary sort operations. The sorting is performed by the default comparer for the type of the element. The default sort order is ascending. You can also specify a custom comparer. However, it is only available by using method-based syntax.
+		IEnumerable<string> sortAscendingQuery = from fruit in fruits orderby fruit select fruit;
+		IEnumerable<string> sortDescendingQuery = from w in fruits orderby w descending select w;
+		IEnumerable<Student> sortedStudents = from student in students orderby student.Last ascending, student.First ascending select student;
+	At compile time, the orderby clause is translated to a call to the OrderBy<TSource, TKey> method. Multiple keys in the orderby clause translate to ThenBy<TSource, TKey> method calls.
+partial
+	1. partial Type
+	Partial type definitions allow for the definition of a class, struct, or interface to be split into multiple files.
+	Splitting a class, struct or interface type over several files can be useful when you are working with large projects, or with automatically generated code such as that provided by the Windows Forms Designer. A partial type may contain a partial method.
+	2. partial Method
+	A partial method has its signature defined in one part of a partial type, and its implementation defined in another part of the type. Partial methods enable class designers to provide method hooks, similar to event handlers, that developers may decide to implement or not. If the developer does not supply an implementation, the compiler removes the signature at compile time. The following conditions apply to partial methods:
+	1) Signatures in both parts of the partial type must match.
+	2) The method must return void.
+	3) No access modifiers are allowed. Partial methods are implicitly private.
+remove
+	The remove contextual keyword is used to define a custom event accessor that is invoked when client code unsubscribes from your event. If you supply a custom remove accessor, you must also supply an add accessor.
+		class Events : IDrawingObject { event EventHandler PreDrawEvent; event EventHandler IDrawingObject.OnDraw { add { lock (PreDrawEvent) { PreDrawEvent += value; }} remove { lock (PreDrawEvent) { PreDrawEvent -= value; }}}}
+	You do not typically need to provide your own custom event accessors. The accessors that are automatically generated by the compiler when you declare an event are sufficient for most scenarios.
+select
+	In a query expression, the select clause specifies the type of values that will be produced when the query is executed. The result is based on the evaluation of all the previous clauses and on any expressions in the select clause itself. A query expression must terminate with either a select clause or a group clause.
+		List<int> Scores = new List<int>() { 97, 92, 60 }; IEnumerable<int> queryHighScores = from score in Scores where score > 80 select score;
+	At compile time, the select clause is translated to a method call to the Select<TSource, TResult> standard query operator.
+set
+	The set contextual keyword defines an accessor method in a property or indexer that assigns the value of the property or the indexer element.
+value
+	The contextual keyword value is used in the set accessor in ordinary property declarations. It is similar to an input parameter on a method. The word value references the value that client code is attempting to assign to the property.
+var
+	Variables that are declared at method scope can have an implicit type var. An implicitly typed local variable is strongly typed just as if you had declared the type yourself, but the compiler determines the type.
+where
+	1. generic type constraint
+	In a generic type definition, the where clause is used to specify constraints on the types that can be used as arguments for a type parameter defined in a generic declaration.
+		public class MyGenericClass<T> where T:IComparable {}
+	In addition to interface constraints, a where clause can include a base class constraint, which states that a type must have the specified class as a base class (or be that class itself) in order to be used as a type argument for that generic type. If such a constraint is used, it must appear before any other constraints on that type parameter.
+		class MyClass<T, U> where T : class where U : struct {}
+	The where clause may also include a constructor constraint. It is possible to create an instance of a type parameter using the new operator; however, in order to do so the type parameter must be constrained by the constructor constraint, new(). The new() Constraint lets the compiler know that any type argument supplied must have an accessible parameterless or default constructor.
+		public class MyGenericClass<T> where T : IComparable, new() { T item = new T(); } // This line is not possible without new() constraint
+	The new() constraint appears last in the where clause.
+	With multiple type parameters, use one where clause for each type parameter.
+	You can also attach constraints to type parameters of generic methods.
+		public bool MyMethod<T>(T t) where T : IMyInterface {}
+	Note: the syntax to describe type parameter constraints on delegates is the same as that of methods.
+		delegate T MyDelegate<T>() where T : new()
+	2. query clause
+	The where clause is used in a query expression to specify which elements from the data source will be returned in the query expression. It applies a Boolean condition (predicate) to each source element (referenced by the range variable) and returns those for which the specified condition is true. A single query expression may contain multiple where clauses and a single clause may contain multiple predicate subexpressions.
+		int[] numbers = { 5, 4, 1, 3 }; var queryLowNums = from num in numbers where num < 5 select num;
+	Within a single where clause, you can specify as many predicates as necessary by using the && and || operators.
+	A where clause may contain one or more methods that return Boolean values.
+	The where clause is a filtering mechanism. It can be positioned almost anywhere in a query expression, except it cannot be the first or last clause. A where clause may appear either before or after a group clause depending on whether you have to filter the source elements before or after they are grouped.
+	If a specified predicate is not valid for the elements in the data source, a compile-time error will result. This is one benefit of the strong type-checking provided by LINQ.
+	At compile time the where keyword is converted into a call to the Where Standard Query Operator method.
+yield
+	When you use the yield keyword in a statement, you indicate that the method, operator, or get accessor in which it appears is an iterator. Using yield to define an iterator removes the need for an explicit extra class (the class that holds the state for an enumeration, see IEnumerator<T> for an example) when you implement the IEnumerable and IEnumerator pattern for a custom collection type.
+		yield return <expression>;
+		yield break;
+	You use a yield return statement to return each element one at a time.
+	You consume an iterator method by using a foreach statement or LINQ query. Each iteration of the foreach loop calls the iterator method. When a yield return statement is reached in the iterator method, expression is returned, and the current location in code is retained. Execution is restarted from that location the next time that the iterator function is called.
+	You can use a yield break statement to end the iteration.
+	Iterator Methods and get Accessors
+	The declaration of an iterator must meet the following requirements:
+	1) The return type must be IEnumerable, IEnumerable<T>, IEnumerator, or IEnumerator<T>.
+	2) The declaration can't have any ref or out parameters.
+	The yield type of an iterator that returns IEnumerable or IEnumerator is object. If the iterator returns IEnumerable<T> or IEnumerator<T>, there must be an implicit conversion from the type of the expression in the yield return statement to the generic type parameter.
+	You can't include a yield return or yield break statement in methods that have the following characteristics:
+	1) Anonymous methods.
+	2) Methods that contain unsafe blocks.
+	Exception Handling
+	A yield return statement can't be located in a try-catch block. A yield return statement can be located in the try block of a try-finally statement.
+	A yield break statement can be located in a try block or a catch block but not a finally block.
+	If the foreach body (outside of the iterator method) throws an exception, a finally block in the iterator method is executed.

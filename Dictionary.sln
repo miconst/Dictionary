@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySqlDict", "MySqlDict\MySq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeGetRequest", "MakeGetRequest\MakeGetRequest.csproj", "{6C8B3E6A-2990-4A4B-A444-9C5B2DD56CED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jumble", "Jumble\Jumble.csproj", "{C2188B74-A5B0-4595-94CF-EF6D409E92B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6C8B3E6A-2990-4A4B-A444-9C5B2DD56CED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C8B3E6A-2990-4A4B-A444-9C5B2DD56CED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C8B3E6A-2990-4A4B-A444-9C5B2DD56CED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2188B74-A5B0-4595-94CF-EF6D409E92B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2188B74-A5B0-4595-94CF-EF6D409E92B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2188B74-A5B0-4595-94CF-EF6D409E92B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2188B74-A5B0-4595-94CF-EF6D409E92B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

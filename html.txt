@@ -1,0 +1,260 @@
+heading
+	Headings are defined with the <h1> to <h6> tags. <h1> defines the most important heading. <h6> defines the least important heading.
+		<h1>This is heading 1</h1>
+paragraph
+	Paragraphs are defined with the <p> tag.
+		<p>This is a paragraph.</p>
+link
+	Links are defined with the <a> tag.
+		<a href="http://www.google.com">This is a link</a>
+	Local link (link to the same web site) is specified with a relative URL (without http://www....).
+		<a href="html_images.asp">HTML Images</a>
+	The target attribute specifies where to open the linked document. Values:
+	1) _blank - Opens the linked document in a new window or tab;
+	2) _self - Opens the linked document in the same window/tab as it was clicked (this is default);
+	3) _parent - Opens the linked document in the parent frame;
+	4) _top - Opens the linked document in the full body of the window;
+	5) framename - Opens the linked document in a named frame;
+		<a href="http://www.google.com/" target="_blank">Click here!</a>
+image
+	Images are defined with the <img> tag. The source file (src), alternative text (alt), and size (width and height) are provided as attributes.
+		<img src="img.jpg" alt="my image" width="104" height="142">
+	It is common to use images as links.
+		<a href="default.asp"> <img src="smiley.gif" alt="HTML tutorial" style="width:42px;height:42px;border:0;"> </a>
+lang
+	The language of the document can be declared in the <html> tag. The language is declared with the lang attribute. Declaring a language is important for accessibility applications (screen readers) and search engines.
+		<!DOCTYPE html><html lang="en-US"><body> ... </body></html>
+title
+	Specifies extra information about an element (displayed as a tool tip).
+		<p title="I'm a tooltip"> This is a paragraph. </p>
+href
+	Links are defined with the <a> tag. The link address is specified in the href attribute.
+		<a href="http://www.google.com">This is a link</a>
+	Bookmarks are used to allow readers to jump to specific parts of a Web page. Bookmarks can be useful if your webpage is very long. To make a bookmark, you must first create the bookmark, and then add a link to it. When the link is clicked, the page will scroll to the location with the bookmark.
+		<h2 id="tips">Useful Tips Section</h2><a href="#tips">Visit the Useful Tips Section</a><a href="html_tips.html#tips">Visit the Useful Tips Section</a>
+style
+	Specifies an inline CSS style for an element.
+	The HTML style attribute has the following syntax: <tagname style="property:value;"> The property is a CSS property. The value is a CSS value.
+id
+	Specifies a unique id for an element.
+disabled
+	Specifies that an input element should be disabled
+head
+	The <head> element is a container for metadata. HTML metadata is data about the HTML document. Metadata is not displayed. The <head> element is placed between the <html> tag and the <body> tag.
+		<head><title>My First HTML</title><meta charset="UTF-8"></head>
+	The following tags describe metadata: <title>, <style>, <meta>, <link>, <script>, and <base>.
+	1) <title> defines the title of the document, and is required in all HTML/XHTML documents.
+	2) <style> is used to define style information for a single HTML page.
+		<style>body {background-color: powderblue;}</style>
+	3) <link> is used to link to external style sheets.
+		<link rel="stylesheet" href="mystyle.css">
+	4) <meta> is used to specify which character set is used, page description, keywords, author, and other metadata. Metadata is used by browsers (how to display content), by search engines (keywords), and other web services.
+		<meta charset="UTF-8">
+		<meta name="description" content="Free Web tutorials">
+		<meta name="keywords" content="HTML, CSS, XML, JavaScript">
+		<meta name="author" content="Hege Refsnes">
+		<meta http-equiv="refresh" content="30">
+	5) <script> is used to define client-side JavaScripts.
+		<script>function myFunction { document.getElementById("demo").innerHTML = "Hello JavaScript!"; }</script>
+	6) <base> specifies the base URL and base target for all relative URLs in a page.
+		<base href="http://www.w3schools.com/images/" target="_blank">
+pre
+	The <pre> element defines preformatted text. The text inside a <pre> element is displayed in a fixed-width font (usually Courier), and it preserves both spaces and line breaks.
+formatting elements
+	Formatting elements were designed to display special types of text:
+	1) <b> - Bold;
+	2) <strong> - Important;
+	3) <i> - Italic;
+	4) <em> - Emphasized;
+	5) <mark> - Marked;
+	6) <small> - Small;
+	7) <del> - Deleted;
+	8) <ins> - Inserted;
+	9) <sub> - Subscript;
+	10) <sup> - Superscript;
+quotation
+	1) <q> defines a short quotation. Browsers usually insert quotation marks around the <q> element.
+	2) <blockquote> defines a section that is quoted from another source. Browsers usually indent <blockquote> elements.
+	3) <abbr>  defines an abbreviation or an acronym. Marking abbreviations can give useful information to browsers, translation systems and search-engines.
+	4) <address> defines contact information (author/owner) of a document or an article. The <address> is usually displayed in italic. Most browsers will add a line break before and after the element.
+	5) <cite> defines the title of a work. Browsers usually display <cite> elements in italic.
+	6) <bdo> defines bi-directional override. The <bdo> is used to override the current text direction.
+		 <bdo dir="rtl">This text will be written from right to left</bdo>
+code
+	1) <kbd> defines keyboard input;
+	2) <samp> defines sample output from a computer program;
+	3) <code> defines a piece of programming code;
+	4) <var> defines a variable. The variable could be a variable in a mathematical expression or a variable in programming context.
+comment
+	Comment tags are used to insert comments in the HTML source code.
+		<!-- Write your comments here -->
+map
+	<map> tag to define an image-map. An image-map is an image with clickable areas. The name attribute of the <map> tag is associated with the <img>'s usemap attribute and creates a relationship between the image and the map. The <map> tag contains a number of <area> tags, that defines the clickable areas in the image-map.
+		 <img src="planets.gif" alt="Planets" usemap="#planetmap" style="width:145px;height:126px;"><map name="planetmap"><area shape="rect" coords="0,0,82,126" alt="Sun" href="sun.htm"><area shape="circle" coords="90,58,3" alt="Mercury" href="mercur.htm"><area shape="circle" coords="124,58,8" alt="Venus" href="venus.htm"></map>
+table
+	A table is defined with the <table> tag.
+	Each table row is defined with the <tr> tag.
+	A table header is defined with the <th> tag. By default, table headings are bold and centered.
+	A table data/cell is defined with the <td> tag.
+		<table><tr><th>Firstname</th><th>Lastname</th></tr><tr><td>Jill</td><td>Smith</td></tr><tr><td>Eve</td><td>Jackson</td></tr></table>
+	To make a cell span more than one column/row, use the colspan/rowspan attributes.
+		<table><tr><th>Name</th><th colspan="2">Telephone</th></tr><tr><td>Bill Gates</td><td>55577854</td><td>55577855</td></tr></table>
+		<table><tr><th>Name:</th><td>Bill Gates</td></tr><tr><th rowspan="2">Telephone:</th><td>55577854</td></tr><tr><td>55577855</td></tr></table>
+	To add a caption to a table, use the <caption> tag.
+		<table><caption>Monthly savings</caption>...</table>
+list
+	1) Unordered List
+	An unordered list starts with the <ul> tag. Each list item starts with the <li> tag. The list items will be marked with bullets (small black circles) by default.
+		<ul><li>Coffee</li><li>Tea</li><li>Milk</li></ul>
+	2) Ordered List
+	An ordered list starts with the <ol> tag. Each list item starts with the <li> tag. The list items will be marked with numbers by default.
+		<ol><li>Coffee</li><li>Tea</li><li>Milk</li></ol>
+	3) Description Lists
+	A description list is a list of terms, with a description of each term. The <dl> tag defines the description list, the <dt> tag defines the term (name), and the <dd> tag describes each term.
+		<dl><dt>Coffee</dt><dd>- black hot drink</dd><dt>Milk</dt><dd>- white cold drink</dd></dl>
+block
+	1) Block-level Elements
+	A block-level element always starts on a new line and takes up the full width available (stretches out to the left and right as far as it can).
+	Examples of block-level elements: <div>, <h1> - <h6>, <p>, <form>.
+	2) Inline Elements
+	An inline element does not start on a new line and only takes up as much width as necessary.
+	Examples of inline elements: <span>, <a>, <img>.
+div
+	The <div> element is often used as a container for other HTML elements. It has no required attributes, but both style and class are common. When used together with CSS, the <div> element can be used to style blocks of content.
+		<div style="background-color:black;color:white;padding:20px;"><h2>London</h2><p>London is the capital city of England.</p></div>
+span
+	The <span> element is often used as a container for some text. The <span> element has no required attributes, but both style and class are common. When used together with CSS, the <span> element can be used to style parts of the text.
+		<h1>My <span style="color:red">Important</span> Heading</h1>
+iframe
+	An iframe is used to display a web page within a web page.
+	Syntax: <iframe src="URL"></iframe>
+	Use the height and width attributes to specify the size of the iframe.
+		<iframe src="demo_iframe.htm" height="200" width="300"></iframe>
+	To remove the border, add the style attribute and use the CSS border property.
+		<iframe src="demo_iframe.htm" style="border:none;"></iframe>
+	An iframe can be used as the target frame for a link. The target attribute of the link must refer to the name attribute of the iframe.
+		<iframe src="demo_iframe.htm" name="iframe_a"></iframe><p><a href="http://www.w3schools.com" target="iframe_a">W3Schools.com</a></p>
+script
+	The <script> tag is used to define a client-side script (JavaScript).
+	The <script> element either contains scripting statements, or it points to an external script file through the src attribute. Common uses for JavaScript are image manipulation, form validation, and dynamic changes of content.
+		<script>document.getElementById("demo").innerHTML = "Hello JavaScript!";</script>
+	The <noscript> tag is used to provide an alternate content for users that have disabled scripts in their browser or have a browser that doesn't support client-side scripts.
+		<noscript>Sorry, your browser does not support JavaScript!</noscript>
+layout
+	HTML5 offers new semantic elements that define the different parts of a web page:
+	1) <header> - Defines a header for a document or a section;
+	2) <nav> - Defines a container for navigation links;
+	3) <section> - Defines a section in a document;
+	4) <article> - Defines an independent self-contained article;
+	5) <aside> - Defines content aside from the content (like a sidebar);
+	6) <footer> - Defines a footer for a document or a section;
+	7) <details> - Defines additional details;
+	8) <summary> - Defines a heading for the <details> element;
+character entities
+	Reserved characters in HTML must be replaced with character entities.
+	Characters that are not present on your keyboard can also be replaced by entities.
+	A character entity looks like this: &entity_name; OR &#entity_number;
+	Some Useful HTML Character Entities:
+	  	non-breaking space	&nbsp;	&#160;
+	 <	less than	&lt;	&#60;
+	 >	greater than	&gt;	&#62;
+	 &	ampersand	&amp;	&#38;
+	 ¢	cent	&cent;	&#162;
+	 £	pound	&pound;	&#163;
+	 ¥	yen	&yen;	&#165;
+	 €	euro	&euro;	&#8364;
+	 ©	copyright	&copy;	&#169;
+	 ®	registered trademark	&reg;	&#174;
+character encoding
+	To display an HTML page correctly, a web browser must know which character set (character encoding) to use.
+	This is specified in the <meta> tag:
+	For HTML4: <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+	For HTML5: <meta charset="UTF-8"> 
+url
+	Uniform Resource Locator
+	A URL can be composed of words (google.com), or an Internet Protocol (IP) address (192.168.1.1).
+	scheme://prefix.domain:port/path/filename
+	Where:
+	 1) scheme - defines the type of Internet service (most common is http or https);
+	 2) prefix - defines a domain prefix (default for http is www);
+	 3) domain - defines the Internet domain name (like w3schools.com);
+	 4) port - defines the port number at the host (default for http is 80);
+	 5) path - defines a path at the server (If omitted: the root directory of the site);
+	 6) filename - defines the name of a document or resource;
+	Common schemes:
+	 1) http	HyperText Transfer Protocol	Common web pages. Not encrypted;
+	 2) https	Secure HyperText Transfer Protocol	Secure web pages. Encrypted;
+	 3) ftp	File Transfer Protocol	Downloading or uploading files;
+	 4) file	A file on your computer;
+	URL Encoding
+	URLs can only be sent over the Internet using the ASCII character-set. If a URL contains characters outside the ASCII set, the URL has to be converted. URL encoding replaces non-ASCII characters with a "%" followed by hexadecimal digits. URLs cannot contain spaces. URL encoding normally replaces a space with a plus (+) sign, or %20.
+form
+	Forms are used to collect user input.
+	The <form> element defines an HTML form: <form>.form elements.</form>
+	Forms contain form elements. Form elements are different types of input elements, checkboxes, radio buttons, submit buttons, and more.
+	The action attribute defines the action to be performed when the form is submitted. The common way to submit a form to a server, is by using a submit button. If the action attribute is omitted, the action is set to the current page.
+		<form action="action_page.php">
+	The method attribute specifies the HTTP method (GET or POST) to be used when submitting the forms.
+		<form action="action_page.php" method="get">
+		<form action="action_page.php" method="post">
+	To be submitted correctly, each input field must have a name attribute.
+		<form action="action_page.php">Last name:<br><input type="text" name="lastname" value="Mouse"><br><br><input type="submit" value="Submit"></form>
+	<form> attributes:
+	 1) accept-charset	Specifies the charset used in the submitted form (default: the page charset);
+	 2) action	Specifies an address (url) where to submit the form (default: the submitting page);
+	 3) autocomplete	Specifies if the browser should autocomplete the form (default: on);
+	 4) enctype	Specifies the encoding of the submitted data (default: is url-encoded);
+	 5) method	Specifies the HTTP method used when submitting the form (default: GET);
+	 6) name	Specifies a name used to identify the form (for DOM usage: document.forms.name);
+	 7) novalidate	Specifies that the browser should not validate the form;
+	 8) target	Specifies the target of the address in the action attribute (default: _self);
+	An HTML <form> element, with all possible attributes set, will look like this:
+	<form action="action_page.php" method="post" target="_blank" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded" autocomplete="off" novalidate>
+	.form elements.
+	</form>
+input
+	The <input> element has many variations, depending on the type attribute:
+	 1) text	Defines a one-line text input;
+	 2) radio	Defines radio button input (for selecting one of many choices);
+	 3) submit	Defines a submit button (for submitting the form);
+	 4) password	Defines a password field;
+	 5) checkbox	Defines a checkbox;
+	 6) button	Defines a button;
+	HTML5 Input Types: color, date, datetime, datetime-local, email, month, number, range, search, tel, time, url, week.
+	Note: Input types, not supported by old web browsers, will behave as input type text.
+	Input Restrictions:
+	 1) disabled	Specifies that an input field should be disabled;
+	 2) max/min	Specifies the maximum/minimum value for an input field;
+	 3) maxlength	Specifies the maximum number of character for an input field;
+	 4) pattern	Specifies a regular expression to check the input value against;
+	 5) readonly	Specifies that an input field is read only (cannot be changed);
+	 6) required	Specifies that an input field is required (must be filled out);
+	 7) size	Specifies the width (in characters) of an input field;
+	 8) step	Specifies the legal number intervals for an input field;
+	 9) value	Specifies the default value for an input field;
+fieldset
+	The <fieldset> element groups related data in a form.
+legend
+	The <legend> element defines a caption for the <fieldset> element.
+select
+	The <select> element defines a drop-down list.
+		<select name="cars"><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="fiat">Fiat</option><option value="audi">Audi</option></select>
+	The <option> elements defines the options to select. The list will normally show the first item as selected. You can add a selected attribute to define a predefined option.
+		<option value="fiat" selected>Fiat</option>
+textarea
+	The <textarea> element defines a multi-line input field (a text area).
+		<textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>
+button
+	The <button> element defines a clickable button.
+		<button type="button" onclick="alert('Hello World!')">Click Me!</button>
+datalist
+	The <datalist> element specifies a list of pre-defined options for an <input> element. Users will see a drop-down list of pre-defined options as they input data. The list attribute of the <input> element, must refer to the id attribute of the <datalist> element.
+		<form action="action_page.php"><input list="browsers"><datalist id="browsers"><option value="Firefox"><option value="Chrome"><option value="Opera"></datalist></form>
+keygen
+	The purpose of the <keygen> element is to provide a secure way to authenticate users.
+	The <keygen> element specifies a key-pair generator field in a form. When the form is submitted, two keys are generated, one private and one public. The private key is stored locally, and the public key is sent to the server. The public key could be used to generate a client certificate to authenticate the user in the future.
+		<form action="action_page.php">Username: <input type="text" name="user">Encryption: <keygen name="security"><input type="submit"></form>
+output
+	The <output> element represents the result of a calculation (like one performed by a script).
+value
+	The value attribute specifies the initial value for an input field
