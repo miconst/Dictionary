@@ -1,0 +1,185 @@
+Exceptions
+	Note: If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.
+	Error and RuntimeException classes are unchecked exceptions;
+	     +-----------+
+	     | Throwable |
+	     +-----------+
+	      /         \
+	     /           \
+	+-------+          +-----------+
+	| Error |          | Exception |
+	+-------+          +-----------+
+	 /  |  \           /|\        \
+	\_______/         \___/        \
+	unchecked        checked  +------------------+
+	                          | RuntimeException |
+	                          +------------------+
+	                           /       |       \
+	                          \_________________/
+	                              unchecked
+Lambdas and Generics
+	List<? extends BaseClass> to read from the list (covariant)
+	List<? super BaseClass> to write to the list (contravariant)
+	In java always: covariant function(contravariant);
+Common Functional Interfaces
+	Runnable            { void    run   ();     }
+	Supplier<T>         { T       get   ();     }
+	Consumer<T>         { void    accept(T);    }
+	BiConsumer<T, U>    { void    accept(T, U); }
+	Function<T, R>      { R       apply (T);    }
+	BiFunction<T, U, R> { R       apply (T, U); }
+	UnaryOperator<T>    { T       apply (T);    }
+	BinaryOperator<T>   { T       apply (T, T); }
+	Predicate<T>        { boolean test(T);      }
+	BiPredicate<T, U>   { boolean test(T, U);   }
+Functional Interfaces for Primitive Types
+	BooleanSupplier { boolean getAsBoolean(); }
+	IntSupplier     { int     getAsInt();     }
+	LongSupplier    { long    getAsLong();    }
+	DoubleSupplier  { double getAsDouble();   }
+	*Consumer
+	Obj*Consumer<T>
+	*Function<T>
+	*To*Function
+	To*Function<T>
+	To*BiFunction<T, U>
+	*UnaryOperator
+	*BinaryOperator
+	*Predicate
+		* is Int, Long, or Double
+Type Parameter Naming Conventions
+	The most commonly used type parameter names are:
+	E - Element (used extensively by the Java Collections Framework);
+	K - Key;
+	N - Number;
+	T - Type;
+	V - Value;
+	S,U,V etc. - 2nd, 3rd, 4th types;
+TCP options
+	TCP_NODELAY, SO_TIMEOUT, SO_LINGER, SO_SNDBUF, SO_RCVBUF, and SO_KEEPALIVE.
+Channels
+	Channels move blocks of data into and out of buffers to and from various I/O sources such as files, sockets, datagrams, and so forth.
+	Important channel classes: SocketChannel, ServerSocketChannel, and DatagramChannel.
+	Java 7 introduces the AsynchronousSocketChannel and AsynchronousServerSocketChannel classes. Their reads and writes return immediately, even before the I/O is complete. The data read or written is further processed by a Future or a CompletionHandler. The connect() and accept() methods also execute asynchronously and return Future. Selectors are not used.
+		AsynchronousSocketChannel client = AsynchronousSocketChannel.open();
+		Future<Void> connected = client.connect(address);
+		ByteBuffer buffer = ByteBuffer.allocate(74);
+		// wait for the connection to finish
+		connected.get();
+		// read from the connection
+		Future<Integer> future = client.read(buffer);
+		// do other things...
+		// wait for the read to finish...
+		future.get();
+		// flip and drain the buffer
+		buffer.flip();
+		WritableByteChannel out = Channels.newChannel(System.out);
+		out.write(buffer);
+java.net
+	Provides the classes for implementing networking applications.
+	The java.net package can be roughly divided in two sections:
+	1. A Low Level API, which deals with the following abstractions:
+	1) Addresses, which are networking identifiers, like IP addresses.
+	2) Sockets, which are basic bidirectional data communication mechanisms.
+	3) Interfaces, which describe network interfaces.
+	2. A High Level API, which deals with the following abstractions:
+	1) URIs, which represent Universal Resource Identifiers.
+	2) URLs, which represent Universal Resource Locators.
+	3) Connections, which represents connections to the resource pointed to by URLs.
+Sockets
+	Sockets are means to establish a communication link between machines over the network. The java.net package provides 4 kinds of Sockets:
+	1) Socket is a TCP client API, and will typically be used to connect to a remote host.
+	2) ServerSocket is a TCP server API, and will typically accept connections from client sockets.
+	3) DatagramSocket is a UDP endpoint API and is used to send and receive datagram packets.
+	4) MulticastSocket is a subclass of DatagramSocket used when dealing with multicast groups.
+	Sending and receiving with TCP sockets is done through InputStreams and OutputStreams which can be obtained via the Socket.getInputStream() and Socket.getOutputStream() methods.
+java.net.InetAddress
+	The InetAddress class is the abstraction representing an IP (Internet Protocol) address. It has two subclasses: Inet4Address for IPv4 addresses, Inet6Address for IPv6 addresses. But, in most cases, there is no need to deal directly with the subclasses, as the InetAddress abstraction should cover most of the needed functionality.
+	It is used by most of the other networking classes (Socket, ServerSocket, URL, DatagramSocket, DatagramPacket, and more). Usually, it includes both a hostname and an IP address.
+		InetAddress address = InetAddress.getByName("google.com");
+		InetAddress me = InetAddress.getLocalHost();
+	Note: Untrusted code is not allowed to perform arbitrary DNS lookups for third-party hosts. SecurityManager.checkConnect(hostname, port) can be used to test whether a host can be resolved.
+java.net.NetworkInterface
+	The NetworkInterface class represents a local IP address.
+	It provides methods to enumerate all the local addresses, regardless of interface, and to create InetAddress objects from them.
+		Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+Lambda Expressions
+	Syntax:
+	1) A comma-separated list of formal parameters enclosed in parentheses.
+		Note: You can omit the data type of the parameters in a lambda expression. In addition, you can omit the parentheses if there is only one parameter.
+	2) The arrow token (->).
+	3) A body (a single expression or a statement block).
+Threads
+	There are two ways to create a new thread of execution:
+	1) Declare a class to be a subclass of java.lang.Thread. This subclass should override the run method of class Thread. An instance of the subclass can then be allocated and started.
+		class PrimeThread extends Thread {
+			long minPrime;
+			PrimeThread(long minPrime) { this.minPrime = minPrime; }
+			public void run() { ... }
+		}
+		...
+		PrimeThread p = new PrimeThread(143);
+		p.start();
+	Note: If you subclass Thread, you should override run() and nothing else!
+	2) Declare a class that implements the Runnable interface. That class then implements the run method. An instance of the class can then be allocated, passed as an argument when creating Thread, and started.
+		class PrimeRun implements Runnable { ... }
+		...
+		PrimeRun p = new PrimeRun(143);
+		new Thread(p).start();
+	
+	Every thread has a name for identification purposes. More than one thread may have the same name. If a name is not specified when a thread is created, a new name is generated for it.
+	
+	A thread can pause at:
+	1) I/O block;
+	2) Block on a synchronized object;
+	3) static Thread.yield();
+	4) static Thread.sleep(milliseconds);
+	5) join another thread (Thread.join(milliseconds));
+		The joining thread (i.e., the one that invokes the join() method) waits for the joined thread (i.e, the one whose join() method is invoked) to finish;
+		Thread t = new AThread();
+		t.start();
+		try {
+			t.join(milliseconds); // Waits at most milliseconds for this thread to die. A timeout of 0 means to wait forever.
+		} catch (InterruptedException ex) {}
+		Note: A thread that’s joined to another thread can be interrupted just like a sleeping thread if some other thread invokes its interrupt() method.
+	6) wait on an object (Object.wait(milliseconds));
+		A thread can wait on an object it has locked. While waiting, it releases the lock on the object and pauses until it is notified by some other thread.
+		It remains asleep until one of three things happens:
+		a) The timeout expires;
+		b) The thread is interrupted when some other thread invokes the thread’s interrupt() method. This causes an InterruptedException;
+		c) The object is notified with Object.notify() or Object.notifyAll();
+	7) finish;
+	8) it can be preempted by a higher-priority thread;
+	9) it can be suspended (Thread.suspend and Thread.resume are deprecated!);
+	10) it can stop (Thread.stop is deprecated!);
+java.io
+	System input and output through data streams, serialization and the file system.
+	
+	public abstract class OutputStream {
+		public abstract void write(int b) throws IOException
+		public void write(byte[] data) throws IOException
+		public void write(byte[] data, int offset, int length) throws IOException
+		public void flush() throws IOException
+		public void close() throws IOException
+	}
+	Subclasses: ByteArrayOutputStream, FileOutputStream, FilterOutputStream, ObjectOutputStream, OutputStream, PipedOutputStream;
+	
+	public abstract class InputStream {
+		public abstract int read() throws IOException
+		public int read(byte[] input) throws IOException
+		public int read(byte[] input, int offset, int length) throws IOException
+		public long skip(long n) throws IOException
+		public int available() throws IOException
+		public void close() throws IOException
+	}
+	Subclasses: ByteArrayInputStream, FileInputStream, FilterInputStream, ObjectInputStream, PipedInputStream, SequenceInputStream, StringBufferInputStream;
+	
+	Filter Streams:  GZIPInputStream, CipherInputStream, BufferedInputStream, PrintStream;
+		Note: PrintStream is evil and network programmers should avoid it like the plague!
+	
+	Data Streams: DataInputStream and DataOutputStream provide methods for reading/writing Java’s primitive data types and strings in a binary format.
+	
+	Readers and Writers: InputStreamReader, OutputStreamWriter, FileReader, FileWriter, StringReader, StringWriter, CharArrayReader, CharArrayWriter;
+	
+	Filter Readers and Writers: BufferedReader, BufferedWriter, LineNumberReader, PushbackReader, PrintWriter;
+	

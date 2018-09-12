@@ -1,0 +1,144 @@
+Ctrl+Shift+F7
+	All methods of the implemented interfaces.
+	All exits points of a method.
+	All statments that throw exeptions.
+Ctrl+Shift+Up/Down
+	Code lines moving
+Ctrl+Shift+I
+	Quick Definition Viewer. Quickly review definition or content of the symbol at caret
+Ctrl+Shift+Enter
+	complete the current statement (if, do-while, try-catch, return)
+Ctrl+Shift+V
+	Recent clipboard contents
+Ctrl+Shift+J
+	Join two lines
+Alt+Up/Down
+	Move between methods in the editor
+Shift+F1
+	View|External Documentation
+Ctrl+P
+	View|Parameter Info
+Ctrl+Space
+	code completion
+Ctrl+Shift+Space
+	code completion after the new keyword, to instantiate an object of the expected type or to cast an expression value to the required type
+Alt+Shift+F10
+	Run/Debug dropdown
+Alt+Shift+C
+	review recent changes
+Alt+F7
+	Find Usage
+Alt+Insert
+	Code|Generate...
+		Ctrl+O
+			Override Methods...
+		Ctrl+I
+			Implement Methods...
+Shift+F6
+	Rename...
+Ctrl+B
+	Go To Declaration
+Ctrl+Alt+B
+	Go To Implementation
+Ctrl+Q
+	To quickly see the documentation for a class or method at caret
+	Shift+F1
+		View External Documentation
+Ctrl+Slash
+	Comment/Uncomment with Line Comment
+Ctrl+Shift+Slash
+	Comment/Uncomment with Block Comment
+Ctrl+F12
+	File Structure
+		It shows the list of members of the current class.
+Ctrl+O
+	Code|Override Methods
+Ctrl+I
+	Code|Implement Methods
+Ctrl+Shift+Space
+	SmartType code completion
+Ctrl+Alt+T
+	Code|Surround With
+Ctrl+Alt+V
+	Refactor|Extract|Variable...
+Ctrl+D
+	Dupticate the selected block or current line
+Ctrl+P
+	A list of valid parameters
+Ctrl+Shift+Backspace
+	Navigate|Last Edit Location
+Ctrl+Shift+F7
+	Edit|Find|Highlight Usages in File
+	F3
+	Shift+F3
+		Navigate through highlighted usages
+	Escape
+		Remove highlighting
+Ctrl+E
+	View|Recent Files
+F2/Shift+F2
+	Jump between syntax errors
+Ctrl+Alt+Up/Down
+	Jump between compiler errors
+Ctrl+J
+	Complete Live Template abbrevation
+	
+Live Templates
+	fori
+		create iteration loop
+	itar
+		iterate elements of array
+	itco
+		iterate elements of Collection
+	iten
+		iterate Enumeration
+	iter
+		iterate Iterable
+	itit
+		iterate Iterator
+	itli
+		iterate List
+	itve
+		iterate Vector
+	ritar
+		iterate array in reverse order
+	serr
+		print a string to System.err
+	sout
+		print a string to System.out
+	soutm
+		print current class and method names to System.out
+	soutp
+		print method parameter names and values to System.out
+	soutv
+		print a value to System.out
+	souf
+		print a formatted string to System.out
+	prsf
+		private static final
+	const
+		private static final int
+	psf
+		public static final
+	psfi
+		public static final int
+	St
+		String
+	thr
+		throw new
+	B
+		surround with {}
+	C
+		surround with Callable
+	I
+		iterate Iterable
+	P
+		surround with ()
+	sbc
+		block comment for structuring code
+	Sfmt
+		String.format
+	fixme
+		add // FIXME:
+	todo
+		add // TODO:

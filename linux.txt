@@ -1,0 +1,784 @@
+﻿Documentation
+	1. The man pages (short for manual pages)
+		Linux man pages online: http://man7.org/linux/man-pages/
+	2. GNU Info
+		info
+		info <topic name>
+	3. The help command and --help option
+	Other documentation sources.
+		Gentoo Handbook: https://www.gentoo.org/support/documentation/
+		Ubuntu Documentation: https://help.ubuntu.com/community/CommunityHelpWiki
+man
+	man –f generates the same result as typing whatis
+	man –k generates the same result as typing apropos
+	The default order is specified in /etc/man_db.conf and is roughly (but not exactly) in ascending numerical order by section.
+	man -a displays all pages with the given name in all chapters, one after the other.
+info
+	n: next node
+	p: previous node
+	u: up in the index
+Graphical Help System
+	GNOME: gnome-help or yelp; CTRL-l to show the location bar.
+		yelp man:cat
+	KDE: khelpcenter
+Linux Distribution List.
+	https://lwn.net/Distributions/
+RHEL
+	Red Hat Enterprise Linux: CentOS, Scientific Linux, Oracle Linux.
+	It uses the RPM-based yum package manager to install, update, and remove packages in the system.
+SUSE
+	SUSE, SUSE Linux Enterprise Server (SLES), and openSUSE.
+	SUSE Linux Enterprise Server (SLES) is upstream for openSUSE.
+	It uses the RPM-based zypper package manager to install, update, and remove packages in the system.
+	It includes the YaST (Yet Another Setup Tool) application for system administration purposes.
+Debian
+	Debian, Ubuntu, Linux Mint.
+	It uses the DPKG-based APT package manager (using apt-get, apt-cache, etc.) to install, update, and remove packages in the system.
+filesystem
+	A method for storing and organizing files in Linux.
+		Examples: ext3, ext4, FAT, XFS, Btrfs.
+	Different types of filesystems supported by Linux:
+	1. Conventional disk filesystems
+		ext2, ext3, ext4, XFS, Btrfs, JFS, NTFS, etc.
+	2. Flash storage filesystems
+		ubifs, JFFS2, YAFFS, etc.
+	3. Database filesystems
+	4. Special purpose filesystems
+		procfs, sysfs, tmpfs, squashfs, debugfs, etc.
+FHS
+	Filesystem Hierarchy
+	All Linux filesystem names are case-sensitive.
+	Multiple drives and/or partitions are mounted as directories in the single filesystem.
+	Removable media such as USB drives and CDs and DVDs will show up as mounted at /run/media/{username}/{disklabel} for recent Linux systems, or under /media for older distributions.
+	Many distributions distinguish between core utilities needed for proper system operation and other programs, and place the latter in directories under /usr (think user).
+	Filesystem Hierarchy Standard:
+		https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf
+	/bin/ - essential user command binaries required by all system users, such as cat, cp, ls, mv, ps, and rm
+	/boot/ - static files of the boot loader; essential files needed to boot the system. For every alternative kernel installed on the system there are four files: vmlinuz, initramfs, config, System.map. Each of these files has a kernel version appended to its name. The Grand Unified Bootloader (GRUB) files such as /boot/grub/grub.conf or /boot/grub2/grub2.cfg are also found under the /boot directory.
+		vmlinuz - The compressed Linux kernel, required for booting;
+		initramfs - The initial ram filesystem, required for booting, sometimes called initrd, not initramfs;
+		config - The kernel configuration file, only used for debugging and bookkeeping;
+		System.map - Kernel symbol table, only used for debugging;
+	/dev/ - device files; it contains device nodes, a type of pseudo-file used by most hardware and software devices, except for network devices.
+	/etc/ - host-specific system configuration (required directories: opt, x11, sgml, xml); It is for system configuration files. It contains no binary programs, although there are some executable scripts.
+		/etc/resolv.conf - tells the system where to go on the network to obtain host name to IP address mappings (DNS).
+		/etc/passwd, /etc/shadow, /etc/group - files for managing user accounts
+		Note: /etc is for system-wide configuration files and only the superuser can modify files there. User-specific configuration files are always found under their home directory.
+	/home/ - user home directories
+	/lib/ - essential shared libraries and kernel modules
+		Note: Most of these are what is known as dynamically loaded libraries (also known as shared libraries or Shared Objects (SO)). On some Linux distributions there exists a /lib64 directory containing 64-bit libraries, while /lib contains 32-bit versions.
+		/lib/modules/<kernel-version-number> - Kernel modules (kernel code, often device drivers, that can be loaded and unloaded without re-starting the system).
+	/media/ - mount point for removable media
+	/mnt/ - mount point for a temporarily mounted filesystems
+	/opt/ - add-on or optional application software packages
+	/run/ - data relevant to running processes
+	/sbin/ - system binaries, essential binaries related to system administration, such as fsck and shutdown
+		Note: Commands that are not essential (theoretically) for the system to boot or operate in single-user mode are placed in the /usr/bin and /usr/sbin directories. Historically, this was done so /usr could be mounted as a separate filesystem that could be mounted at a later stage of system startup or even over a network. However, nowadays most find this distinction is obsolete. In fact, many distributions have been discovered to be unable to boot with this separation, as this modality had not been used or tested for a long time. Thus, on some of the newest Linux distributions /usr/bin and /bin are actually just symbolically linked together, as are /usr/sbin and /sbin.
+	/srv/ - data for services provided by the system; seldom used
+	/tmp/ - temporary files
+	/usr/ - (multi-)user utilities and applications (required directories: bin, include, lib, local, sbin, share)
+	/var/ - variable files; it contains files that are expected to change in size and content as the system is running (var stands for variable).
+		/var/log - system log files
+		/var/lib - packages and database files
+		/var/spool - print queues
+		/var/tmp - temporary files
+		Note: The /var directory may be put on its own filesystem so that growth of the files can be accommodated and the file sizes do not fatally affect the system. Network services directories such as /var/ftp (the FTP service) and /var/www (the HTTP web service) are also found under /var.
+	/root/ - home directory for the root user
+	/proc/ - virtual filesystem documenting kernel and process status as text files; This filesystem contains files and directories that mimic kernel structures and configuration information. It does not contain real files, but runtime system information, e.g. system memory, devices mounted, hardware configuration, etc. /proc has subdirectories as well.
+		/proc/cpuinfo
+		/proc/interrupts
+		/proc/meminfo
+		/proc/mounts
+		/proc/partitions
+		/proc/version
+	There are some additional directories to be found under the root directory:
+	/sys/ - Virtual pseudo-filesystem giving information about the system and the hardware. Can be used to alter system parameters and for debugging purposes.
+/bin
+	There must be no subdirectories in /bin
+	The following commands, or symbolic links to commands, are required in /bin:
+	cat - To concatenate files to standard output
+	chgrp - To change file group ownership
+	chmod - To change file access permissions
+	chown - To change file owner and group
+	cp - To copy files and directories
+	date - To print or set the system data and time
+	dd - To convert and copy a file
+	df - To report filesystem disk space usage
+	dmesg - To print or control the kernel message buffer
+	echo - To display a line of text
+	false - To do nothing, unsuccessfully
+	hostname - To show or set the system's host name
+	kill - To send signals to processes
+	ln - To make links between files
+	login - To begin a session on the system
+	ls - To list directory contents
+	mkdir - To make directories
+	mknod - To make block or character special files
+	more - To page through text
+	mount - To mount a filesystem
+	mv - To move/rename files
+	ps - To report process status
+	pwd - To print name of current working directory
+	rm - To remove files or directories
+	rmdir - To remove empty directories
+	sed - stream editor
+	sh - POSIX compatible command shell
+	stty - To change and print terminal line settings
+	su - To change user ID
+	sync - To flush filesystem buffers
+	true - To do nothing, successfully
+	umount - To unmount file systems
+	uname - To print system information
+	The following programs, or symbolic links to programs, can be in /bin
+	csh - C shell
+	ed - editor
+	tar - archiving utility
+	cpio - archiving utility
+	gzip - The GNU compression utility
+	gunzip - The GNU uncompression utility
+	zcat - The GNU uncompression utility
+	netstat - The network statistics utility
+	ping - The ICMP network test utility
+/usr
+	contains theoretically non-essential programs and scripts (in the sense that they should not be needed to initially boot the system) and has at least the following sub-directories:
+	/usr/include - Header files used to compile applications
+	/usr/lib - Libraries for programs in /usr/bin and /usr/sbin
+	/usr/lib64 - 64-bit libraries for 64-bit programs in /usr/bin and /usr/sbin
+	/usr/sbin - Non-essential system binaries, such as system daemons
+	/usr/share - Shared data used by applications, generally architecture-independent
+	/usr/src - Source code, usually for the Linux kernel
+	/usr/local - Data and programs specific to the local machine. Subdirectories include bin, sbin, lib, share, include, etc.
+	/usr/bin - This is the primary directory of executable commands on the system
+filesystem top node
+	the root or simply "/"
+boot loader
+	A program that boots the operating system: GRUB, ISOLINUX.
+	The boot loader is usually stored on one of the hard disks in the system, either in the boot sector (for traditional BIOS/MBR systems) or the EFI partition (for more recent (Unified) Extensible Firmware Interface or EFI/UEFI systems). Up to this stage, the machine does not access any mass storage media. Thereafter, information on date, time, and the most important peripherals are loaded from the CMOS values (after a technology used for the battery-powered memory store which allows the system to keep track of the date and time even when it is powered off).
+		GRUB - GRand Unified Boot loader
+		ISOLINUX - booting from removable media
+		DAS U-Boot - booting on embedded devices/appliances
+	When booting Linux, the boot loader is responsible for loading the kernel image and the initial RAM disk or filesystem (which contains some critical files and device drivers needed to start the system) into memory.
+	The second stage boot loader resides under /boot. A splash screen is displayed, which allows us to choose which operating system (OS) to boot. After choosing the OS, the boot loader loads the kernel of the selected operating system into RAM and passes control to it. The boot loader loads the selected kernel image and passes control to it. Kernels are almost always compressed, so its first job is to uncompress itself. After this, it will check and analyze the system hardware and initialize any hardware device drivers built into the kernel.
+initramfs
+	Initial RAM Disk:
+	1. mount proper root filesystem
+	2. providing kernel functionality
+	3. locating devices
+	4. locating drivers and load them
+	5. checking for errors in root filesystem
+	The initramfs filesystem image contains programs and binary files that perform all actions needed to mount the proper root filesystem, like providing kernel functionality for the needed filesystem and device drivers for mass storage controllers with a facility called udev (for user device), which is responsible for figuring out which devices are present, locating the device drivers they need to operate properly, and loading them. After the root filesystem has been found, it is checked for errors and mounted.
+	The mount program instructs the operating system that a filesystem is ready for use, and associates it with a particular point in the overall hierarchy of the filesystem (the mount point).
+	If this is successful, the initramfs is cleared from RAM and the init program on the root filesystem (/sbin/init) is executed.
+	If special hardware drivers are needed before the mass storage can be accessed, they must be in the initramfs image.
+/sbin/init
+	init handles the mounting and pivoting over to the final real root filesystem.
+	Once the kernel has set up all its hardware and mounted the root filesystem, the kernel runs /sbin/init. This then becomes the initial process, which then starts other processes to get the system running. Most other processes on the system trace their origin ultimately to init.
+		Exceptions include the so-called kernel processes. These are started by the kernel directly, and their job is to manage internal operating system details.
+	Near the end of the boot process, init starts a number of text-mode login prompts. These enable you to type your username, followed by your password, and to eventually get a command shell. However, if you are running a system with a graphical login interface, you will not see these at first.
+	Besides starting the system, init is responsible for keeping the system running and for shutting it down cleanly. One of its responsibilities is to act when necessary as a manager for all non-kernel processes; it cleans up after them upon completion, and restarts user login services as needed when users log in and out, and does the same for other background system services.
+systemd
+	/sbin/init now just points to /lib/systemd/systemd; i.e. systemd takes over the init process.
+	One systemd command - systemctl is used for most basic tasks.
+systemctl
+	sudo systemctl start|stop|restart nfs.service
+		Starting, stopping, restarting a service (using nfs as an example) on a currently running system.
+	sudo systemctl enable|disable nfs.service
+		Enabling or disabling a system service from starting up at system boot.
+service
+	A program that runs as a background process.
+		Examples: httpd, nfsd, ntpd, ftpd, named.
+X Window System
+	The standard toolkit and protocol to build graphical user interfaces on nearly all Linux systems.
+	The X server, which actually provides the GUI, uses the /etc/X11/xorg.conf file as its configuration file if it exists.
+desktop environment
+	A graphical user interface on top of the operating system.
+		Examples: GNOME, KDE, Xfce, Fluxbox.
+Shell
+	The command line interpreter that interprets the command line input and instructs the operating system to perform any necessary tasks and commands.
+		Examples: bash, tcsh, zsh.
+MBR
+	Master Boot Record also known as First Sector of the Hard Disk.
+	For systems using the BIOS/MBR method the size of the MBR is just 512 bytes.
+	For systems using the EFI/UEFI method, UEFI firmware reads its Boot Manager data to determine which UEFI application is to be launched and from where (i.e. from which disk and partition the EFI partition can be found). The firmware then launches the UEFI application, for example GRUB, as defined in the boot entry in the firmware's boot manager. This procedure is more complicated, but more versatile than the older MBR methods.
+BIOS
+		The Basic Input/Output System initializes the hardware, including the screen and keyboard, and tests the main memory.
+		This process is also called POST (Power On Self Test).
+boot process
+	Power ON
+	BIOS
+		The BIOS software is stored on a ROM chip on the motherboard. After this, the remainder of the boot process is controlled by the operating system (OS).
+	MBR
+	Boot Loader
+	Kernel (Linux OS)
+	Initial RAM disk
+		initramfs image
+	/sbin/init
+		parent process
+	Command Shell
+		using getty
+		Text-Mode Logins
+		Most distributions start six text terminals and one graphics terminal starting with F1 or F2.
+	X Windows System
+		Graphical User Interface
+X Windows System
+	Session manager
+		starts and maintains the components of the graphical session
+	Window manager
+		controls the placement and movement of windows, window title-bars, and controls
+	A set of utilities
+	You can start it manually from the command line (startx). Or you can start the display manager (gdm, lightdm, kdm, xdm, etc.).
+gnome-tweak-tool
+	tool to adjust advanced configuration settings for GNOME.
+Check for Update, and Upgrade
+	sudo apt-get update
+	sudo apt upgrade -y
+Clean up
+	sudo apt-get autoclean
+	sudo apt-get clean
+	sudo apt-get autoremove
+Install Multimedia Plug-in
+	sudo apt-get install mint-meta-codecs
+shortcuts
+	Alt+F2 - Run dialog
+	Ctrl+Alt+Down - Show the window selection screen
+	Ctrl+Alt+Up, Alt+F1 - Show the workspace selection screen
+	Super+D - Show desktop
+	Alt+Space - Activate window menu
+	Alt+F10 - Toggle maximization state
+	Ctrl+Alt+T - Launch terminal
+	Ctrl+Alt+F1...F6 - Switch to a Virtual Terminal
+xdpyinfo | grep dim
+	current screen resolution
+Network Manager
+	Network Manager was developed to make things easier and more uniform across distributions.
+	It can list all available networks (wired or wireless), allow the choice of a wired, wireless, or mobile broadband network, handle passwords, and set up Virtual Private Networks (VPNs).
+	For static configurations that do not use DHCP, manual setup can also be done easily through Network Manager.
+	You can also change the Ethernet Media Access Control (MAC) address if your hardware supports it.
+Package Management
+	Both package management systems operate on two distinct levels: a low-level tool (such as dpkg or rpm) takes care of the details of unpacking individual packages, running scripts, getting the software installed correctly, while a high-level tool (such as apt-get, yum, dnf or zypper) works with groups of packages, downloads packages from the vendor, and figures out dependencies.
+		Debian -> dpkg -> apt-get
+		SUSE -> rpm -> zypper
+		Red Hat -> rpm -> yum
+dpkg
+	Debian package manager. It can install, remove, and build packages.
+	Unlike higher-level package management systems, it does not automatically download and install packages and satisfy their dependencies.
+	For Debian-based systems, the higher-level package management system is the apt (Advanced Package Tool) system of utilities.
+apt
+	Advanced Package Tool For Debian-based systems
+	Generally, while each distribution within the Debian family uses apt, it creates its own user interface on top of it.
+		apt-get, apt-cache, aptitude, synaptic, Ubuntu Software Center, Update Manager, etc.
+	Most apt repositories target a particular distribution (like Ubuntu), and often software distributors ship with multiple repositories to support multiple distributions.
+rpm
+	Red Hat Package Manager
+	It was developed by Red Hat, and adopted by a number of other distributions, including openSUSE, Mandriva, CentOS, Oracle Linux, and others.
+	The high-level package manager differs between distributions:
+	yum (Yellowdog Updater, Modified) - Red Hat family distributions have historically used its repository format, although recent Fedora uses a replacement, dnf, still using the same format.
+	SUSE family distributions also use RPM, but use the zypper interface.
+	The GNOME project also uses PackageKit as a unified interface.
+YaST
+	(Yet another Setup Tool) software manager
+	It is an RPM-based application.
+	You can add, remove, or update packages using this application.
+yum
+	Yellowdog Updater Modified is an open source command-line package-management utility for the RPM-compatible Linux systems that belongs to the Red Hat/Fedora family. It has both command line and graphical user interfaces.
+	Recent Fedora versions have replaced yum with a new utility called dnf, which has less historical baggage, has nice new capabilities and is mostly backwards-compatible with yum for day-to-day commands.
+zypper
+	The package management system for the SUSE/openSUSE family and is also based on RPM.
+	It also allows you to manage repositories from the command line.
+	It is fairly straightforward to use and resembles yum quite closely.
+basic packaging commands
+	Install package
+		rpm -i foo.rpm
+		dpkg --install foo.deb
+	Install package, dependencies
+		yum install foo
+		apt-get install foo
+	Remove package
+		rpm -e foo.rpm
+		dpkg --remove foo.deb
+	Remove package, dependencies
+		yum remove foo
+		apt-get autoremove foo
+	Update package
+		rpm -U foo.rpm
+		dpkg --install foo.deb
+	Update package, dependencies
+		yum update foo
+		apt-get install foo
+	Update entire system
+		yum update
+		apt-get dist-upgrade
+	Show all installed packages
+		rpm -qa
+		yum list installed
+		dpkg --list
+	Get information on package
+		rpm -qil foo
+		dpkg --listfiles foo
+	Show packages named foo
+		yum list "foo"
+		apt-cache search foo
+	Show all available packages
+		yum list
+		apt-cache dumpavail foo
+	What package is file part of?
+		rpm -qf file
+		dpkg --search file
+software
+	FileZilla - Intuitive graphical FTP client that supports FTP, Secure FTP (SFTP), and FTP Secured (FTPS). Used to transfer files to/from (FTP) servers.
+	Pidgin - To access GTalk, AIM, ICQ, MSN, IRC and other messaging networks.
+	Ekiga - To connect to Voice over Internet Protocol (VoIP) networks.
+	Hexchat- To access Internet Relay Chat (IRC) networks.
+Basic Utilities
+	w: shows who is logged on and what they are doing
+	cat: to type out a file (or combine files)
+	head: to show the first few lines of a file
+	tail: to show the last few lines of a file
+	man: to view documentation
+	sudo: to run programs using the security privileges of another user, generally root (superuser)
+	shutdown: to reboot or shutdown the system
+		sudo shutdown -h 10:00 "Shutting down for scheduled maintenance."
+		sudo shutdown -r 10:00 "Rebooting is scheduled."
+	which: to view the pathnames of the files (links)
+		which java
+	whereis: to locate the binaries, source and manual files
+		whereis python/
+	pwd: to display the present working directory
+	tree: to list contents of directories in a tree-like format
+		tree -d
+	pushd/popd/dirs: to change the directory with a stack-like directory history
+	touch: to set or update the access, change, and modify times of files. By default, it resets a file's timestamp to match the current time.
+		to create an empty file: touch <filename>
+		to set the date and timestamp of the file to a specific value: touch -t 12091600 <filename>
+	mkdir/rmdir: to create/remove a directory
+		Note: The directory must be empty or rmdir will fail. To remove a directory and all of its contents: rm -rf
+	mv: rename/move a file/directory
+	rm: remove a file
+		rm –f: forcefully remove a file
+		rm –i: interactively remove a file
+	at: to schedule future processes
+	df: to report file system disk space usage
+		df -Th
+	whoami: to identify the current user
+	who: to list the currently logged-on users
+		who -a
+	id: to print real and effective user and group IDs
+sudo
+	Steps for Setting Up and Running:
+	1. $ su {password}
+	2. Create a configuration file to enable your user account to use sudo. Typically, this file is created in the /etc/sudoers.d/ directory with the name of the file the same as your username.
+		# echo "student ALL=(ALL) ALL" > /etc/sudoers.d/student
+	3. Some Linux distributions will complain if we do not also change permissions on the file.
+		# chmod 440 /etc/sudoers.d/student
+Turning Off/On the Graphical Desktop
+	$ sudo systemctl stop gdm (or sudo telinit 3)
+	$ sudo systemctl start gdm (or sudo telinit 5)
+		On Ubuntu versions before 18.04 LTS, substitute lightdm for gdm.
+links
+	ln: to create hard links and (with the -s option) soft links, also known as symbolic links or symlinks.
+	1. Hard Links
+	A hard link, called link1, is created with the command: ln file1 link1
+	2. Soft (Symbolic) Links
+	Soft (or Symbolic) links are created with the -s option: ln -s file1 link2
+	Unlike hard links, soft links can point to objects even on different filesystems, partitions, and/or disks and other media, which may or may not be currently available or even exist.
+	In the case where the link does not point to a currently available or existing object, you obtain a dangling link.
+file viewing
+	cat: for viewing files that are not very long; it does not provide any scroll-back.
+	tac: to look at a file backwards, starting with the last line.
+	less: to view larger files because it is a paging program. It pauses at each screen full of text, provides scroll-back capabilities, and lets you search and navigate within the file.
+		Note: Use / to search for a pattern in the forward direction and ? for a pattern in the backward direction. An older program named more is still used, but has fewer capabilities: "less is more".
+	tail: to print the last 10 lines of a file by default. You can change the number of lines by doing -n 15 or just -15 if you wanted to look at the last 15 lines instead of the default.
+	head: The opposite of tail; by default, it prints the first 10 lines of a file.
+file searching
+	You can search for a filename containing specific characters using wildcards.
+	? - any single character
+	* - any string of characters
+	[set] - any character in the set of characters
+		[adf] will match any occurrence of 'a', 'd', or 'f'
+	[!set] - any character not in the set of characters
+	
+	locate: To perform a search taking advantage of a previously constructed database of files and directories on the system, matching all entries that contain a specified character string. locate utilizes a database created by a related utility, updatedb.
+		locate zip | grep bin
+	find: To recurse down the filesystem tree from any particular directory (or set of directories) and locates files that match specified conditions. Commonly used options to shorten the list include -name (only list files with a certain pattern in their name), -iname (also ignore the case of file names), and -type (which will restrict the results to files of a certain specified type, such as d for directory, l for symbolic link, or f for a regular file, etc.). Another good use of find is being able to run commands on the files that match your search criteria. The -exec option is used for this purpose.
+	Note: One can also use the -ok option, which behaves the same as -exec, except that find will prompt you for permission before executing the command. This makes it a good way to test your results before blindly executing any potentially dangerous commands.
+		Searching for files and directories named gcc: find /usr -name gcc
+		Searching only for directories named gcc: find /usr -type d -name gcc
+		Searching only for regular files named gcc: find /usr -type f -name gcc
+		To find and remove all files that end with .swp: find -name "*.swp" -exec rm {} ’;’
+		Note: The {} (squiggly brackets) is a placeholder that will be filled with all the file names that result from the find expression, and the preceding command will be run on each one individually. Also you have to end the command with either ’;’ (including the single-quotes) or "\;". Both forms are fine.
+		To find files based on time: find / -ctime 3
+		Note: -ctime is when the inode metadata (i.e. file ownership, permissions, etc.) last changed; it is often, but not necessarily, when the file was first created. -atime to search for accessed/last read or -mtime for modified/last written times. The number is the number of days and can be expressed as either a number (n) that means exactly that value, +n, which means greater than that number, or -n, which means less than that number. There are similar options for times in minutes (as in -cmin, -amin, and -mmin).
+		To find files based on sizes: find / -size 0
+		Note: the size here is in 512-byte blocks, by default; you can also specify bytes (c), kilobytes (k), megabytes (M), gigabytes (G), etc. As with the time numbers above, file sizes can also be exact numbers (n), +n or -n.
+		To find files greater than 10 MB in size and running a command on those files: find / -size +10M -exec command {} ’;’
+Standard File Streams
+	0 stdin - standard input
+		do_something < input-file
+	1 stdout - standard output
+		do_something > output-file
+	2 stderr - standard error
+		do_something 2> error-file
+	A special shorthand notation can send anything written to file descriptor 2 (stderr) to the same place as file descriptor 1 (stdout): 2>&1.
+		do_something > all-output-file 2>&1
+	Note: bash permits an easier syntax: >&
+		do_something >& all-output-file
+pipe
+	You can pipe the output of one command or program into another as its input.
+	In order to do this, use the vertical-bar | (pipe symbol) between commands.
+		command1 | command2 | command3
+Process and Thread IDs
+	PID - Unique Process ID number
+	PPID - Parent Process ID. If the parent dies, the PPID will refer to an adoptive parent; on recent kernels, this is kthreadd which has PPID=2.
+	TID - Thread ID. This is the same as the PID for single-threaded processes. For a multi-threaded process, each thread shares the same PID, but has a unique TID.
+	RUID - Real User ID.
+	EUID - Effective UID. The EUID may or may not be the same as the RUID.
+	RGID - Real Group ID.
+	EGID - Effective Group ID. The access rights of the group are determined by the EGID.
+Terminating a Process
+	kill -SIGKILL <pid>
+	kill -9 <pid>
+	Note: you can only kill your own processes; those belonging to another user are off limits, unless you are root.
+Background Process
+	By default, all jobs are executed in the foreground. You can put a job in the background by suffixing & to the command.
+		updatedb &
+	You can either use CTRL-Z to suspend a foreground job or CTRL-C to terminate a foreground job and can always use the bg and fg commands to run a process in the background and foreground, respectively.
+	jobs: displays all jobs running in background.
+	jobs -l: provides the same information as jobs, including the PID of the background jobs.
+ps
+	ps provides information about currently running processes keyed by PID.
+	Without options, ps will display all processes running under the current shell.
+	-u: to display information of processes for a specified username
+	-ef: to display all the processes in the system in full detail
+	-eLf: to display one line of information for every thread (a process can contain multiple threads)
+	aux: to display all processes of all users
+	axo: to specify which attributes you want to view
+		ps axo stat,priority,pid,pcpu,comm
+pstree
+	displays the processes running on the system in the form of a tree diagram showing the relationship between a process and its parent process and any other processes that it created.
+	Repeated entries of a process are not displayed, and threads are displayed in curly braces.
+top
+	Interactive Keys:
+	t: Display/hide summary information (rows 2 and 3)
+	m: Display/hide memory information (rows 4 and 5)
+	A: Sort the process list by top resource consumers
+	r: Re-nice (change the priority of) a specific processes
+	k: Kill a specific process
+	f: Enter the top configuration screen
+	o: Interactively select a new sort order in the process list
+cron
+	is a time-based scheduling utility program. It can launch routine background jobs at specific times and/or days on an on-going basis.
+	It is driven by a configuration file: /etc/crontab (cron table), which contains the various shell commands that need to be run at the properly scheduled times. There are both system-wide crontab files and individual user-based ones. Each line of a crontab file represents a job, and is composed of a so-called CRON expression, followed by a shell command to execute.
+	crontab -e: opens the crontab editor to edit existing jobs or to create new jobs.
+	Each line of the crontab file will contain 6 fields:
+	1. MIN: Minutes (0 to 59)
+	2. HOUR: Hour field (0 to 23)
+	3. DOM: Day of Month (1-31)
+	4. MON: Month field (1-12)
+	5. DOW: Day Of Week (0-6) (0 = Sunday)
+	6. CMD: Command. Any command to be executed.
+		* * * * * /usr/local/bin/execute/this/script.sh: will schedule a job to execute 'script.sh' every minute of every hour of every day of the month, and every month and every day in the week.
+		30 08 10 06 * /home/sysadmin/full-backup: will schedule a full-backup at 8.30 a.m., 10-June, irrespective of the day of the week.
+		0 10 * * * /tmp/myjob.sh: every day at 10 AM. If the machine is not up at 10 AM on a given day, anacron will run the job at a suitable time.
+		crontab -r: to remove a task.
+mounting/unmounting
+	The mount command is used to attach a filesystem (local to the computer or on a network) somewhere within the filesystem tree. The basic arguments are the device node and mount point.
+		sudo mount /dev/sda5 /home
+	There are other ways to specify the partition other than the device node, such as using the disk label or UUID.
+	Typing mount without any arguments will show all presently mounted filesystems.
+	The command df -Th (disk-free) will display information about mounted filesystems, including the filesystem type, and usage statistics about currently used and available space.
+	To unmount the partition, the command would be umount.
+		sudo umount /home
+	Edit /etc/fstab for automatic mounting at the system start up.
+		man fstab
+nfs
+	1. On the server
+		sudo systemctl start nfs
+	The text file /etc/exports contains the directories and permissions that a host is willing to share with other systems over NFS.
+		/projects *.example.com(rw)
+	After modifying the /etc/exports file, you can use the exportfs -av command to notify Linux about the directories you are allowing to be remotely mounted using NFS.
+	You can also restart NFS with sudo systemctl restart nfs, but this is heavier, as it halts NFS for a short while before starting it up again.
+	To make sure the NFS service starts whenever the system is booted, issue sudo systemctl enable nfs.
+	2. On the client
+	On the client machine, if it is desired to have the remote filesystem mounted automatically upon system boot, the /etc/fstab file is modified to accomplish this. Use the nofail option in fstab in case the NFS server is not live at boot.
+		servername:/projects /mnt/nfs/projects nfs defaults 0 0
+	You can also mount the remote filesystem without a reboot or as a one-time mount by directly using the mount command.
+		sudo mount servername:/projects /mnt/nfs/projects
+removable media
+	/media, /run and /mnt directories
+diff
+	to compare files and directories.
+		diff [options] <filename1> <filename2>
+	The patch files are produced by running diff with the correct options.
+		diff -Nur originalfile newfile > patchfile
+	Useful options:
+	-c: Provides a listing of differences that include three lines of context before and after the lines differing in content
+	-r: Used to recursively compare subdirectories, as well as the current directory
+	-i: Ignore the case of letters
+	-w: Ignore differences in spaces and tabs (white space)
+	-q: Be quiet: only report if files are different without listing the differences
+	Note: diff is meant to be used for text files; for binary files, one can use cmp.
+diff3
+	to compare three files at once. It uses one file as the reference basis for the other two.
+		diff3 MY-FILE COMMON-FILE YOUR-FILE
+patch
+	patch -p1 < patchfile
+	patch originalfile patchfile
+	Note: The first usage is more common, as it is often used to apply changes to an entire directory tree, rather than just one file, as in the second example.
+file
+	determines file type
+	It tests each argument in an attempt to classify it. There are three sets of tests, performed in this order: filesystem tests, magic tests, and language tests. The first test that succeeds causes the file type to be printed.
+rsync
+	file-copying tool
+	rsync source-file destination-file
+		rsync -r project-X archive-machine:archives/project-X - to back up a project directory
+		rsync --progress -avrxH  --delete sourcedir destdir
+compressing data
+	gzip: The most frequently used Linux compression utility
+		gzip * - Compresses all files in the current directory; each file is compressed and renamed with a .gz extension
+		gzip -r projectX - Compresses all files in the projectX directory, along with all files in all of the directories under projectX
+		gunzip foo - De-compresses foo found in the file foo.gz. Under the hood, the gunzip command is actually the same as gzip –d
+	bzip2: Produces files significantly smaller than those produced by gzip
+		bzip2 * - Compresses all of the files in the current directory and replaces each file with a file renamed with a .bz2 extension
+		bunzip2 *.bz2 - Decompresses all of the files with an extension of .bz2 in the current directory. Under the hood, bunzip2 is the same as calling bzip2 -d
+	xz: The most space-efficient compression utility used in Linux
+		xz * - Compresses all of the files in the current directory and replaces each file with one with a .xz extension
+		xz foo - Compresses the file foo into foo.xz using the default compression level (-6), and removes foo if compression succeeds
+		xz -dk bar.xz - Decompresses bar.xz into bar and does not remove bar.xz even if decompression is successful
+		xz -dcf a.txt b.txt.xz > abcd.txt - Decompresses a mix of compressed and uncompressed files to standard output, using a single command
+		xz -d *.xz - Decompresses the files compressed using xz
+	zip: Is often required to examine and decompress archives from other operating systems
+		zip backup * - Compresses all files in the current directory and places them in the file backup.zip
+		zip -r backup.zip ~ - Archives your login directory (~) and all files and directories under it in the file backup.zip
+		unzip backup.zip - Extracts all files in the file backup.zip and places them in the current directory
+	Note: In addition, the tar utility is often used to group files in an archive and then compress the whole archive at once.
+tar
+	Historically, tar stood for "tape archive" and was used to archive files to a magnetic tape. It allows you to create or extract files from an archive file, often called a tarball. At the same time, you can optionally compress while creating the archive, and decompress while extracting its contents.
+		tar xvf mydir.tar - Extract all the files in mydir.tar into the mydir directory
+		tar zcvf mydir.tar.gz mydir - Create the archive and compress with gzip
+		tar jcvf mydir.tar.bz2 mydir - Create the archive and compress with bz2
+		tar Jcvf mydir.tar.xz mydir - Create the archive and compress with xz
+		tar xvf mydir.tar.gz - Extract all the files in mydir.tar.gz into the mydir directory. Note: You do not have to tell tar it is in gzip format
+	You can separate out the archiving and compression stages, but this is slower and wastes space by creating an unneeded intermediary .tar file.
+		tar cvf mydir.tar mydir ; gzip mydir.tar
+		gunzip mydir.tar.gz ; tar xvf mydir.tar
+dd
+	Disk-to-Disk Copying.
+creating files without using an editor
+	1. Use echo repeatedly
+		echo line one > myfile
+		echo line two >> myfile
+		echo line three >> myfile
+	2. Use cat combined with redirection
+		cat << EOF > myfile
+		> line one
+		> line two
+		> line three
+		> EOF
+nano
+	nano <filename>
+	If the file does not exist, it will be created.
+	Some commands:
+	CTRL-G: Display the help screen.
+	CTRL-O: Write to a file.
+	CTRL-X: Exit a file.
+	CTRL-R: Insert contents from another file to the current buffer.
+	CTRL-C: Cancels previous commands.
+vi
+	Modes:
+	1. Command
+	By default, vi starts in Command mode. Each key is an editor command. Keyboard strokes are interpreted as commands that can modify file contents.
+	2. Insert
+	Type i to switch to Insert mode from Command mode. Insert mode is used to enter (insert) text into a file. Insert mode is indicated by an “? INSERT ?” indicator at the bottom of the screen. Press Esc to exit Insert mode and return to Command mode.
+	3. Line
+	Type : to switch to the Line mode from Command mode. Each key is an external command, including operations such as writing the file contents to disk or exiting. Uses line editing commands inherited from older line editors. Most of these commands are actually no longer used. Some line editing commands are very powerful. Press Esc to exit Line mode and return to Command mode.
+	Important commands:
+	vi myfile - Start the vi editor and edit the myfile file
+	vi -r myfile - Start vi and edit myfile in recovery mode from a system crash
+	:r file2 - Read in file2 and insert at current position
+	:w - Write to the file
+	:w myfile - Write out the file to myfile
+	:w! file2 - Overwrite file2
+	:x or :wq - Exit vi and write out modified file
+	:q - Quit vi
+	:q! - Quit vi even though modifications have not been saved
+	Changing Cursor Positions:
+	arrow keys - To move up, down, left and right
+	j or <ret> - To move one line down
+	k - To move one line up
+	h or Backspace - To move one character left
+	l or Space - To move one character right
+	0 - To move to beginning of line
+	$ - To move to end of line
+	w - To move to beginning of next word
+	:0 or 1G - To move to beginning of file
+	:n or nG - To move to line n
+	:$ or G - To move to last line in file
+	CTRL-F or Page Down - To move forward one page
+	CTRL-B or Page Up - To move backward one page
+	^l - To refresh and center screen
+	Searching for Text:
+	/pattern - Search forward for pattern
+	?pattern - Search backward for pattern
+	n - Move to next occurrence of search pattern
+	N - Move to previous occurrence of search pattern
+	Stop upon Escape key commands:
+	a - Append text after cursor; 
+	A - Append text at end of current line;
+	i - Insert text before cursor;
+	I - Insert text at beginning of current line;
+	o - Start a new line below current line, insert text there;
+	O - Start a new line above current line, insert text there;
+	R - Replace text starting with current position;
+	Other commands:
+	r - Replace character at current position
+	x - Delete character at current position
+	Nx - Delete N characters, starting at current position
+	dw - Delete the word at the current position
+	D - Delete the rest of the current line
+	dd - Delete the current line
+	Ndd or dNd - Delete N lines
+	u - Undo the previous operation
+	yy - Yank (copy) the current line and put it in buffer
+	Nyy or yNy - Yank (copy) N lines and put it in buffer
+	p - Paste at the current position the yanked line or lines from the buffer
+	:sh - opens an external command shell
+	:! {command} % - executes a command from within vi; % - the file currently being edited
+emacs
+	emacs myfile - Start emacs and edit myfile
+	CTRL-x i - Insert prompted for file at current position
+	CTRL-x s - Save all files
+	CTRL-x CTRL-w - Write to the file giving a new name when prompted
+	CTRL-x CTRL-s - Saves the current file 
+	CTRL-x CTRL-c - Exit after being prompted to save any modified files
+	CTRL-h  - for help and then the letter t for tutorial
+	Changing Cursor Positions:
+	arrow keys: Use the arrow keys for up, down, left and right
+	CTRL-n: One line down
+	CTRL-p: One line up
+	CTRL-f: One character forward/right
+	CTRL-b: One character back/left
+	CTRL-a: Move to beginning of line
+	CTRL-e: Move to end of line
+	Meta-f: Move to beginning of next word
+	Meta-b: Move back to beginning of preceding word
+	Meta-<: Move to beginning of file
+	Meta-g-g-n: Move to line n (can also use 'Esc-x Goto-line n')
+	Meta->: Move to end of file
+	CTRL-v or Page Down: Move forward one page
+	Meta-v or Page Up: Move backward one page
+	CTRL-l: Refresh and center screen
+	Searching for Text:
+	CTRL-s: Search forward for prompted pattern, or for next pattern
+	CTRL-r: Search backwards for prompted pattern, or for next pattern
+	Working with Text:
+	CTRL-o: Insert a blank line
+	CTRL-d: Delete character at current position
+	CTRL-k: Delete the rest of the current line
+	CTRL-_: Undo the previous operation
+	CTRL- (space or CTRL-@): Mark the beginning of the selected region. The end will be at the cursor position
+	CTRL-w: Delete the current marked text and write it to the buffer
+	CTRL-y: Insert at current cursor location whatever was most recently deleted
+user startup files
+	When you first login to Linux, /etc/profile is read and evaluated, after which the following files are searched (if they exist) in the listed order:
+	1. ~/.bash_profile
+	2. ~/.bash_login
+	3. ~/.profile
+	The Linux login shell evaluates whatever startup file that it comes across first and ignores the rest.
+	However, every time you create a new shell, or terminal window, etc., you do not perform a full system login; only a file named ~/.bashrc file is read and evaluated.
+alias
+	defines or displays aliases.
+	unalias removes an alias.
+	Note: there should not be any spaces on either side of the equal sign and the alias definition needs to be placed within either single or double quotes if it contains any spaces.
+groups
+	All Linux users are assigned a unique user ID (uid), which is just an integer; normal users start with a uid of 1000 or greater.
+	Linux uses groups for organizing users.
+	Groups are collections of accounts with certain shared permissions. Permissions on various files and directories can be modified at the group level.
+	Control of group membership is administered through the /etc/group file, which shows a list of groups and their members. By default, every user belongs to a default or primary group.
+	When a user logs in, the group membership is set for their primary group and all the members enjoy the same level of access and privilege.
+	Users also have one or more group IDs (gid), including a default one which is the same as the user ID.
+	These numbers are associated with names through the files /etc/passwd and /etc/group.
+	Groups are used to establish a set of users who have common interests for the purposes of access rights, privileges, and security considerations.
+	Access rights to files (and devices) are granted on the basis of the user and the group they belong to.
+adding/removing users/groups
+	users: to print the user names currently logged in
+	groups: to print the groups a user is in
+	Note: Only the root user can add and remove users and groups.
+	useradd: to add a new user
+		sudo useradd student
+		sudo passwd student
+	userdel: to delete an existing user
+		sudo userdel -r student
+	groupadd: to add a new group
+		sudo /usr/sbin/groupadd anewgroup
+	usermod: to modify a user account
+		sudo /usr/sbin/usermod -a -G anewgroup student
+	groupmod: to change group properties, such as the Group ID (gid) with the -g option or its name with then -n option.
+	groupdel: to delete an existing group
+		sudo /usr/sbin/groupdel anewgroup
+sudo
+	executes a command as another user. When the command is complete, you will return to being a normal unprivileged user.
+	sudo configuration files are stored in the /etc/sudoers file and in the /etc/sudoers.d/ directory. By default, the sudoers.d directory is empty.
+environment variables
+	There are a number of ways to view the values of currently set environment variables: set, env, export.
+		set | grep HIST
+	By default, variables created within a script are only available to the current shell; child processes (sub-shells) will not have access to values that have been set or modified. Allowing child processes to see the values requires use of the export command.
+		echo $SHELL - Show the value of a specific variable
+		export VARIABLE=value (or VARIABLE=value; export VARIABLE) - Export a new variable value
+		SDIRS=s_0* KROOT=/lib/modules/$(uname -r)/build make modules_install - Set environment variables to be fed as a one shot to a command
+	To add a variable permanently edit ~/.bashrc and add: export VARIABLE=value.
+PATH
+	is an ordered list of directories (the path) which is scanned when a command is given to find the appropriate program or script to run. Each directory in the path is separated by colons (:).
+	A null (empty) directory name (or ./) indicates the current directory at any given time.
+		export PATH=$HOME/bin:$PATH
+SHELL
+	points to the user's default command shell (the program that is handling whatever you type in a command window, usually bash) and contains the full pathname to the shell.
+PS1
+	is the primary prompt variable which controls what your command line prompt looks like.
+	Special characters can be included in PS1:
+	\u - User name
+	\h - Host name
+	\w - Current working directory
+	\! - History number of this command
+	\d - Date
+	They must be surrounded in single quotes when they are used.
+		export PS1='\u@\h:\w$ '
+		export PS1='$ ' - To revert the changes
+		OLD_PS1=$PS1
+		PS1=$OLD_PS1
+history
+	CTRL-R: Search previously used commands
+	!! (Pronounced as bang-bang): Execute the previous command
+	Up/Down arrow keys: Browse through the list of commands previously executed
+	!: Start a history substitution
+	!$: Refer to the last argument in a line
+	!n: Refer to the n-th command line
+	!string: Refer to the most recent command starting with string
+bash keyboard shortcuts
+	CTRL-L: Clears the screen
+	CTRL-D: Exits the current shell
+	CTRL-Z: Puts the current process into suspended background
+	CTRL-C: Kills the current process
+	CTRL-H: Works the same as backspace
+	CTRL-A: Goes to the beginning of the line
+	CTRL-W: Deletes the word before the cursor
+	CTRL-U: Deletes from beginning of line to cursor position
+	CTRL-E: Goes to the end of the line
+	Tab: Auto-completes files, directories, and binaries
+file ownership
+	Files have three kinds of permissions: read (r), write (w), execute (x). These are generally represented as in rwx. These permissions affect three groups of owners: user/owner (u), group (g), and others (o).
+	As a result, you have the following three groups of three permissions:
+	rwx:rwx:rwx
+	u:g:o
+	This kind of syntax can be difficult to type and remember, so one often uses a shorthand which lets you set all the permissions in one step. This is done with a simple algorithm, and a single digit suffices to specify all three permission bits for each entity. This digit is the sum of:
+	4 if read permission is desired
+	2 if write permission is desired
+	1 if execute permission is desired.
+	Thus, 7 means read/write/execute, 6 means read/write, and 5 means read/execute.
+	Commands:
+	chown: Used to change user ownership of a file or directory
+	chgrp: Used to change group ownership
+	chmod: Used to change the permissions on the file, which can be done separately for owner, group and the rest of the world (often named as other)
+		chmod uo+x,g-w somefile
+		chmod 755 somefile
+	
+	
