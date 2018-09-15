@@ -1,4 +1,4 @@
-﻿Documentation
+Documentation
 	1. The man pages (short for manual pages)
 		Linux man pages online: http://man7.org/linux/man-pages/
 	2. GNU Info
@@ -60,6 +60,8 @@ FHS
 		config - The kernel configuration file, only used for debugging and bookkeeping;
 		System.map - Kernel symbol table, only used for debugging;
 	/dev/ - device files; it contains device nodes, a type of pseudo-file used by most hardware and software devices, except for network devices.
+	/dev/random/ - pool of random numbers
+	/dev/urandom/ - pool of pseudo-random bits
 	/etc/ - host-specific system configuration (required directories: opt, x11, sgml, xml); It is for system configuration files. It contains no binary programs, although there are some executable scripts.
 		/etc/resolv.conf - tells the system where to go on the network to obtain host name to IP address mappings (DNS).
 		/etc/passwd, /etc/shadow, /etc/group - files for managing user accounts
@@ -149,6 +151,11 @@ FHS
 	/usr/src - Source code, usually for the Linux kernel
 	/usr/local - Data and programs specific to the local machine. Subdirectories include bin, sbin, lib, share, include, etc.
 	/usr/bin - This is the primary directory of executable commands on the system
+/dev/null
+	Pseudofile. (It is also called the bit bucket or black hole.)
+	All data written to it is discarded and write operations never return a failure condition.
+		ls -lR /tmp > /dev/null # the entire standard output stream is ignored, but any errors will still appear on the console
+		ls -lR /tmp >& /dev/null # both stdout and stderr will be dumped into /dev/null
 filesystem top node
 	the root or simply "/"
 boot loader
@@ -180,10 +187,12 @@ systemd
 	/sbin/init now just points to /lib/systemd/systemd; i.e. systemd takes over the init process.
 	One systemd command - systemctl is used for most basic tasks.
 systemctl
-	sudo systemctl start|stop|restart nfs.service
-		Starting, stopping, restarting a service (using nfs as an example) on a currently running system.
-	sudo systemctl enable|disable nfs.service
-		Enabling or disabling a system service from starting up at system boot.
+	sudo systemctl start|stop|restart nfs.service - to start, stop, restart a service (using nfs as an example) on a currently running system
+	sudo systemctl enable|disable nfs.service - to enable or disable a system service from starting up at system boot
+	sudo systemctl restart NetworkManager
+	sudo systemctl restart network
+	sudo service NetworkManager restart
+	sudo service network restart
 service
 	A program that runs as a background process.
 		Examples: httpd, nfsd, ntpd, ftpd, named.
@@ -363,6 +372,9 @@ Basic Utilities
 	who: to list the currently logged-on users
 		who -a
 	id: to print real and effective user and group IDs
+	wget: network downloader
+	curl: to transfer data from or to a server
+		curl -o saved.html http://www.mysite.com
 sudo
 	Steps for Setting Up and Running:
 	1. $ su {password}
@@ -719,12 +731,13 @@ sudo
 	executes a command as another user. When the command is complete, you will return to being a normal unprivileged user.
 	sudo configuration files are stored in the /etc/sudoers file and in the /etc/sudoers.d/ directory. By default, the sudoers.d directory is empty.
 environment variables
-	There are a number of ways to view the values of currently set environment variables: set, env, export.
+	There are a number of ways to view the values of currently set environment variables: set, env, export, printenv.
 		set | grep HIST
-	By default, variables created within a script are only available to the current shell; child processes (sub-shells) will not have access to values that have been set or modified. Allowing child processes to see the values requires use of the export command.
+	By default, variables created within a script are only available to the current shell; child processes (sub-shells) will not have access to values that have been set or modified. Allowing child processes to see the values requires use of the export command. While child processes are allowed to modify the value of exported variables, the parent will not see any changes; exported variables are not shared, they are only copied and inherited.
 		echo $SHELL - Show the value of a specific variable
 		export VARIABLE=value (or VARIABLE=value; export VARIABLE) - Export a new variable value
 		SDIRS=s_0* KROOT=/lib/modules/$(uname -r)/build make modules_install - Set environment variables to be fed as a one shot to a command
+		$? - Exit status code
 	To add a variable permanently edit ~/.bashrc and add: export VARIABLE=value.
 PATH
 	is an ordered list of directories (the path) which is scanned when a command is given to find the appropriate program or script to run. Each directory in the path is separated by colons (:).
@@ -732,6 +745,9 @@ PATH
 		export PATH=$HOME/bin:$PATH
 SHELL
 	points to the user's default command shell (the program that is handling whatever you type in a command window, usually bash) and contains the full pathname to the shell.
+RANDOM
+	Environment variable to generate random numbers and other random data.
+		for n in 1 2 3 ; do echo $RANDOM ; done
 PS1
 	is the primary prompt variable which controls what your command line prompt looks like.
 	Special characters can be included in PS1:
@@ -780,5 +796,371 @@ file ownership
 	chmod: Used to change the permissions on the file, which can be done separately for owner, group and the rest of the world (often named as other)
 		chmod uo+x,g-w somefile
 		chmod 755 somefile
+cat
+	is short for concatenate. It is often used to read and print files, as well as for simply viewing file contents.
+		cat <filename>
+	The main purpose of cat is to combine (concatenate) multiple files together.
+		cat file1 file2 - Concatenate multiple files and display the output
+		cat file1 file2 > newfile - Combine multiple files and save the output into a new file
+		cat file >> existingfile - Append a file to the end of an existing file
+		cat > file - Any subsequent lines typed will go into the file, until CTRL-D is typed
+		cat >> file - Any subsequent lines are appended to the file, until CTRL-D is typed
+		cat > <filename> << EOF - Note: EOF is case sensitive. One can also use another word, such as STOP.
+tac
+	(cat spelled backwards) prints the lines of a file in reverse order. Each line remains the same, but the order of lines is inverted. The syntax of tac is exactly the same as for cat.
+		tac file
+		tac file1 file2 > newfile
+echo
+	simply displays (echoes) text.
+	The –e option, along with the following switches, is used to enable special character sequences, such as the newline character or horizontal tab.
+	1) \n - represents newline
+	2) \t - represents horizontal tab
+		echo string > newfile: The specified string is placed in a new file
+		echo string >> existingfile: The specified string is appended to the end of an already existing file
+		echo $variable: The contents of the specified environment variable are displayed
+sed
+	a powerful text processing tool
+	The -e command option allows you to specify multiple editing commands simultaneously at the command line. It is unnecessary if you only have one operation invoked.
+	To convert 01/02/ to JAN/FEB/
+	sed -e 's/01/JAN/' -e 's/02/FEB/' -e 's/03/MAR/' -e 's/04/APR/' -e 's/05/MAY/' \
+	-e 's/06/JUN/' -e 's/07/JUL/' -e 's/08/AUG/' -e 's/09/SEP/' -e 's/10/OCT/' \
+	-e 's/11/NOV/' -e 's/12/DEC/'
+		sed -e command <filename>: Specify editing commands at the command line, operate on file and put the output on standard out (e.g., the terminal)
+		sed -f scriptfile <filename>: Specify a scriptfile containing sed commands, operate on file and put output on standard out
+		sed s/pattern/replace_string/ file: Substitute first string occurrence in every line
+		sed s/pattern/replace_string/g file: Substitute all string occurrences in every line
+		sed 1,3s/pattern/replace_string/g file: Substitute all string occurrences in a range of lines
+		sed -i s/pattern/replace_string/g file: Save changes for string substitution in the same file
+awk
+	is used to extract and then print specific contents of a file and is often used to construct reports.
+		awk command file: Specify a command directly at the command line
+		awk -f scriptfile file: Specify a file that contains the script to be executed
+	-F option allows you to specify a particular field separator character.
+		awk '{ print $0 }' /etc/passwd: Print entire file
+		awk -F: '{ print $1 }' /etc/passwd: Print first field (column) of every line, separated by a space
+		awk -F: '{ print $1 $7 }' /etc/passwd: Print first and seventh field of every line
+file manipulation
+	sort: to rearrange the lines of a text file either in ascending or descending order, according to a sort key. You can also sort by particular fields of a file. The default sort key is the order of the ASCII characters (i.e. essentially alphabetically). When used with the -u option, sort checks for unique values after sorting the records (lines). It is equivalent to running uniq on the output of sort.
+		sort <filename>: Sort the lines in the specified file, according to the characters at the beginning of each line
+		cat file1 file2 | sort: Combine the two files, then sort the lines and display the output on the terminal
+		sort -r <filename>: Sort the lines in reverse order
+		sort -k 3 <filename>: Sort the lines by the 3rd field on each line instead of the beginning
+		sort -u file1 file2 > file3: To remove duplicate entries from multiple files at once
+	uniq: uniq removes duplicate consecutive lines in a text file and is useful for simplifying the text display.
+		sort file1 file2 | uniq > file3: To remove duplicate entries from multiple files at once
+		uniq -c filename: To count the number of duplicate entries
+	paste: to combine fields (such as name or phone number) from different files, as well as combine lines from multiple files.
+		-d: delimiters, which specify a list of delimiters to be used instead of tabs for separating consecutive values on a single line. Each delimiter is used in turn; when the list has been exhausted, paste begins again at the first delimiter.
+		-s, which causes paste to append the data in series rather than in parallel; that is, in a horizontal rather than vertical fashion.
+		paste file1 file2: To paste contents from two files
+		paste -d, file1 file2: Common delimiters are 'space', 'tab', '|', 'comma', etc.
+	join: to combine files on a common field
+		join file1 file2
+	split: to break up a file into equal-sized segments for easier viewing and manipulation. By default, split breaks up a file into 1000-line segments. By default, the x prefix is added.
+		split infile <Prefix>
+regular expressions
+	Many text editors and utilities such as vi, sed, awk, find and grep work extensively with regular expressions.
+	Search patterns and their usage:
+	.(dot) - Match any single character
+	a|z - Match a or z
+	$ - Match end of string
+	^ - Match beginning of string
+	* - Match preceding item 0 or more times
+grep
+	is extensively used as a primary text searching tool. It scans files for specified patterns and can be used with regular expressions, as well as simple strings.
+		grep [pattern] <filename>: Search for a pattern in a file and print all matching lines
+		grep -v [pattern] <filename>: Print all lines that do not match the pattern
+		grep [0-9] <filename>: Print the lines that contain the numbers 0 through 9
+		grep -C 3 [pattern] <filename>: Print context of lines (specified number of lines above and below the pattern) for matching the pattern. Here, the number of lines is specified as 3
+strings
+	is used to extract all printable character strings found in the file or files given as arguments. It is useful in locating human-readable content embedded in binary files; for text files one can just use grep.
+		strings book1.xls | grep my_string
+tr
+	to translate or delete characters
+		tr [options] set1 [set2]
+		tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ - Convert lower case to upper case
+		tr '{}' '()' < inputfile > outputfile - Translate braces into parenthesis
+		echo "This is for testing" | tr [:space:] '\t' - Translate white-space to tabs
+		echo "This   is   for    testing" | tr -s [:space:] - Squeeze repetition of characters using -s
+		echo "the geek stuff" | tr -d 't' - Delete specified characters using -d option
+		echo "my username is 432234" | tr -cd [:digit:] - Complement the sets using -c option
+		tr -cd [:print:] < file.txt - Remove all non-printable character from a file
+		tr -s '\n' ' ' < file.txt - Join all the lines in a file into a single line
+tee
+	takes the output from any command, and, while sending it to standard output, it also saves it to a file.
+wc
+	counts the number of lines, words, and characters in a file or list of files.
+		wc /var/log/*.log
+	Options:
+	–l: Displays the number of lines
+	-c: Displays the number of bytes
+	-w: Displays the number of words
+	By default, all three of these options are active.
+cut
+	is used for manipulating column-based files and is designed to extract specific columns. The default column separator is the tab character. A different delimiter can be given as a command option.
+		ls -l | cut -d" " -f3
+network configuration files
+	/etc/network/ - for Debian family
+	/etc/sysconfig/network - for Fedora and SUSE family
+	nmtui - Text User Interface for controlling NetworkManager
+	nmcli - command-line tool for controlling NetworkManager
+network interface
+	Network interfaces are a connection channel between a device and a network.
+	Physically, network interfaces can proceed through a network interface card (NIC), or can be more abstractly implemented as software.
+	You can have multiple network interfaces operating at once. Specific interfaces can be brought up (activated) or brought down (de-activated) at any time.
+	Information about a particular network interface or all network interfaces can be reported by the ip and ifconfig utilities, which you may have to run as the superuser, or at least, give the full path, i.e. /sbin/ifconfig, on some distributions. ip is newer than ifconfig  and has far more capabilities, but its output is uglier to the human eye.
+	Note: Some new Linux distributions do not install the older net-tools package to which ifconfig belongs, and  so you would have to install it if you want to use it.
+ip
+	ip is a very powerful program that can do many things. Older (and more specific) utilities such as ifconfig and route are often used to accomplish similar tasks.
+		/sbin/ip addr show - To view the IP address
+		/sbin/ip route show - To view the routing information
+		ip route - Show current routing table
+		ip route show
+		ip route add - Add static route
+		ip route del - Delete static route
+		ip --brief addr show - To get id address
+route
+	to view or change the IP routing table to add, delete, or modify specific (static) routes to specific hosts or networks.
+		route –n - Show current routing table
+		route add -net address - Add static route
+		route del -net address - Delete static route
+traceroute
+	to inspect the route which the data packet takes to reach the destination host, which makes it quite useful for troubleshooting network delays and errors.
+	By using traceroute, you can isolate connectivity issues between hops, which helps resolve them faster.
+		traceroute <address>
+		sudo traceroute 8.8.8.8
+additional networking tools
+	ethtool: Queries network interfaces and can also set various parameters such as the speed
+		sudo ethtool eth0
+	netstat: Displays all active connections and routing tables. Useful for monitoring performance and troubleshooting
+		netstat -r
+	nmap: Scans open ports on a network. Important for security analysis
+		sudo nmap -sP 10.0.2.15/24
+	tcpdump: Dumps network traffic for analysis
+	iptraf: Monitors network traffic in text mode
+	mtr: Combines functionality of ping and traceroute and gives a continuously updated display
+		sudo mtr --report-cycles 3 8.8.8.8
+	dig: Tests DNS workings. A good replacement for host and nslookup
+		dig google.com
+name
+	hostname - show or set the system's host name
+	domainname/ypdomainname/nisdomainname - show or set the system's NIS/YP domain name
+	dnsdomainname - show the system's DNS domain name
+DNS
+	/etc/hosts
+	/etc/resolv.conf
+		host linuxfoundation.org - To look up hostnames using DNS
+		nslookup linuxfoundation.org - To look up name servers interactively
+		dig google.com - To look up domain name information from nameserver
+NAT
+	Network Address Translation.
+	NAT enables sharing one IP address among many locally connected computers, each of which has a unique address only seen on the local network.
+DHCP
+	Dynamic Host Configuration Protocol.
+	It is used to assign IP addresses.
+		sudo dhclient eth0
+IPv4
+	A 32-bit IPv4 address is divided into four 8-bit sections called octets.
+		172.16.31.46
+	Note: The value of an octet, or 8-bits, can range from 0 to 255.
+	Network addresses are divided into five classes: A, B, C, D, E. Network addresses (NetID) and Host address (HostID). The NetID is used to identify the network, while the HostID is used to identify a host in the network. Class D is used for special multicast applications (information is broadcast to multiple computers simultaneously) and Class E is reserved for future use.
+	  octet1 octet2 octet3 octet4
+	A  NetID HostID HostID HostID
+	B  NetID  NetID HostID HostID
+	C  NetID  NetID  NetID HostID
+	D     Multi-cast addresses
+	E   Reserved for future use
 	
-	
+	Class A.
+	Class A addresses use the first octet of an IP address as their NetID and use the other three octets as the HostID.
+	The first bit of the first octet is always set to zero. So you can use only 7-bits for unique network numbers. As a result, there are a maximum of 126 Class A networks available (the addresses 0000000 and 1111111 are reserved).
+	Each Class A network can have up to 16.7 million unique hosts on its network. The range of host address is from 1.0.0.0 to 127.255.255.255.
+	Class B.
+	Class B addresses use the first two octets of the IP address as their NetID and the last two octets as the HostID.
+	The first two bits of the first octet are always set to binary 10, so there are a maximum of 16,384 (14-bits) Class B networks. The first octet of a Class B address has values from 128 to 191.
+	Each Class B network can support a maximum of 65,536 unique hosts on its network. The range of host address is from 128.0.0.0 to 191.255.255.255.
+	Class C.
+	Class C addresses use the first three octets of the IP address as their NetID and the last octet as their HostID.
+	The first three bits of the first octet are set to binary 110, so almost 2.1 million (21-bits) Class C networks are available. The first octet of a Class C address has values from 192 to 223.
+	Each Class C network can support up to 256 (8-bits) unique hosts. The range of host address is from 192.0.0.0 to 223.255.255.255.
+non-graphical browsers
+	Lynx: Configurable text-based web browser; the earliest such browser and still in use
+	ELinks: Based on Lynx. It can display tables and frames
+	w3m: Another text-based web browser with many features.
+command line FTP clients
+	ftp, sftp, ncftp, yafc (Yet Another FTP Client).
+		ftp –p aristotle.learningmate.com
+ssh
+	Secure Shell is a cryptographic network protocol used for secure data communication.
+	It is also used for remote services and other secure services between two devices on the network and is very useful for administering systems which are not easily available to physically work on, but to which you have remote access.
+		ssh some_system - to login to a remote system
+		ssh -l someone some_system - to run as another user
+		ssh someone@some_system
+		ssh some_system my_command - to run a command on a remote system via SSH
+	Note: You can also configure ssh to securely allow your remote access without typing a password each time.
+scp
+	to copy files securely using Secure Copy (scp) between two networked hosts. scp uses the SSH protocol for transferring data.
+		scp <localfile> <user@remotesystem>:/home/user/
+	Note: You can also configure scp so that it does not prompt for a password for each transfer.
+command shell choices
+	The command interpreter is tasked with executing statements that follow it in the script.
+	Commonly used interpreters include: /usr/bin/perl, /bin/bash, /bin/csh, /usr/bin/python and /bin/sh.
+	Linux provides a wide choice of shells; exactly what is available on the system is listed in /etc/shells.
+	Most Linux users use the default bash shell.
+bash basic syntax and special characters
+	# - to add a comment, except when used as \#, or as #! when starting a script
+	\ - at the end of a line to indicate continuation on to the next line
+	; - to interpret what follows as a new command to be executed next
+		make; make install; make clean
+	$ - to indicate an environment variable
+	> - to redirect output
+		free > /tmp/free.out
+	>> - to append output to a file if it exists, and act just like > if the file does not already exist
+	< - to redirect input
+		wc < /etc/passwd
+	| - to pipe the result into the next command
+	&& - to abort subsequent commands when an earlier one fails
+		make && make install && make clean
+	|| - to proceed until something succeeds and then you stop executing any further steps
+		cat file1 || cat file2 || cat file3
+script parameters
+	$0 - Script name
+	$1 - First parameter
+	$2, $3, etc. - Second, third parameter, etc.
+	$* - All parameters
+	$# - Number of arguments
+command substitution
+	It can be done in two ways:
+	1. By enclosing the inner command in $( )
+	2. By enclosing the inner command with backticks (`)
+	Note: backticks form, is deprecated in new scripts and commands.
+	The specified command will be executed in a newly launched shell environment, and the standard output of the shell will be inserted where the command substitution is done.
+		ls /lib/modules/$(uname -r)/
+if statement
+	In compact form, the syntax of an if statement is:
+	if TEST-COMMANDS; then CONSEQUENT-COMMANDS; fi
+	A more general definition is:
+	if condition
+	then
+	  statements
+	else
+	  statements
+	fi
+	In the following example, an if statement checks to see if a certain file exists, and if the file is found, it displays a message indicating success or failure:
+	if [ -f "$1" ]
+	then
+	  echo file "$1 exists" 
+	else
+	  echo file "$1" does not exist
+	fi
+	In modern scripts, you may see doubled brackets as in[[ -f /etc/passwd ]]. It is never wrong to do so and it avoids some subtle problems, such as referring to an empty environment variable without surrounding it in double quotes;
+	You can use the elif statement to perform more complicated tests, and take action appropriate actions.
+	if [ sometest ] ; then
+	  echo Passed test1 
+	elif [ somothertest ] ; then
+	  echo Passed test2 
+	fi
+	bash provides a set of file conditionals, that can be used with the if statement:
+	-e file - if the file exists
+	-d file -  if the file is a directory
+	-f file - if the file is a regular file (i.e. not a symbolic link, device node, directory, etc.)
+	-s file - if the file is of non-zero size
+	-g file - if the file has sgid set
+	-u file - if the file has suid set
+	-r file - if the file is readable
+	-w file - if the file is writable
+	-x file - if the file is executable
+	Note: You can view the full list of file conditions: man 1 test
+	Numerical Tests:
+	The syntax for comparing numbers is as follows - exp1 -op exp2
+		[ $number1 -gt $number2 ] - The operator -gt returns TRUE if number1 is greater than number2
+	Operators:
+	-eq - Equal to
+	-ne - Not equal to
+	-gt - Greater than
+	-lt - Less than
+	-ge - Greater than or equal to
+	-le - Less than or equal to
+Arithmetic expressions
+	Arithmetic expressions can be evaluated in the following three ways (spaces are important!):
+	Using the expr utility. expr is a standard but somewhat deprecated program.
+		expr 8 + 8
+		echo $(expr 8 + 8)
+	Using the $((...)) syntax. This is the built-in shell format.
+		echo $((x+1))
+	Using the built-in shell command let.
+		let x=( 1 + 2 ); echo $x
+	In modern shell scripts, the use of expr is better replaced with var=$((...)).
+string manipulation
+	A string variable contains a sequence of text characters.
+	It can include letters, numbers, symbols and punctuation marks.
+		abcde, 123, abcde 123, abcde-123, &acbde=%123
+	String operators include those that do comparison, sorting, and finding the length.
+	Basic string operators:
+	[[ string1 > string2 ]] - to compare the sorting order of string1 and string2
+	[[ string1 == string2 ]] - to compare the characters in string1 with the characters in string2
+	myLen1=${#string1} - to saves the length of string1 in the variable myLen1
+	${string:0:n} - to extract the first n characters of a string
+	${string#*.} - to extract all characters in a string after a dot (.)
+case statement
+	case expression in
+	  pattern1) execute commands;;
+	  pattern2) execute commands;;
+	  pattern3) execute commands;;
+	  pattern4) execute commands;;
+	  * )       execute some default commands or nothing ;;
+	esac
+loop statement
+	1. The for loop operates on each element of a list of items.
+	for variable-name in list
+	do
+	  execute one iteration for each item in the list until the list is finished
+	done
+	2. The while loop repeats a set of statements as long as the control command returns true.
+	while condition is true
+	do
+	  Commands for execution
+	done
+	3. The until loop repeats a set of statements as long as the control command is false.
+	until condition is false
+	do
+	  Commands for execution
+	done
+script debug mode
+	You can run a bash script in debug mode either by doing bash –x ./script_file,  or bracketing parts of the script with set -x and set +x.
+	In debug mode:
+	1) It traces and prefixes each command with the + character.
+	2) It displays each command before executing it.
+	3) It can debug only selected parts of a script (set -x/set +x).
+		set -x # turns on debugging
+		set +x # turns off debugging
+mktemp
+	Creates temporary files or directories.
+		TEMP=$(mktemp /tmp/tempfile.XXXXXXXX) # To create a temporary file
+		TEMPDIR=$(mktemp -d /tmp/tempdir.XXXXXXXX) # To create a temporary directory
+		Note: The XXXXXXXX is replaced by the mktemp with random characters to ensure the name of the temporary file cannot be easily predicted and is only known within your program.
+CUPS
+	Common UNIX Printing System.
+	It acts as a print server for both local and network printers.
+	After executing a print command, the scheduler validates the command and processes the print job, creating job files according to the settings specified in the configuration files. Simultaneously, the scheduler records activities in the log files. Job files are processed with the help of the filter, printer driver, and backend, and then sent to the printer.
+	CUPS carries out the printing process with the help of its various components:
+	1) Configuration Files
+	CUPS related configuration files are stored under the /etc/cups/;
+		cupsd.conf - is where most system-wide settings are located; it does not contain any printer-specific details. Most of the settings available in this file relate to network security, i.e. which systems can access CUPS network capabilities, how printers are advertised on the local network, what management features are offered, and so on.
+		printers.conf - is where you will find the printer-specific settings. For every printer connected to the system, a corresponding section describes the printer’s status and capabilities. This file is generated only after adding a printer to the system and should not be modified by hand.
+	2) Scheduler
+	manages print jobs, handles administrative commands, allows users to query the printer status, and manages the flow of data through all CUPS components;
+	browser-based interface allows to view and manipulate the order and status of pending print jobs;
+	3) Job Files
+	CUPS stores print requests as files under the /var/spool/cups directory (these can actually be accessed before a document is sent to a printer). Data files are prefixed with the letter "d" while control files are prefixed with the letter "c".
+	After a printer successfully handles a job, data files are automatically removed. These data files belong to what is commonly known as the print queue.
+	4) Log Files
+	Log files are placed in /var/log/cups and are used by the scheduler to record activities that have taken place. These files include access, error, and page records.
+	5) Filter
+	CUPS uses filters to convert job file formats to printable formats. Printer drivers contain descriptions for currently connected and configured printers, and are usually stored under /etc/cups/ppd/. The print data is then sent to the printer through a filter and via a backend that helps to locate devices connected to the system.
+	6) Printer Drivers
+	7) Backend
+	Managing CUPS: all management features can be done with the systemctl utility.
+		systemctl status cups
+		sudo systemctl [enable|disable] cups
+		sudo systemctl [start|stop|restart] cups
