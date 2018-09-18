@@ -375,7 +375,14 @@ Basic Utilities
 	wget: network downloader
 	curl: to transfer data from or to a server
 		curl -o saved.html http://www.mysite.com
+	last: shows the last time each user logged into the system
 sudo
+	executes a command as another user. When the command is complete, you will return to being a normal unprivileged user.
+	sudo configuration files are stored in the /etc/sudoers file and in the /etc/sudoers.d/ directory. By default, the sudoers.d directory is empty.
+		sudo visudo
+	sudo has the ability to keep track of unsuccessful attempts at gaining root access.
+	By default, sudo commands and any failures are logged in /var/log/auth.log under the Debian distribution family, and in /var/log/messages and/or /var/log/secure on other systems.
+	Whenever sudo is invoked, a trigger will look at /etc/sudoers and the files in /etc/sudoers.d to determine if the user has the right to use sudo and what the scope of their privilege is. The basic structure of an entry is: who where = (as_whom) what
 	Steps for Setting Up and Running:
 	1. $ su {password}
 	2. Create a configuration file to enable your user account to use sudo. Typically, this file is created in the /etc/sudoers.d/ directory with the name of the file the same as your username.
@@ -716,7 +723,7 @@ adding/removing users/groups
 	groups: to print the groups a user is in
 	Note: Only the root user can add and remove users and groups.
 	useradd: to add a new user
-		sudo useradd student
+		sudo useradd -m student
 		sudo passwd student
 	userdel: to delete an existing user
 		sudo userdel -r student
@@ -727,9 +734,6 @@ adding/removing users/groups
 	groupmod: to change group properties, such as the Group ID (gid) with the -g option or its name with then -n option.
 	groupdel: to delete an existing group
 		sudo /usr/sbin/groupdel anewgroup
-sudo
-	executes a command as another user. When the command is complete, you will return to being a normal unprivileged user.
-	sudo configuration files are stored in the /etc/sudoers file and in the /etc/sudoers.d/ directory. By default, the sudoers.d directory is empty.
 environment variables
 	There are a number of ways to view the values of currently set environment variables: set, env, export, printenv.
 		set | grep HIST
@@ -1143,6 +1147,7 @@ CUPS
 	Common UNIX Printing System.
 	It acts as a print server for both local and network printers.
 	After executing a print command, the scheduler validates the command and processes the print job, creating job files according to the settings specified in the configuration files. Simultaneously, the scheduler records activities in the log files. Job files are processed with the help of the filter, printer driver, and backend, and then sent to the printer.
+	The CUPS web interface is available at: http://localhost:631
 	CUPS carries out the printing process with the help of its various components:
 	1) Configuration Files
 	CUPS related configuration files are stored under the /etc/cups/;
@@ -1164,3 +1169,156 @@ CUPS
 		systemctl status cups
 		sudo systemctl [enable|disable] cups
 		sudo systemctl [start|stop|restart] cups
+	Printing from the Command-Line Interface
+	lp (System V) or lpr (BSD)
+		lp <filename> # To print the file to default printer
+		lp -d printer <filename> # To print to a specific printer (useful if multiple printers are available)
+		program | lp
+		echo string | lp # To print the output of a program
+		lp -n number <filename> # To print multiple copies
+		lpoptions -d printer # To set the default printer
+		lpq -a # To show the queue status
+		lpadmin # To configure printer queues
+	The lpoptions utility can be used to set printer options and defaults. Each printer has a set of tags associated with it, such as the default number of copies and authentication requirements. You can execute the command lpoptions help to obtain a list of supported options. lpoptions can also be used to set system-wide values, such as the default printer.
+		lpstat -p -d # To get a list of available printers, along with their status
+		lpstat -a # To check the status of all connected printers, including job numbers
+		cancel job-id
+		lprm job-id # To cancel a print job
+		lpmove job-id newprinter # To move a print job to new printer
+PostScript
+	PostScript is a standard page description language.
+	It effectively manages scaling of fonts and vector graphics to provide quality printouts. It is purely a text format that contains the data fed to a PostScript interpreter. The format itself is a language that was developed by Adobe in the early 1980s to enable the transfer of data to printers.
+	Features:
+	1. It can be used on any printer that is PostScript-compatible; i.e. any modern printer
+	2. Any program that understands the PostScript specification can print to it
+	3. Information about page appearance, etc. is embedded in the page.
+	Note: Postscript has been for the most part superseded by the PDF format (Portable Document Format) which produces far smaller files in a compressed format for which support has been integrated into many applications. However, one still has to deal with postscript documents, often as an intermediate format on the way to producing final documents.
+enscript
+	A tool that is used to convert a text file to PostScript and other formats. It also supports Rich Text Format (RTF) and HyperText Markup Language (HTML).
+		enscript -2 -r -p psfile.ps textfile.txt # To convert a text file to two columns (-2) formatted PostScript
+		enscript -p psfile.ps textfile.txt # To convert a text file to PostScript (saved to psfile.ps)
+		enscript -n -p psfile.ps textfile.txt # To convert a text file to n columns where n=1-9 (saved in psfile.ps)
+		enscript textfile.txt # To print a text file directly to the default printer
+converting between PostScript and PDF
+	ps2pdf and pdf2ps are part of the ghostscript package installed on or available on all Linux distributions. As an alternative, there are pstopdf and pdftops which are usually part of the poppler package, which may need to be added through your package manager. Unless you are doing a lot of conversions or need some of the fancier options (which you can read about in the man pages for these utilities), it really does not matter which ones you use.
+	Another possibility is to use the very powerful convert program, which is part of the ImageMagick package.
+		pdf2ps file.pdf # To convert file.pdf to file.ps
+		ps2pdf file.ps # To converts file.ps to file.pdf
+		pstopdf input.ps output.pdf # To converts input.ps to output.pdf
+		pdftops input.pdf output.ps # To converts input.pdf to output.ps
+		convert input.ps output.pdf # To converts input.ps to output.pdf
+		convert input.pdf output.ps # To converts input.pdf to output.ps
+Linux PDF readers
+	Evince is available on virtually all distributions and the most widely used program.
+	Okular is based on the older kpdf and available on any distribution that provides the KDE environment.
+	GhostView is one of the first open source PDF readers and is universally available.
+	Xpdf is one of the oldest open source PDF readers and still has a good user base.
+pdftk
+	https://www.pdflabs.com/
+	PDF Toolkit for:
+	1. Merging/Splitting/Rotating PDF documents
+	2. Repairing corrupted PDF pages
+	3. Pulling single pages from a file
+	4. Encrypting and decrypting PDF files
+	5. Adding, updating, and exporting a PDF’s metadata
+	6. Exporting bookmarks to a text file
+	7. Filling out PDF forms.
+		sudo apt-get install pdftk # To install pdftk on Ubuntu
+		snap install pdftk # Ubuntu 18.04 (and the binary will reside at: /snap/bin/pdftk)
+		sudo yum install pdftk # CentOS 6
+		sudo zypper install pdftk # openSUSE
+		
+		pdftk 1.pdf 2.pdf cat output 12.pdf # To merge the two documents 1.pdf and 2.pdf. The output will be saved to 12.pdf.
+		pdftk A=1.pdf cat A1-2 output new.pdf # To write only pages 1 and 2 of 1.pdf. The output will be saved to new.pdf.
+		pdftk A=1.pdf cat A1-endright output new.pdf # To rotate all pages of 1.pdf 90 degrees clockwise and save result in new.pdf.
+		pdftk public.pdf output private.pdf user_pw PROMPT # To encrypt
+ghostscript
+	Ghostscript is widely available as an interpreter for the Postscript and PDF languages.
+	The executable program associated with it is abbreviated to gs.
+	This utility can do most of the operations pdftk can, as well as many others. Use is somewhat complicated by the rather long nature of the options.
+		gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite  -sOutputFile=all.pdf file1.pdf file2.pdf file3.pdf # To combine three PDF files into one
+		gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dDOPDFMARKS=false -dFirstPage=10 -dLastPage=20 -sOutputFile=split.pdf file.pdf # To split pages 10 to 20 out of a PDF file
+pdfinfo
+	It can extract information about PDF files, especially when the files are very large or when a graphical interface is not available.
+		pdfinfo /usr/share/doc/readme.pdf
+flpsed
+	It can add data to a PostScript document. This tool is specifically useful for filling in forms or adding short comments into the document.
+pdfmod
+	It is a simple application that provides a graphical interface for modifying PDF documents. Using this tool, you can reorder, rotate, and remove pages; export images from a document; edit the title, subject, and author; add keywords; and combine documents using drag-and-drop action.
+user account
+	Command line programs such as useradd and userdel as well as GUI tools are used for creating and removing accounts.
+	For each user, the following fields are maintained in the /etc/passwd file:
+	1) Username.
+	User login name. Should be between 1 and 32 characters long.
+	2) Password.
+	User password (or the character x if the password is stored in the /etc/shadow file) in encrypted format. Is never shown in Linux when it is being typed; this stops prying eyes.
+	3) User ID (UID).
+	Every user must have a user id (UID).
+	UID 0 is reserved for root user.
+	UID's ranging from 1-99 are reserved for other predefined accounts.
+	UID's ranging from 100-999 are reserved for system accounts and groups.
+	Normal users have UID's of 1000 or greater.
+	4) Group ID (GID).
+	The primary Group ID (GID).
+	Group Identification Number stored in the /etc/group file.
+	5) User Info.
+	This field is optional and allows insertion of extra information about the user such as their name.
+	6) Home Directory.
+	The absolute path location of user's home directory.
+	7) Shell.
+	The absolute location of a user's default shell.
+	Note: On modern systems, passwords are actually stored in an encrypted format in a secondary file named /etc/shadow. Only those with root access can modify/read this file.
+types of accounts
+	By default, Linux distinguishes between several account types in order to isolate processes and workloads:
+	1) root
+	2) System
+	3) Normal
+	4) Network
+operations requiring root privileges
+	1) Creating, removing and managing user accounts
+	2) Managing software packages
+	3) Removing or modifying system files
+	4) Restarting system services
+	Note: Regular account users of Linux distributions might be allowed to install software packages, update some settings, use some peripheral devices, and apply various kinds of changes to the system. However, root privilege is required for performing administration tasks such as restarting services, manually installing packages and managing parts of the filesystem that are outside the normal user’s directories.
+operations not requiring root privileges
+	1) Running a network client
+	2) Using devices such as printers
+	3) Operations on files that the user has proper permissions to access
+	4) Running SUID-root applications (executing programs such as passwd)
+	A regular account user can perform some operations requiring special permissions; however, the system configuration must allow such abilities to be exercised.
+	SUID (Set owner User ID upon execution) is a special kind of file permission given to a file. SUID provides temporary permissions to a user to run a program with the permissions of the file owner (which may be root) instead of the permissions held by the user.
+additional security mechanisms
+	Control Groups (cgroups)
+	Allows system administrators to group processes and associate finite resources to each cgroup.
+	
+	Containers
+	Makes it possible to run multiple isolated Linux systems (containers) on a single system by relying on cgroups.
+
+	Virtualization
+	Hardware is emulated in such a way that not only processes can be isolated, but entire systems are run simultaneously as isolated and insulated guests (virtual machines) on one physical host.
+password algorithm
+	Most Linux distributions rely on a modern password encryption algorithm called SHA-512 (Secure Hashing Algorithm 512 bits), developed by the U.S. National Security Agency (NSA) to encrypt passwords.
+	The SHA-512 algorithm is widely used for security applications and protocols. These security applications and protocols include TLS, SSL, PHP, SSH, S/MIME and IPSec. SHA-512 is one of the most tested hashing algorithms.
+		echo -n test | sha512sum
+password practices
+	1. aging.
+	A method to ensure that users get prompts that remind them to create a new password after a specific period. This can ensure that passwords, if cracked, will only be usable for a limited amount of time.
+		chage --list newuser # configures the password expiry information for a user
+		sudo chage -E 2020-31-12 newuser # to modify the expiration date
+	2. Pluggable Authentication Modules (PAM). PAM can be configured to automatically verify that a password created or modified using the passwd utility is sufficiently strong. PAM configuration is implemented using a library called pam_cracklib.so, which can also be replaced by pam_passwdqc.so for more options.
+	3. One can also install password cracking programs, such as John The Ripper, to secure the password file and detect weak password entries. It is recommended that written authorization be obtained before installing such tools on any system that you do not own.
+boot loader password
+	GRUB 2 Password Protection - https://help.ubuntu.com/community/Grub2/Passwords
+hardware vulnerability
+	When hardware is physically accessible, security can be compromised by:
+	1) Key logging.
+	Recording the real time activity of a computer user including the keys they press. The captured data can either be stored locally or transmitted to remote machines.
+	2) Network sniffing.
+	Capturing and viewing the network packet level data on your network.
+	3) Booting with a live or rescue disk.
+	4) Remounting and modifying disk content.
+	The guidelines of security are:
+	1) Lock down workstations and servers.
+	2) Protect your network links such that it cannot be accessed by people you do not trust.
+	3) Protect your keyboards where passwords are entered to ensure the keyboards cannot be tampered with.
+	4) Ensure a password protects the BIOS in such a way that the system cannot be booted with a live or rescue DVD or USB key.
