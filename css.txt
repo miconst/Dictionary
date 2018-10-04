@@ -1,3 +1,6 @@
+list of CSS properties
+	https://www.w3.org/Style/CSS/all-properties.en.html
+	https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
 selector
 	1. The element Selector
 		selects elements based on the element name.
@@ -19,6 +22,26 @@ selector
 	4. Grouping Selectors
 	To group selectors, separate each selector with a comma.
 		h1, h2, p { text-align: center; color: red; }
+	5. Descendant Selectors
+		#guideline a { color: #00FF00; }
+		#intro blockquote a { font-weight: bold; }
+	6. Direct descendant selectors ( > )
+		#intro > a { font-size: large; }
+	7. Everything selector (*)
+	The asterisk (*) can be used to match any tag.
+		body > * { margin-left: 10px; } /* all the _direct_ children of the body receive the margin */
+		p * { text-decoration: underline; } /* the text of the paragraph will be normal, but any children anywhere inside it will be underlined */
+precedence
+	1. Most specific rule
+	A more specific rule takes precedence over a less specific rule. A rule that more tightly matches a particular element than a general rule will be applied.
+		span { color: blue; }
+		ul li span { color: red; }
+	2. #id selector is the most specific
+	Rules with an id selector are considered more specific than rules without.
+	3. .class selector is more specific than a tag selector
+	4. Rules that come later override those that come earlier
+	Note: !important overrides precedence rules.
+		p { color: orange !important; }
 comment
 	A CSS comment starts with /* and ends with */. Comments can also span multiple lines.
 		p { color: red; /* This is a comment */ text-align: center; }
@@ -328,14 +351,14 @@ list
 	3) Set an image as the list item marker
 	4) Add background colors to lists and list items
 	1. List Item Markers
-	The list-style-type property specifies the type of list item marker.
+	The list-style-type property specifies the type of list item marker. For un-ordered lists (<ul>), there are several popular values: disc, circle, square, none. For ordered lists (<ol>) you can choose different ways of having the numbers shown: decimal, decimal-leading-zero, lower-roman, upper-roman, lower-alpha, upper-alpha, as well as several of the worlds languages: armenian, georgian, simp-chinese-formal, and many others.
 		ul.a { list-style-type: circle; }
 		ul.b { list-style-type: square; }
 		ol.c { list-style-type: upper-roman; }
 		ol.d { list-style-type: lower-alpha; }
 	The list-style-image property specifies an image as the list item marker.
-		ul { list-style-image: url('sqpurple.gif'); }
-	The list-style-position property specifies whether the list-item markers should appear inside or outside the content flow.
+		ul { list-style-image: url('purple.gif'); }
+	The list-style-position property specifies whether the list-item markers should appear inside or outside the content flow. The two values are inside and outside.
 		ul { list-style-position: inside; }
 	2. Shorthand property
 	The list-style property is a shorthand property. It is used to set all the list properties in one declaration.
@@ -980,3 +1003,38 @@ media
 		@media screen and (min-width: 480px) { #leftsidebar {width: 200px; float: left;} #main {margin-left:216px;} }
 		@media screen and (max-width: 699px) and (min-width: 520px) { ul li a { padding-left: 30px; background: url(email-icon.png) left center no-repeat; } }
 		@media screen and (max-width: 1000px) and (min-width: 700px) { ul li a:before { content: "Email: "; font-style: italic; color: #666666; } }
+font-size
+	can be used to size the text of a tag.
+	the most common units are: px, em, %, vh.
+		blockquote { font-size: 10vh; }
+	Additionally, font-size supports a more readable set of values that many authors prefer: xx-small, x-small, small, medium, large, x-large, xx-large;
+		blockquote { font-size: larger; }
+font-weight
+	Values: normal, bold, bolder, lighter, 100, 200, 300, 400, 500, 600, 700, 800, 900.
+		p { font-weight: bold; }
+		blockquote { font-weight: 900; }
+font-style
+	normal, italic;
+font-family
+	Standard choices: serif, sans-serif, monospace, cursive, fantasy;
+		p { font-family: "Helvetica", "Verdana", "Arial", sans-serif; }
+line-height
+	drives the height of the space it is drawn into.
+	A large line-height will give the text more spacing. A small line-height will smash the text lines together.
+	The used value is this unitless <number> multiplied by the element's font size.
+text-align
+	It can be used to align the text left, center or right. There are additional possible values like justify and justify-all.
+		blockquote { text-align: right; }
+text-decoration
+	The values are: underline, overline, line-through, and none;  They can combined.
+		span { text-decoration: underline overline line-through; } /* everything */
+units
+	px: pixels
+	em: capital M
+	rem: relative to its parent M
+		https://css-tricks.com/rem-global-em-local/
+	%: relative to the parent dimension
+		p { margin-left:  10%; }
+	vh: percentage relative to viewport height
+	vw: percentage relative to viewport width
+		http://www.cssmine.com/css3-units
