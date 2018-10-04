@@ -1,3 +1,27 @@
+attribute
+	There are two kind of attributes:
+		https://www.w3.org/2009/cheatsheet/
+	1. Global: can be applied to all tags.
+		https://www.w3.org/wiki/HTML/Attributes/_Global
+		https://www.w3.org/TR/html5/dom.html#global-attributes
+	2. Non-global: are applied to a specific instance of a tag.
+		https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+semantic elements
+	Tags such as <article>, <aside>, <section>, <header>, <nav> and <footer> were specifically introduced in HTML5 to define the Web page structure.
+	The use of these semantic elements improves the automated processing of documents.
+details
+	A way to provide additional information that the user can show or hide.
+		<details><summary>Content that is shown by default.</summary>Hidden content. It can be expanded to view.</details>
+figure
+	Contains an image and can be used to group with an image's caption.
+	<figcaption> provides a caption (explanation) of an image.
+		<figure><img src="img_cast.jpg" alt="The Importance of Being Earnest Cast"><figcaption>Fig1. - The cast hard at work</figcaption></figure>
+article
+	An <article> element is stand-alone content. It should make sense all by itself.
+	One article element can be nested inside another.
+	An article element can use section elements to split its contents into groups.
+section
+	The <section> element is used to section a page.
 heading
 	Headings are defined with the <h1> to <h6> tags. <h1> defines the most important heading. <h6> defines the least important heading.
 		<h1>This is heading 1</h1>
@@ -17,10 +41,11 @@ link
 	5) framename - Opens the linked document in a named frame;
 		<a href="http://www.google.com/" target="_blank">Click here!</a>
 image
-	Images are defined with the <img> tag. The source file (src), alternative text (alt), and size (width and height) are provided as attributes.
+	Images are defined with the <img> tag. The source file (src), alternative text (alt), and size (width and height) are provided as attributes. We don't need to define both width and height. We can just specify either height or width and the aspect ratio will be adjusted.
 		<img src="img.jpg" alt="my image" width="104" height="142">
 	It is common to use images as links.
-		<a href="default.asp"> <img src="smiley.gif" alt="HTML tutorial" style="width:42px;height:42px;border:0;"> </a>
+		<a href="default.asp"><img src="smiley.gif" alt="HTML tutorial" style="width:42px;height:42px;border:0;"></a>
+	Note: Search engines rely on the alt attribute to find out what the image is about.
 lang
 	The language of the document can be declared in the <html> tag. The language is declared with the lang attribute. Declaring a language is important for accessibility applications (screen readers) and search engines.
 		<!DOCTYPE html><html lang="en-US"><body> ... </body></html>
@@ -32,6 +57,9 @@ href
 		<a href="http://www.google.com">This is a link</a>
 	Bookmarks are used to allow readers to jump to specific parts of a Web page. Bookmarks can be useful if your webpage is very long. To make a bookmark, you must first create the bookmark, and then add a link to it. When the link is clicked, the page will scroll to the location with the bookmark.
 		<h2 id="tips">Useful Tips Section</h2><a href="#tips">Visit the Useful Tips Section</a><a href="html_tips.html#tips">Visit the Useful Tips Section</a>
+	'target' attribute:
+	1. _self: In the same view where the link resides. If no target is specified, this is the default behavior.
+	2. _blank: In a new window or tab.
 style
 	Specifies an inline CSS style for an element.
 	The HTML style attribute has the following syntax: <tagname style="property:value;"> The property is a CSS property. The value is a CSS value.
@@ -102,6 +130,7 @@ table
 		<table><tr><th>Name:</th><td>Bill Gates</td></tr><tr><th rowspan="2">Telephone:</th><td>55577854</td></tr><tr><td>55577855</td></tr></table>
 	To add a caption to a table, use the <caption> tag.
 		<table><caption>Monthly savings</caption>...</table>
+	Tables Concepts: https://www.w3.org/WAI/tutorials/tables/
 list
 	1) Unordered List
 	An unordered list starts with the <ul> tag. Each list item starts with the <li> tag. The list items will be marked with bullets (small black circles) by default.
@@ -120,11 +149,15 @@ block
 	An inline element does not start on a new line and only takes up as much width as necessary.
 	Examples of inline elements: <span>, <a>, <img>.
 div
+	Defines a division or a section of the document.
 	The <div> element is often used as a container for other HTML elements. It has no required attributes, but both style and class are common. When used together with CSS, the <div> element can be used to style blocks of content.
 		<div style="background-color:black;color:white;padding:20px;"><h2>London</h2><p>London is the capital city of England.</p></div>
 span
 	The <span> element is often used as a container for some text. The <span> element has no required attributes, but both style and class are common. When used together with CSS, the <span> element can be used to style parts of the text.
 		<h1>My <span style="color:red">Important</span> Heading</h1>
+	Difference between <div> and <span>: They are both considered generic elements that don't have any meaning. But <div> is a block level element while <span> is an inline element.
+		https://en.wikipedia.org/wiki/Span_and_div
+	Note: There are several other semantic inline elements such as <abbr>, <cite> and <code> that should be used when possible instead of <span>.
 iframe
 	An iframe is used to display a web page within a web page.
 	Syntax: <iframe src="URL"></iframe>
@@ -212,6 +245,12 @@ form
 	<form action="action_page.php" method="post" target="_blank" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded" autocomplete="off" novalidate>
 	.form elements.
 	</form>
+	Creating accessible forms:
+	1. A descriptive label should be provided (the <label> element) to describe the purpose of each form control. The 'for' attribute of the label must exactly match the id of the form control.
+		<label for="first_name">First Name:</label><input id="first_name" type="text" name="fname"/>
+		<label for="first_name"><span lang=en">First Name:</span><input id="first_name" type="text" name="fname"/></label>
+	2. For larg or complex forms, use the <fieldset> and <legend> elements to group and associate related form controls.
+	Forms tutorial: https://www.w3.org/WAI/tutorials/forms/
 input
 	The <input> element has many variations, depending on the type attribute:
 	 1) text	Defines a one-line text input;
@@ -234,6 +273,8 @@ input
 	 9) value	Specifies the default value for an input field;
 fieldset
 	The <fieldset> element groups related data in a form.
+		<fieldset><legend>Output:</legend><div><input type="radio" name="format" id="txt" value="txt" checked><label for="txt">Text file</label></div><div><input type="radio" name="format" id="csv" value="csv"><label for="csv">CSV file</label></div></fieldset>
+		<fieldset><legend>Receive:</legend><div><input type="checkbox" name="newsletter" id="check_1"><label for="check_1">The weekly newsletter</label></div></fieldset>
 legend
 	The <legend> element defines a caption for the <fieldset> element.
 select
@@ -244,6 +285,7 @@ select
 textarea
 	The <textarea> element defines a multi-line input field (a text area).
 		<textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>
+		<label for="address">Enter your address:</label><br><textarea id="address" name="addresstext"></textarea>
 button
 	The <button> element defines a clickable button.
 		<button type="button" onclick="alert('Hello World!')">Click Me!</button>
