@@ -131,6 +131,47 @@ table
 	To add a caption to a table, use the <caption> tag.
 		<table><caption>Monthly savings</caption>...</table>
 	Tables Concepts: https://www.w3.org/WAI/tutorials/tables/
+	List of table elements:
+	1. <table>
+		<table border=1></table>
+	2. <caption>
+	3. <thead>, <tfoot>, <tbody> : Row groups. These elements can be used to style header, body and footer rows individually using CSS. Once browsers are able to identify which cells are header and footer, the body can be allowed to scroll independently of header and footer catering to a good table viewing experience in small screens.
+	a) <thead> is used to group the header content in a table.
+	b) <tbody> rows are considered body rows in a table.
+	c) <tfoot> rows are considered footer rows at the end of a table.
+	4. <colgroup>, <col> : Column groups. Grouping columns is useful if you want to specify properties for a group of columns like applying styles to the whole column instead of repeating it for each cell.
+	a) <colgroup> allows you to group columns in a table. Attribute 'span' specifies the number of columns you want your colgroup to span (cover). Essentially it allows a single cell to stretch to cover multiple columns on a particular row.
+	b) <col> specifies the column property for each column within a <colgroup>. The only element a <colgroup> can contain is <col>. Attribute 'span' specifies the number of columns you want the col element to span (cover).
+	5. <tr> : Table row
+	6. <th>, <td> : Table cells. There are two types of cells in a table - header and standard. <th> creates table header cells. The content of table header cells is bold and centered by default.
+	Attributes for <th>:
+	a) colspan : Specifies the number of cells you want that column to span (cover). Values: positive integer number.
+	b) rowspan : Specifies the number of cells you want the row to span (cover). Values: positive integer number.
+	c) scope : Specifies if a header cell is the header for a row, column, rowgroup or colgroup. Values: row, col, rowgroup, colgroup, auto.
+	Attributes for <td>:
+	a) colspan;
+	b) rowspan;
+	c) headers : Value is the 'id' of the <th> tag it corresponds to if any.
+		<tr><th id="header-id"></tr><tr><td headers="header-id"><td headers="header-id"></tr>
+	Styling:
+	border: sets border-width, border-style and border-color.
+		table, th, td { border: 1px solid black; }
+	border-width: thin, medium, thick, in pixels
+	border-style: none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset
+	border-color: color name or color values, transparent
+	initial: sets the property to the default value. Defaults for width, style and color are 'medium none current-color-of-element'
+	inherit: inherits property from parent element
+	border-collapse: separate (default, borders are detached), collapse (collapsed into a single border), initial (sets to default).
+		table { border-collapse: collapse; }
+	border-spacing: the distance between two cell borders in pixels. It takes two values for horizontal and vertical spacing. If only one value is provided, it is used for both horizontal and vertical spacing.
+		table, td, th (border-spacing: 25px; }
+	zebra table: alternating colors for table rows making it easier to differentiate data between rows.
+		tr:nth-child(even) { background-color: grey; }
+		tr:nth-child(odd) { background-color: #ccff99; }
+		/*The 'nth-child' selector matches every element that is the nth child of the table or any parent element*/ tr:nth-child(3n) { background-color: grey; }
+	hover to highlight: is useful to differentiate data between rows.
+		tr:hover {background-color: #ccff99; }
+	overflow: visible (overflowed content is visible outside the parent element), hidden (overflowed content is hidden), scroll (hidden but a scroll bar is added to make it accessible), auto (overflowed content is hidden but a scroll bar is automatically added to view hidden content).
 list
 	1) Unordered List
 	An unordered list starts with the <ul> tag. Each list item starts with the <li> tag. The list items will be marked with bullets (small black circles) by default.
