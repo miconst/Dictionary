@@ -1,3 +1,12 @@
+Open Web Platform
+	HTML5 specification: https://www.w3.org/TR/html5/
+	CSS: https://www.w3.org/Style/CSS/current-work#CSS3
+	SVG: https://www.w3.org/TR/SVG/
+	MathML: https://www.w3.org/TR/MathML/
+	Geolocation: https://www.w3.org/TR/geolocation-API/
+	XMLHttpRequest: https://www.w3.org/TR/XMLHttpRequest/
+	Canvas 2D Context: https://www.w3.org/TR/2dcontext/
+	Web Fonts: https://www.w3.org/TR/2012/REC-WOFF-20121213/
 attribute
 	There are two kind of attributes:
 		https://www.w3.org/2009/cheatsheet/
@@ -9,6 +18,20 @@ attribute
 semantic elements
 	Tags such as <article>, <aside>, <section>, <header>, <nav> and <footer> were specifically introduced in HTML5 to define the Web page structure.
 	The use of these semantic elements improves the automated processing of documents.
+	<header>
+	 ----------
+	|  <nav>   |
+	 ----------
+	<div id="body">
+	 -----------------   ------------
+	|  <section>      | |  <aside>   |
+	|    <article>    | |            |
+	|    <article>    | |            |
+	|  <section>      | |            |
+	 -----------------   ------------
+	 ------------
+	|  <footer>  |
+	 ------------
 details
 	A way to provide additional information that the user can show or hide.
 		<details><summary>Content that is shown by default.</summary>Hidden content. It can be expanded to view.</details>
@@ -224,6 +247,9 @@ layout
 	6) <footer> - Defines a footer for a document or a section;
 	7) <details> - Defines additional details;
 	8) <summary> - Defines a heading for the <details> element;
+	9) <time> - Used for marking up times and dates;
+	10) <figure> and <figcaption> - Used to encapsulate a figure as a single item;
+	11) <main> - The main element, the main content of the body; There can be only one <main> element in a document.
 character entities
 	Reserved characters in HTML must be replaced with character entities.
 	Characters that are not present on your keyboard can also be replaced by entities.
