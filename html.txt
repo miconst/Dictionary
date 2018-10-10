@@ -7,6 +7,17 @@ Open Web Platform
 	XMLHttpRequest: https://www.w3.org/TR/XMLHttpRequest/
 	Canvas 2D Context: https://www.w3.org/TR/2dcontext/
 	Web Fonts: https://www.w3.org/TR/2012/REC-WOFF-20121213/
+minimal HTML5 document
+	<!DOCTYPE html>
+	<html lang="en"><head>
+	  <meta charset="utf-8">
+	  <title>Page Title</title>
+		<!-- 'type' attribute is optional (type="text/css", type="text/javascript") -->
+	  <link rel="stylesheet" href="style.css">
+	  <script src="script.js"></script>
+	</head><body>
+	  <!-- The rest is content -->
+	</body></html>
 attribute
 	There are two kind of attributes:
 		https://www.w3.org/2009/cheatsheet/
@@ -32,6 +43,10 @@ semantic elements
 	 ------------
 	|  <footer>  |
 	 ------------
+main
+	The <main> element has been supported by major browsers since 2013. It has constrains:
+	1) Only one <main> element in a document;
+	2) It must not be a descendent of an <article>,<aside>, <footer>, <header>, or <nav> element;
 details
 	A way to provide additional information that the user can show or hide.
 		<details><summary>Content that is shown by default.</summary>Hidden content. It can be expanded to view.</details>
