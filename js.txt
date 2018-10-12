@@ -1,0 +1,370 @@
+﻿external libraries
+	D3.js: is a JavaScript library for manipulating documents based on data.
+		The latest version: https://github.com/d3/d3/releases/download/v5.7.0/d3.zip
+		To link directly: <script src="https://d3js.org/d3.v5.min.js"></script>
+	Function Plot: is a plotting library built on top of D3.js used to render functions with little configuration (think of it as a clone of Google's plotting utility: y=x2)
+		<script src="https://mauriciopoppe.github.io/function-plot/js/function-plot.js"></script>
+	jQuery
+		<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	Spectrum: the no hassle jQuery colorpicker
+		http://bgrins.github.io/spectrum/
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+	Google map
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	Fetch
+		https://github.github.io/fetch/
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/0.10.1/fetch.js"></script>
+	paperJS: Vector Graphics Scripting
+		http://paperjs.org/
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.22/paper.js"></script>
+	Sprite.js: is a powerful, easy-to-use Sprite animation library for HTML5 Canvas.
+		https://github.com/IceCreamYou/Canvas-Sprite-Animations
+		<script src="https://icecreamyou.github.io/Canvas-Sprite-Animations/sprite.js"></script>
+	howler.js: Audio library for the modern web.
+		https://howlerjs.com/
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/1.1.28/howler.min.js"></script>
+		sound = new Howl({...});
+	video.js: a framework for building custom video player
+		https://videojs.com/
+	Audio.js: an open source JavaScript library for creating an enhanced audio player. Native JavaScript with fallback in Flash
+		http://kolber.github.io/audiojs/
+	SoundManager2: a free HTML5 audio player with flash fallback and a javaScript API that makes it suitable to any kind of project
+		http://www.schillmania.com/projects/soundmanager2/
+polyfill
+	http://caniuse.com/
+	http://html5please.com/
+	http://modernizr.com/
+online editors
+	JsBin: http://jsbin.com/?html,output
+	CodePen: http://codepen.io/
+	JSFiddle: http://jsfiddle.net/
+	Dabblet: http://dabblet.com/
+	Plunker: https://plnkr.co/
+	Liveweave: https://liveweave.com/
+debuggers
+	Firefox JS debugger
+		https://developer.mozilla.org/en-US/docs/Tools/Debugger
+	JS Lint - The JavaScript Code Quality Tool
+		http://www.jslint.com/
+	CodeBeautify  - JavaScript Validator
+		https://codebeautify.org/jsvalidate
+	W3C Validator - for markup validity of various Web document formats, such as HTML
+		https://validator.w3.org/
+	CSS validator - for Cascading Style Sheets (CSS) and (X)HTML documents that use CSS stylesheets
+		https://jigsaw.w3.org/css-validator/
+	Unicorn - W3C's unified validator
+		http://validator.w3.org/unicorn/
+	W3C Link Checker - for issues in links, anchors and referenced objects in a Web page, CSS style sheet, or recursively on a whole Web site
+		http://validator.w3.org/checklink
+	W3C Internationalization Checker - for various internationalization-related aspects of your page, including the HTTP headers that affect it
+		https://validator.w3.org/i18n-checker/
+	Other
+		https://jqueryhouse.com/best-javascript-debugging-tools/
+	W3C cheatsheet
+		http://www.w3.org/2009/cheatsheet/
+		http://dev.w3.org/2009/cheatsheet/doc/
+character encoding declaration
+	<head><meta charset="utf-8"/></head>
+primary language declaration
+	<!DOCTYPE html><html lang="fr"><head></head></html>
+internationalization
+	1. Encoding: use the UTF-8 (Unicode) character encoding for content, databases, etc. Always declare the encoding.
+	2. Language: declare the language of documents and indicate internal language changes.
+	3. Navigation: on each page include clearly visible navigation to localized pages or sites, using the target language.
+	4. Escapes: use characters rather than escapes (e.g. &#xE1; &#225; or &aacute;) whenever you can.
+	5. Forms: use UTF-8 on both form and server. Support local formats of names/addresses, times/dates, etc.
+	6. Localizable styling: use CSS styling for the presentational aspects of your page. So that it's easy to adapt content to suit the typographic needs of the audience, keep a clear separation between styling and semantic content, and don't use 'presentational' markup.
+	7. Images, animations & examples: if your content will be seen by people from diverse cultures, check for translatability and inappropriate cultural bias.
+HTML5
+	The first line of HTML5 page should start by <!DOCTYPE html>
+void elements
+	Elements, without a "/" at the end: area, base, br, col, embed, hr, img, input, link, menuitem, meta, param, source, track, wbr.
+AjaX
+	Asynchronous JAvascript and Xml
+location
+	1. In HTML code: <script></script>
+	2. In local files: <script src="style.js"></script>
+	3. In external files located on the Web, using their URLs: <script src="http://www.aserver.com/..../js/script.js"></script>
+variables
+	var myVar;
+	let x; // ES2015 (JavaScript 6)
+	The first letter of a variable can only be '$', '_', a-z, or A-Z. ([$_a-zA-Z])
+	The other characters in a name must be any of these, or numeric digits. ([$_a-zA-Z0-9])
+		Note: The camelCase notation is preferred: mySpaceShip, sumOfAllGrades, etc.
+constants
+	const CONSTANT = value // An error will be raised if someone try to change its value in the future. (since ES2015/2016)
+scope
+	JavaScript 5 / ES5 has two scopes:
+	1) a global scope for declaring global variables
+	2) a function scope for declaring variables that are local to a function
+		Note: In JavaScript 5 / ES5, a variable declared in a function without the var keyword, makes it a global variable.
+	JavaScript 6 / ES6 has the let keyword for declaring variables, and the const keyword for declaring constants.
+		Note: All modern browsers support the let and const keywords.
+	JavaScript 6 / ES6 has two scopes:
+	1) a global scope for declaring global variables
+	2) a block scope for declaring variables between { and }
+		Note: Inside a block, a local variable masks other variables located in higher scopes (global or in another block that contains the current block).
+data types
+	1) number: 1, 2, 105, 3.14, 5.3e+6, 5344000e-5
+		var x = 3;
+	In JavaScript, all numbers are represented with a double-precision 64-bit format (IEEE 754).
+	a) Octal: 010;
+	b) Hexadecimal: 0xF3;
+	c) Scientific notation: 3.46e4, 5.3e+6, 5344000e-5
+	d) Integer: 1, -4, 274929
+	e) Special values: +Infinity, -Infinity, NaN (Not a Number);
+	Infinity (or +Infinity) represents all number values greater than 1.79769313486231570e+308;
+	-Infinity represents values smaller than -1.79769313486231570e+308;
+	NaN represents not-a-number values;
+		Infinity - Infinity => Nan
+		Infinity - 20 => Infinity
+		Infinity / 2 => Infinity
+	2) string: 'a', "one", 'two', 'World Wide Web'
+		var name = "Buffa";
+	Strings are arrays of characters! So they are objects too, they have a length property, each individual character can be accessed using an index.
+	Note: There is no difference between 'string' and "string" in JavaScript.
+	3) boolean: true / false
+		var flag = false;
+		NaN == NaN; // false
+	Note: All these values are evaluated as false: false, undefined, null, 0, NaN, "" (empty string). Everything else is evaluated as true!
+	4) undefined: absent or unknown value
+		var x;
+	5) null: special keyword, meaning no value or empty. The difference from undefined is that when a variable is null, it is still defined.
+		var x = null;
+	6) object: everything that is not a "primitive data type" is an object.
+		var student = {firstName:'Michel', lastName:'Buff'};
+	a) Arrays.
+	Use the length property of an array to know its length. You can add elements to an array using a new index or the push method.
+		var daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+		daysOfWeek.push('Sunday');
+	7) function:
+	An array named "arguments" is created automatically in each function, it contains all the call parameters of the function.
+		function foo() { var i; for (i = 0; i < arguments.length; i++) { console.log(arguments[i]); } }
+	The typeof operator is useful for knowing the type of a variable depending in its value (possible values: number, string, boolean, undefined, object, or function).
+		typeof variable;
+handling events
+	<button onclick="doOnClick();">Click me</button>
+	Input events on an HTML input field
+	<input type="text" oninput="doOnInput();" id="inputId" />
+	Mouse events in an HTML5 canvas: canvas.addEventListener
+	mousedown, mouseup, mousemove
+Comparison Operators
+	== // Equal (with type conversion)
+	!= // Not equal (with type conversion)
+	>  // Greater than
+	>= // Greater than or equal
+	<  // Less than
+	<= // Less than or equal to
+	=== // Strict equal
+	!== // Strict not equal
+event
+	The event object is the only parameter passed to event listeners.
+	Event common properties and methods:
+	1. event.type: the name of the event;
+	2. event.target: the HTML element that has fired the event;
+	3. event.stopPropagation(): will not propagate the event to all other elements that listen to it;
+	4. event.preventDefault(): the default browser behavior will not be executed; For example, in a 'contextmenu' event listener attached to an object, if you call preventDefault(), instead of having the right click default context menu of your browser displayed, you'll be able to display your own context menu.
+		addEventListener("contextmenu", function(event) { console.log("contextmenu activated"); event.preventDefault(); menuOn(); positionMenu(event); });
+		function menuOn() { menuIsVisible = true; menu.classList.add("context-menu-active"); }
+		function positionMenu(event) { /* Mouse position is relative to the element clicked. We make the coordinates absolute in the page */ var x = event.pageX; var y = event.pageY; ... }
+	It also contains properties that are associated with the type of the event:
+	1. event.button: the mouse button that has been used in the case of a mouse event listener;
+	2. event.keyCode: the code of the key that has been used;
+	3. event.pageX: coordinate of the mouse relative to the page;
+	
+	Page life-cycle events:
+	1. load: occurs when an object has loaded (including all its resources: images, etc.). This event is very useful when you want to run JS code and be sure that the DOM is ready (document.getElementById() or document.querySelector() will not raise an error because the document has not been loaded and elements we are looking for are not ready).
+	2. resize: occurs when the document view is resized.
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+	3. scroll: occurs when an element's scrollbar is being scrolled.
+		var max = document.body.scrollHeight - innerHeight;
+		var percent = (pageYOffset / max); // to know the percentage of the scroll in the page
+	
+	Keyboard events: keydown, keyup, keypressed (deprecated!).
+		Key code interactive example: http://www.asquare.net/javascript/tests/KeyCode.html
+		Key codes: http://css-tricks.com/snippets/javascript/javascript-keycodes/
+	Keyboard event properties:
+	1. event.keyCode: the Unicode character code of the key that triggered the onkeypress ,onkeydown or onkeyup event;
+	2. event.shiftKey: whether the "shift" key was pressed when the key event was triggered;
+	3. event.ctrlKey: whether the "ctrl" key was pressed when the key event was triggered;
+	4. event.altKey: whether the "alt" key was pressed when the key event was triggered;
+	5. (new) event.key: when the pressed key is a printable character, you get the character in string form. When the pressed key is not a printable character (for example: Backspace, Control, but also Enter or Tab which actually are printable characters), you get a multi-character descriptive string, like 'Backspace', 'Control', 'Enter', 'Tab';
+	6. (new) event.code: Gives you the physical key that was pressed, in string form. This means it’s totally independent of the keyboard layout that is being used. If the user presses the Q key on a QWERTY keyboard then event.code gives you 'KeyQ' while event.key gives you 'q';
+	
+	Mouse events: click, dblclick, mouse(down, up, move, enter, leave, over), contextmenu.
+		canvas.addEventListener('mousedown', function (event) { /* do something with the event */ });
+	Mouse event properties:
+	1. event.button: which mouse button was pressed when the mouse event was triggered;
+	2. event.clientX/clientY: the coordinates of the mouse pointer, relative to the element coordinate system that triggered the event;
+	3. event.pageX/pageY: the coordinates of the mouse pointer, relative to the document, when the mouse event was triggered. They are relative to the complete document/page, and will always be relative to the very beginning of the document/page, even if the top of the page is not visible because you've scrolled down. They will change when the page scrolls and the mouse does not move!
+	4. event.screenX/screenY: the coordinates of the mouse pointer, relative to the screen, when an event was triggered;
+	5. event.altKey/ctrlKey/shiftKey: whether the alt, ctrl and shift key was pressed when an event was triggered;
+	6. event.detail: a number that indicates how many times the mouse was clicked;
+	
+	Form events:
+	1. input: occurs when an element gets user input (e.g., a key is typed on an input field, a slider is moved, etc.);
+	2. change: occurs when the content of a form element, the selection, or the checked state have changed (for <input>, <select>, and <textarea>). A change event listener on a slider will generate an event when the drag/move ends, while input events will be useful to do something as the slider is being moved.
+	3. focus: occurs when an element gets focus (e.g., the user clicks in an input field);
+	4. blur: occurs when an element loses focus (e.g., the user clicks on another element);
+	5. select: occurs after the user selects some text (for <input> and <textarea>);
+	6. submit: occurs when a form is submitted;
+selector API
+	querySelector(selector): returns the first element in the DOM that matches the selector (and you will be able to work with it directly)
+		document.querySelector('#nav ul li'); // all elements li in ul elements in an element of id=nav
+		document.querySelector("#foo, #bar"); // first element of id=foo or id=bar
+	querySelectorAll(selector): returns a collection of HTML elements corresponding to all elements matching the selector.
+		document.querySelectorAll('ul li:nth-child(even)'); // all li in a ul, but only even elements
+		document.querySelectorAll('form.test > tr > td'); // all td directly in tr in a form of class test
+		document.querySelectorAll("p.warning, p.error"); // all paragraphs of class warning or error
+	getElementById(id): returns the element with the id
+		document.getElementById('myDiv'); // equals to document.querySelector('#myDiv');
+		document.getElementById("bar").querySelector("p"); // first p in a div
+	getElementsByTagName(tagName): returns a list of elements; This is equivalent to querySelectorAll(tagName);
+	getElementsByClassName(className): returns a list of elements; This is equivalent to querySelectorAll('.className');
+DOM new element
+	createElement(nameOfTheElement);
+		document.createElement('li');
+		document.createElement('img');
+	To add the newly created element to another element in the DOM, use append(), appendChild(), insertBefore() or the innerHTML property.
+		var ul = document.querySelector('#myList');
+		ul.append(li); // insert at the end, appendChild() could also be used (old)
+		ul.prepend(li); // insert at the beginning
+		ul.insertBefore(li, anotherElementChildOfUl); // insert in the middle
+		document.body.append(img); // adds the image at the end of the document
+		document.querySelector("#numbers").innerHTML += "<li>" + val + "</li>";
+DOM remove element
+	removeChild(): to remove a child;
+	innerHTML = "": to remove all children;
+canvas
+	<canvas id="canvasId" width="200" height="200"></canvas>
+	canvas = document.querySelector("#canvasId");
+	content = canvas.getContext('2d');
+	
+	Mouse events:
+	canvas.addEventListener('mousedown', function (event) {});
+	canvas.addEventListener('mousedup', function (event) {});
+	Note: It is necessary to take into account CSS boundaries.
+		var rect = canvas.getBoundingClientRect();
+		canvasX = event.clientX - rect.left;
+		canvasY = event.clientY - rect.top;
+animation
+	Note: setInterval and setTimeout are deprecated;
+	requestAnimationFrame(animation); // request a new frame of animation in 1/60s
+Array
+	var arr = [1, 3, 2, 5, 7]; // or new Array(1, 3, 2, 5, 7)
+	typeof arr; // "object"
+	arr.length; // number of elements; The length property can be modified: reducing or increasing the size of an array.
+	Most useful methods you can use on arrays: sort(), join(), slice(), splice(), push(), pop().
+	arr.sort();
+	arr.slice([begin[, end]]); // returns a sub-array without modifying the original array
+	arr.splice(start[, deleteCount[, item1[, item2[, ...]]]]); // Changes the contents of an array by removing existing elements and/or adding new elements. Return value: an array containing the deleted elements.
+		var removed = arr.splice(2, 1); // remove 1 element starting from index=2 (3rd element)
+	arr[arr.length] = "five"; // adding at the end
+	arr.push("six"); // adding at the end
+	arr.pop();
+	arr.forEach(function(element, index, array){}); // Iterating using the forEach method
+	arr.join(separator);
+video
+	https://www.w3.org/2010/05/video/mediaevents.html: HTML5 Video Events and API
+	Methods: play, pause, load, canPlayType
+	Read-only properties: startTime, duration, ended, paused, seekable, played
+	Properties: currentSrc, currentTime, videoWidth, videoHeight, error, muted, seeking, volume, height, width
+	Events: play, pause, progress, error, timeupdate, ended, abort, empty, emptied, waiting, loadedmetadata
+		video.addEventListener('ended', playNextVideo, false); // To detect the end of a video and start a new one
+geolocation
+	navigator.geolocation.getCurrentPosition(showPosition, onError);
+	function showPosition(position) { console.log("latitude is: " + position.coords.latitude + " longitude is: " + position.coords.longitude); }
+	function onError(error) { console.log("Could not get the position"); }
+	https://www.w3.org/TR/geolocation-API/: Geolocation API Specification
+	http://econym.org.uk/gmap/: Google Maps API Version 2 Tutorial
+class
+	ES6 created a 'class' keyword and a 'constructor' keyword.
+	A class is simply defined using the keyword 'class' followed by the name of the class.
+	The unique constructor is defined using the 'constructor' keyword followed by the parameters.
+		class Hero { constructor(name, side) { this.name = name; this.side = side; } }
+	A method is simply defined by its name followed by its parameters (the 'function' keyword is not used!).
+	Note: Unlike functions, classes must be declared BEFORE using them.
+static
+	The 'static' keyword defines a static method for a class.
+		class Point { static distance(a, b) {...} }
+	Class properties should be defined after the class definition.
+		class Point {...}
+		Point.pointsCreated = 0;
+object
+	Comparing: returns true only if they point to the same object; Two objects of the same type, with the same property value, that look identical, will not be equal one to another if they don’t have the same reference.
+		{} === {} // false
+		{} !== {} // true
+window
+	The global variables defined with the keyword var are properties of this window object, and we can say the same of predefined functions like prompt, alert, etc; let, unlike var, does not create a property on the global window object.
+		document === window.document; // true
+		navigator === window.navigator; // true
+	Predefined functions are methods from the global object window: parseInt, alert, prompt, addEventListener.
+Object
+	All objects will inherit the properties and methods from the special class named Object.
+	Creation of an empty object: var o = {}; // or var o = new Object();
+	The toString method inherited from Object by all objects.
+		o.toString(); // "[object Object]"
+		[1, 2, 3].toString(); // 1, 2, 3
+	The valueOf method inherited from Object by all objects.
+		[1, 2, 3].valueOf(); // [1, 2, 3]
+Number
+	var n = Number('3.1416');
+	Note: it is recommended to use parseInt or parseFloat instead.
+	Number.MAX_VALUE; // 1.7976931348623157e+308
+	Number.MIN_VALUE; // 5e-324
+	Methods useful for converting numbers: toFixed(), toExponential(), toString().
+Math
+	Math.PI; // 3.141592653589793
+	Math.SQRT2; // 1.4142135623730951
+	Math.E; // Euler constant: 2.718281828459045
+	Math.LN2; // Neperian log of 2: 0.6931471805599453
+	Math.LN10; // Neperian log of 10: 2.302585092994046
+	Math.random(); // returns a float value between 0 and 1.
+	Note: To get a number between a min and a max value: val = ((max - min) * Math.random()) + min;
+Date
+	new Date(); // returns the current date.
+	Note: Calling Date() without 'new' returns the current date as a string. It does not matter if we pass parameters.
+		Date(); // "Sun Apr 16 2017 14:51:47 GMT+0200 (CEST)"
+table
+	Useful properties:
+	rows: a collection of all <tr> elements in a table;
+	caption: the <caption> element of a table;
+	tFoot: a reference to the <tfoot> element of a table;
+	tHead: a reference to the <thead> element of a table;
+	Useful methods:
+	insertRow(): Creates an empty <tr> element and adds it to the table.
+		var row = table.insertRow();  // inserts a new row at the end of the table
+		var row = table.insertRow(0); // inserts at index = 0
+		var row = table.insertRow(10); // inserts at index = 10, and pushes all the rows after this index
+	deleteRow(): Removes a row (<tr>) from the table.
+		table.deleteRow(0); // deletes the row at index 0.
+	createCaption(): Creates an empty <caption> element and adds it to the table
+	deleteCaption(): Removes the first <caption> element from the table
+	createTHead(): Creates an empty <thead> element and adds it to the table
+	deleteTHead(): Removes the <thead> element from the table
+	createTFoot(): Creates an empty <tfoot> element and adds it to the table
+	deleteTFoot(): Removes the <tfoot> element from the table
+	TableRow useful properties:
+	cells: Returns a collection of all <td> or <th> elements in a table row
+	rowIndex: Returns the position of a row in the rows collection of a table
+	sectionRowIndex: Returns the position of a row in the rows collection of a <tbody>, <thead>, or <tfoot>
+	TableRow useful methods:
+	insertCell(): Inserts a cell into the current table row. Without parameters, appends a cell after the last cell of the row. You can pass the index of the cell as a unique parameter, in which case other cells are "pushed" to the right. The value of 0 results in the new cell being inserted at the first position. The value of -1 can also be used, which results in the new cell being inserted in the last position.
+	deleteCell(): Deletes a cell from the current table row. There is one parameter for this method: the index of the cell to remove. The value of 0 results in the deletion of the first cell. The value of -1 can also be used, which results in the deletion of the last cell.
+JSON
+	JavaScript Object Notation.
+	JSON.stringify(obj); // Transforms any JavaScript object in JSON
+	JSON.parse(jsonString); // Transform any JSON string into a JavaScript object
+	JSONPlaceholder: a free online REST service that you can use whenever you need some fake data in JSON.
+		https://jsonplaceholder.typicode.com/users
+XMLHttpRequest
+	Use XMLHttpRequest (XHR) objects to interact with servers.
+	Despite its name, XMLHttpRequest can be used to retrieve any type of data, not just XML, and it supports protocols other than HTTP (including file and ftp).
+WebSocket
+	The WebSocket API is an advanced technology that makes it possible to open a two-way interactive communication session between the user's browser and a server.
+LocalStorage API
+	1. localStorage: the data will remain until it is deleted;
+	2. sessionStorage: the data is erased when the tab/browser is closed;
+	The W3C Web Storage API recommendation: https://www.w3.org/TR/webstorage/
+	
