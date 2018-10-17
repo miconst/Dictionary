@@ -353,6 +353,7 @@ input
 	 7) size	Specifies the width (in characters) of an input field;
 	 8) step	Specifies the legal number intervals for an input field;
 	 9) value	Specifies the default value for an input field;
+		<input type="date" id="birthdayParty" value="2015-06-20" min="2015-06-20" max="2015-07-31" step="7">
 fieldset
 	The <fieldset> element groups related data in a form.
 		<fieldset><legend>Output:</legend><div><input type="radio" name="format" id="txt" value="txt" checked><label for="txt">Text file</label></div><div><input type="radio" name="format" id="csv" value="csv"><label for="csv">CSV file</label></div></fieldset>
