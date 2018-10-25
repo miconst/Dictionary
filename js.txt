@@ -1,4 +1,4 @@
-﻿external libraries
+external libraries
 	D3.js: is a JavaScript library for manipulating documents based on data.
 		The latest version: https://github.com/d3/d3/releases/download/v5.7.0/d3.zip
 		To link directly: <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -30,6 +30,8 @@
 		http://kolber.github.io/audiojs/
 	SoundManager2: a free HTML5 audio player with flash fallback and a javaScript API that makes it suitable to any kind of project
 		http://www.schillmania.com/projects/soundmanager2/
+	appear.in: a free WebRTC video conferencing tool. It uses the getUserMedia API for video and audio.
+		https://appear.in/
 polyfill
 	http://caniuse.com/
 	http://html5please.com/
@@ -367,4 +369,20 @@ LocalStorage API
 	1. localStorage: the data will remain until it is deleted;
 	2. sessionStorage: the data is erased when the tab/browser is closed;
 	The W3C Web Storage API recommendation: https://www.w3.org/TR/webstorage/
-	
+jQuery
+	jQuery is a wrapper around the JavaScript DOM. Basic syntax is: $(selector).action();
+		var jQueryObject = $(this); // converts DOM object to a jQuery object
+		$(this).hide(); // hides the current element
+	Selectors: element, #id, .class, [attribute].
+	[http://api.jquery.com/category/selectors/attribute-selectors/]
+		$("*") // all elements
+		$("p:first") // the first <p> element
+		$("ul li:first") // the first <li> element of the first <ul>
+		$("ul li:first-child") // the first <li> element of every <ul>
+		$("[href]") // all elements with an href attribute
+		$('[demo-attribute="demo-value"]') // all elements with an attribute matching the specified value
+		$('h1[demo-attribute="demo-value"]') // all h1 elements with an attribute matching the specified value
+		$('[class^="col"]') // all elements where the value starts with a string
+		$('[class*="md"]') // all elements where the value contains a string
+	Events.
+	[http://api.jquery.com/category/events/]
