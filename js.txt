@@ -20,10 +20,16 @@ external libraries
 	Sprite.js: is a powerful, easy-to-use Sprite animation library for HTML5 Canvas.
 		https://github.com/IceCreamYou/Canvas-Sprite-Animations
 		<script src="https://icecreamyou.github.io/Canvas-Sprite-Animations/sprite.js"></script>
-	howler.js: Audio library for the modern web.
+	howler.js: Audio library for the modern web; useful for loading and playing sound sample;  Can handle audio sprites (multiple sounds in a single audio file), loops, spatialization.
 		https://howlerjs.com/
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/1.1.28/howler.min.js"></script>
 		sound = new Howl({...});
+		https://jsbin.com/wuteqo/edit?js,output
+	WebAudiox.jsfx.js: 8 Bit Procedural Sound Generation With Web Audio API
+		https://github.com/jeromeetienne/webaudiox
+		http://jeromeetienne.github.io/webaudiox/examples/jsfx.html
+	Tone.js: a framework for creating interactive music in the browser. It provides advanced scheduling capabilities, synths and effects, and intuitive musical abstractions built on top of the Web Audio API.
+		https://tonejs.github.io/
 	video.js: a framework for building custom video player
 		https://videojs.com/
 	Audio.js: an open source JavaScript library for creating an enhanced audio player. Native JavaScript with fallback in Flash
@@ -386,3 +392,44 @@ jQuery
 		$('[class*="md"]') // all elements where the value contains a string
 	Events.
 	[http://api.jquery.com/category/events/]
+audio
+	Web Audio API specification: https://webaudio.github.io/web-audio-api/
+	Samples: https://webaudioapi.com/samples/
+	Concepts and Usage: https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
+	AudioContext: sampleRate, currentTime (in seconds, from the start of AudioContext creation), destination, and the methods for creating each of the various audio nodes (create: Analyser, BiquadFilter, Buffer, BufferSource, ChannelMerger, ChannelSplitter, Convolver, Delay, DynamicsCompressor, Gain, MediaElementSource, MediaStreamSource, Oscillator, Panner, PeriodicWave, ScriptProcessor, StereoPanner, WaveShaper), decodeAudioData.
+	AudioBufferSourceNode: buffer (the decoded sound sample), loop, loopStart, loopEnd, playbackRate, detune. Note: Source nodes can only be used once.
+gamepad
+	Gamepad API: https://w3c.github.io/gamepad/
+IndexedDB
+	API: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
+	IndexedDB does not use Structured Query Language (SQL).
+	IndexedDB is built on a transactional database model. A transaction is an atomic set of data-access and data-modification operations on a particular database.
+	IndexedDB adheres to a same-origin policy.
+	1) Opening and/or creating a Database:
+		var request = window.indexedDB.open(databaseID, version);
+		request.onupgradeneeded = function(even) {...};
+		request.onsuccess = function(even) { database = event.target.result; };
+		request.onerror = function(even) {...};
+	2) Creating an Object Store (usually in onupgradeneeded):
+		var db = event.target.result;
+		var os = db.createObjectStore(storeName, { keyPath: keyPathName });
+		os.createIndex(indexName, indexName, { unique: false/true });
+		os.add(data);
+	3) Inserting data with transaction (in onsuccess):
+		var tn = db.transaction([], 'readwrite');
+		tn.oncomplete = function(even) {...};
+		tn.onerror = function(even) {...};
+		var request = tn.objectStore(storeName).add(newData);
+		request.onsuccess = function(even) {...};
+		request.onerror = function(even) {...};
+FormData
+	A FormData object is a container for parts in the multipart data that will be sent by an XHR2 POST request.
+		var data = new FormData(form); // form is the HTML form. We can add files to this object using the data.append(name, value) method.
+Drag and Drop
+	API: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+Web components
+	https://www.webcomponents.org/
+	https://www.polymer-project.org/
+	http://x-tag.github.io/
+custom element
+	https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
