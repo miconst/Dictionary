@@ -1,6 +1,565 @@
+JDK
+	www.oracle.com/technetwork/java/javase/downloads
+	The library source files are delivered in the JDK as a compressed file lib/src.zip
+	Documentation: jdk-13_doc-all.zip
+javac
+	Java compiler. It compiles *.java files into the *.class files.
+	The java program launches the Java virtual machine. It executes the bytecodes that the compiler placed in the class file.
+jshell
+	java shell with tab completion
+primitive types
+	1. Integer:
+	int (4 bytes) [–2147483648, 2147483647]
+	short (2 bytes) [–32768, 32767]
+	long (8 bytes) [–9223372036854775808, 9223372036854775807]
+	byte (1 byte) [–128, 127]
+	Long integer numbers have a suffix L or l.
+		long x = 4000000000L;
+	Hexadecimal numbers have a prefix 0x or 0X.
+		int x = 0xCAFE;
+	Octal numbers have a prefix 0. This can be confusing, so we recommend against the use of octal constants.
+		010; // 8
+	Starting with Java 7:
+	Binary numbers have a prefix 0b or 0B.
+		0b1001; // 9
+	You can add underscores to number literals to denote one million. The underscores are for human eyes only. The Java compiler simply removes them.
+		1_000_000;
+		0b1111_0100_0010_0100_0000;
+	Note: You can, with some care, interpret signed integer values as unsigned. For example, instead of having a byte value b represent the range from –128 to 127, you may want a range from 0 to 255. You can store it in a byte. Due to the nature of binary arithmetic, addition, subtraction, and multiplication will work provided they don’t overflow. For other operations, call Byte.toUnsignedInt(b) to get an int value between 0 and 255, then process the integer value and cast back to byte. The Integer and Long classes have methods for unsigned division and remainder.
+	2. Floating-Point:
+	float (4 bytes) Approximately ±3.40282347E+38F (6–7 significant decimal digits)
+	double (8 bytes) Approximately ±1.79769313486231570E+308 (15 significant decimal digits)
+	Note: You can specify floating-point literals in hexadecimal. In hexadecimal notation, you use a p, not an e, to denote the exponent. (An e is a hexadecimal digit.) Note that the mantissa is written in hexadecimal and the exponent in decimal. The base of the exponent is 2, not 10.
+		double d = 0x1.0p-3; // 0.125 == 2^–3 == 1 / (2 * 2 * 2)
+	All floating-point computations follow the IEEE 754 specification.
+	Floating-point values to denote overflows and errors:
+	Positive infinity;
+	Negative infinity;
+	NaN (not a number);
+		if (Double.isNaN(x)) // check whether x is "not a number"
+	Note: Floating-point numbers are not suitable for financial calculations in which roundoff errors cannot be tolerated. Such roundoff errors are caused by the fact that floating-point numbers are represented in the binary number system. There is no precise binary representation of the fraction 1/10, just as there is no accurate representation of the fraction 1/3 in the decimal system. If you need precise numerical computations without roundoff errors, use the BigDecimal class.
+		System.out.println(2.0 - 1.1); // prints 0.8999999999999999, not 0.9 as you would expect.
+	3. char
+	In Java, the char type describes a code unit in the UTF-16 encoding.
+	Note: Do not use the char type in your programs unless you are actually manipulating UTF-16 code units. You are almost always better off treating strings as abstract data types.
+	Literal values of type char are enclosed in single quotes.
+		char c = 'A';
+	Values of type char can be expressed as hexadecimal values that run from \u0000 to \uFFFF.
+		char trademark = '\u2122'; // is the trademark symbol (™)
+		char pi = '\u03C0'; // is the Greek letter pi (π)
+	Escape Sequences for Special Characters:
+	\b \u0008 Backspace
+	\t \u0009 Tab
+	\n \u000a Linefeed
+	\r \u000d Carriage return
+	\" \u0022 Double quote
+	\' \u0027 Single quote
+	\\ \u005c Backslash
+	Note: Unicode escape sequences are processed before the code is parsed.
+		public static void main(String\u005B\u005D args) \\ is perfectly legal! \u005B and \u005D are the encodings for [ and ]
+
+	Over time Unicode grew beyond 65,536 characters, primarily due to the addition of a very large set of ideographs used for Chinese, Japanese, and Korean. Now, the 16-bit char type is insufficient to describe all Unicode characters.
+	A code point is a code value that is associated with a character in an encoding scheme.
+	In the Unicode standard, code points are written in hexadecimal and prefixed with U+.
+		char c = U+0041; // the code point of the Latin letter A
+	Unicode has code points that are grouped into 17 code planes. The first code plane, called the basic multilingual plane, consists of the “classic” Unicode characters with code points U+0000 to U+FFFF. Sixteen additional planes, with code points U+10000 to U+10FFFF, hold the supplementary characters.
+	The UTF-16 encoding represents all Unicode code points in a variable-length code.
+	The characters in the basic multilingual plane are represented as 16-bit values, called code units. The supplementary characters are encoded as consecutive pairs of code units. Each of the values in such an encoding pair falls into a range of 2048 unused values of the basic multilingual plane, called the surrogates area (U+D800 to U+DBFF for the first code unit, U+DC00 to U+DFFF for the second code unit). You can immediately tell whether a code unit encodes a single character or it is the first or second part of a supplementary character. For example, the mathematical symbol for the set of octonions, http://math.ucr.edu/home/baez/octonions) has code point U+1D546 and is encoded by the two code units U+D835 and U+DD46. (See https://tools.ietf.org/html/rfc2781 for a description of the encoding algorithm.)
+	4. boolean
+	The boolean type has two values, false and true. It is used for evaluating logical conditions. You cannot convert between integers and boolean values.
+Operators
+	1. Arithmetic Operators. +, -, *, /, %
+	Note: integer division by 0 raises an exception, whereas floating-point division by 0 yields an infinite or NaN result.
+	strictfp keyword is used for strict floating-point operations that yield reproducible results. If you tag a class as strictfp, then all of its methods must use strict floating-point computations.
+		public static strictfp void main(String[] args) // all instructions inside the main method will use strict floating-point computations
+	2. Mathematical Functions and Constants
+	The Math class contains an assortment of mathematical functions (floorMod, sin, cos, tan, atan, atan2, exp, log, log10, etc.).
+		double y = Math.sqrt(x);
+		double y = Math.pow(x, a);
+	The Math class provides several methods to make integer arithmetic safer. The mathematical operators quietly return wrong results when a computation overflows. For example, one billion times three (1000000000 * 3) evaluates to -1294967296 because the largest int value is just over two billion. If you call Math.multiplyExact(1000000000, 3) instead, an exception is generated. You can catch that exception or let the program terminate rather than quietly continue with a wrong result. There are also methods addExact, subtractExact, incrementExact, decrementExact, negateExact, all with int and long parameters.
+	Note: You can avoid the Math prefix for the mathematical methods and constants by adding the following line to the top of your source file: import static java.lang.Math.*;
+	Note: The methods in the Math class use the routines in the computer’s floating-point unit for fastest performance. If completely predictable results are more important than performance, use the StrictMath class instead. It implements the algorithms from the “Freely Distributable Math Library” (www.netlib.org/fdlibm), guaranteeing identical results on all platforms.
+Operator Hierarchy
+	Left to right  [] . () (method call)
+	Right to left  ! ~ ++ -- + (unary) - (unary) () (cast) new
+	Left to right  * / %
+	Left to right  + -
+	Left to right  << >> >>>
+	Left to right  < <= > >= instanceof
+	Left to right  == !=
+	Left to right  &
+	Left to right  ^
+	Left to right  |
+	Left to right  &&
+	Left to right  ||
+	Right to left  ?:
+	Right to left  = += -= *= /= %= &= |= ^= <<= >>= >>>=
+String
+	Code Points and Code Units.
+	Java strings are sequences of char values.
+	The char data type is a code unit for representing Unicode code points in the UTF-16 encoding.
+	The most commonly used Unicode characters can be represented with a single code unit. The supplementary characters require a pair of code units.
+	The length method yields the number of code units required for a given string in the UTF-16 encoding.. To get the true length (the number of code points) call codePointCount.
+		String greeting = "Hello";
+		int cpCount = greeting.codePointCount(0, greeting.length());
+	To get at the i-th code point, use offsetByCodePoints and codePointAt methods.
+		int index = greeting.offsetByCodePoints(0, i);
+		int cp = greeting.codePointAt(index);
+	Use exotic characters with code units above U+FFFF for tests.
+		String beerMug = "\ud83c\udf7a"; // beer mag emoji
+		String mathO = "\uD835\uDD46"; // Mathematical Double-Struck Capital O
+	To traverses a string, use codePointAt and Character.isSupplementaryCodePoint methods. To move backwards, use Character.isSurrogate method instead of isSupplementaryCodePoint.
+		for (int i = 0; i < sentence.length; i += (Character.isSupplementaryCodePoint(cp) ? 2 : 1)) { int cp = sentence.codePointAt(i); ... }
+	Or use the codePoints method that yields a “stream” of int values, one for each code point.
+		int[] codePoints = str.codePoints().toArray();
+	To turn an array of code points to a string, use a constructor.
+		String str = new String(codePoints, 0, codePoints.length);
+Reading Input
+	To read console input, you first construct a Scanner that is attached to System.in and use the various methods of the Scanner class to read input. The Scanner class is defined in the java.util package.
+		import java.util.*;
+		Scanner in = new Scanner(System.in);
+		System.out.print("What is your name? ");
+		String name = in.nextLine(); // or in.next() to read a single word (delimited by whitespace)
+	Note: The Scanner class is not suitable for reading a password from a console since the input is plainly visible to anyone. Java 6 introduces a Console class specifically for this purpose. For security reasons, the password is returned in an array of characters rather than a string. After you are done processing the password, you should immediately overwrite the array elements with a filler value.
+		Console cons = System.console();
+		String username = cons.readLine("User name: ");
+		char[] passwd = cons.readPassword("Password: ");
+Formatting Output
+		String message = String.format("Hello, %s. Next year, you'll be %d", name, age);
+		System.out.printf("%8.2f", 10000.0 / 3.0); // prints 3333.33
+		System.out.printf("%,.2f", 10000.0 / 3.0); // prints 3,333.33
+	
+	Format specifiers:
+	d Decimal integer
+		159
+	x Hexadecimal integer
+		9f
+	o  Octal integer
+		237
+	f Fixed-point floating-point
+		15.9
+	e Exponential floating-point
+		1.59e+01
+	g General floating-point (the shorter of e and f)
+		—
+	a Hexadecimal floating-point
+		0x1.fccdp3
+	s String
+		Hello
+	c Character
+		H
+	b boolean
+		true
+	h Hash code
+		42628b2
+	tx or Tx Date and time (T forces uppercase). Obsolete, use the java.time classes instead
+	% The percent symbol
+		%
+	n The platform-dependent line separator
+		—
+	Flags for printf:
+	+ Prints sign for positive and negative numbers.
+		+3333.33
+	space Adds a space before positive numbers.
+		| 3333.33|
+	0 Adds leading zeroes.
+		003333.33
+	- Left-justifies field.
+		|3333.33 |
+	( Encloses negative numbers in parentheses.
+		(3333.33)
+	, Adds group separators.
+		3,333.33
+	# (for f format) Always includes a decimal point.
+		3,333.
+	# (for x or o format) Adds 0x or 0 prefix.
+		0xcafe
+	$ Specifies the index of the argument to be formatted; for example, %1$d %1$x prints the first argument in decimal and hexadecimal.
+		159 9F
+	< Formats the same value as the previous specification; for example, %d %<x prints the same number in decimal and hexadecimal.
+		159 9F
+File Input and Output
+	You need to know the character encoding when you read a text file.
+		Scanner in = new Scanner(Path.of("myfile.txt"), StandardCharsets.UTF_8);
+		PrintWriter out = new PrintWriter("myfile.txt", StandardCharsets.UTF_8); // If the file does not exist, it is created.
+	If you construct a Scanner with a file that does not exist or a PrintWriter with a file name that cannot be created, an exception occurs.
+	Note: When you launch a program from a command shell, you can use the redirection syntax of your shell and attach any file to System.in and System.out.
+		java MyProg < myfile.txt > output.txt
+Big Numbers
+	BigInteger - arbitrary-precision integer arithmetic;
+		BigInteger a = BigInteger.valueOf(100);
+		BigInteger reallyBig = new BigInteger("22223224462942044552973989346190");
+	BigDecimal - arbitrary-precision floating-point numbers;
+Initialization Block
+	Whenever an object of a class is constructed, the initialization block runs first, and then the body of the constructor is executed.
+	Note: It is usually more straightforward to place the initialization code inside a constructor/method.
+		class Employee {
+		private static int nextId;
+		...
+		// object initialization block
+		{
+			id = nextId;
+			nextId++;
+		}
+		...
+	Static initialization block is taged with the keyword static. Static initialization occurs when the class is first loaded.
+		// static initialization block
+		static
+		{
+			var generator = new Random();
+			nextId = generator.nextInt(10000);
+		}
+	All static field initializers and static initialization blocks are executed in the order in which they occur in the class declaration.
+Package
+	To place classes inside a package, put the name of the package at the top of your source file, before the code that defines the classes in the package and place source files into a subdirectory that matches the full package name.
+		package com.horstmann.corejava;
+	If you don’t put a package statement in the source file, then the classes in that source file belong to the unnamed package. The unnamed package has no package name.
+	Access
+	Features tagged as public can be used by any class.
+	Private features can be used only by the class that defines them.
+	If you don’t specify either public or private, the feature (that is, the class, method, or variable) can be accessed by all methods in the same package.
+	
+	Import
+	Import statements are for the compiler only. The bytecodes in class files always use full package names to refer to other classes. The only benefit of the import statement is convenience. You can refer to a class by a name shorter than the full package name.
+		java.time.LocalDate today = java.time.LocalDate.now();
+		or
+		import java.time.*; // you can only use the * notation to import a single package.
+		LocalDate today = LocalDate.now();
+	
+	Static Import is used for importing of static methods and fields, not just classes.
+		import static java.lang.System.*;
+	
+	A class can use all classes from its own package and all public classes from other packages.
+	Note: From the point of view of the compiler, there is absolutely no relationship between nested packages. For example, the packages java.util and java.util.jar have nothing to do with each other. Each is its own independent collection of classes.
+	
+	Class Path
+	The class path is the collection of all locations that can contain class files. The path to the class must match the package name. Class files can also be stored in a JAR file.
+	Note: The java virtual machine launcher only looks into the current directory if the “.” directory is on the class path. The default class path consists of the “.” directory. But if you have set the class path and forgot to include the “.” directory, your programs will compile without error, but they won’t run.
+		java -classpath /home/user/classdir:.:/home/user/archives/archive.jar MyProg
+		java -classpath c:\classdir;.;c:\archives\archive.jar MyProg
+		or global
+		export CLASSPATH=/home/user/classdir:.:/home/user/archives/archive.jar
+		set CLASSPATH=c:\classdir;.;c:\archives\archive.jar
+jar
+	You can package application programs and code libraries into JAR files.
+	jar command
+		jar options file1 file2 . . .
+	to make a new JAR file: jar cvf jarFileName file1 file2 . . .
+		jar cvf CalculatorClasses.jar *.class icon.gif
+	jar Program Options:
+	 c Creates a new or empty archive and adds files to it. If any of the specified file names are directories, the jar program processes them recursively.
+	 C Temporarily changes the directory.
+		jar cvf jarFileName.jar -C classes *.class # changes to the classes subdirectory to add class files.
+	 e Creates an entry point in the manifest
+	 f Specifies the JAR file name as the second command-line argument. If this parameter is missing, jar will write the result to standard output (when creating a JAR file) or read it from standard input (when extracting or tabulating a JAR file).
+	 i Creates an index file (for speeding up lookups in a large archive).
+	 m Adds a manifest to the JAR file. A manifest is a description of the archive contents and origin. Every archive has a default manifest, but you can supply your own if you want to authenticate the contents of the archive.
+	 M Does not create a manifest file for the entries.
+	 t Displays the table of contents.
+	 u Updates an existing JAR file.
+	 v Generates verbose output.
+	 x Extracts files. If you supply one or more file names, only those files are extracted. Otherwise, all files are extracted.
+	 0 Stores without ZIP compression.
+	
+	Executable JAR Files.
+	Use the e option of the jar command to specify the entry point of the program.
+		jar cvfe MyProgram.jar com.mycompany.mypkg.MainAppClass {files to add}
+	Or specify the main class of the program in the manifest.
+		Main-Class: com.mycompany.mypkg.MainAppClass
+	java -jar MyProgram.jar # To start a program.
+	
+	Multi-release JARs.
+	can contain class files for different Java releases. Additional class files are placed in the META-INF/versions directory. Java 8 knows nothing about the META-INF/versions directory and will simply load the legacy classes.
+		Application.class
+		BuildingBlocks.class
+		META-INF 
+		 ├─ MANIFEST.MF (with line Multi-Release: true)
+		 ├─ versions
+		 ├─ 9
+		 │  ├─ Application.class
+		 │  └─ BuildingBlocks.class
+		 └─ 10
+		    └─ BuildingBlocks.class
+	Note: The public API of all classes should be the same for both releases. The sole purpose of multi-release JARs is to enable a particular version of your program or library to work with multiple JDK releases. If you add functionality or change an API, you should provide a new version of the JAR instead.
+		jar uf MyProgram.jar --release 9 Application.class # To add versioned class files
+		jar cf MyProgram.jar -C bin/8 . --release 9 -C bin/9 Application.class # To build a multi-release JAR file from scratch
+		javac -d bin/8 --release 8 . . . # When compiling for different releases
+manifest
+	The manifest file is called MANIFEST.MF and is located in a special META-INF sub-directory of the JAR file. It describes special features of the archive.
+		jar cfm jarFileName manifestFileName . . . # To edit the manifest, place the lines that you want to add to the manifest into a text file.
+		jar cfm MyArchive.jar manifest.mf com/mycompany/mypkg/*.class # To make a new JAR file with a manifest
+		jar ufm MyArchive.jar manifest-additions.mf # To update the manifest of an existing JAR file
+	The manifest entries are grouped into sections.
+	The first section in the manifest is called the main section. It applies to the whole JAR file.
+	Subsequent entries can specify properties of named entities such as individual files, packages, or URLs. Those entries must begin with a Name entry.
+	Sections are separated by blank lines.
+		Manifest-Version: 1.0
+		lines describing this archive
+		
+		Name: Woozle.class
+		lines describing this file
+		Name: com/mycompany/mypkg/
+		lines describing this package
+	See https://docs.oracle.com/javase/10/docs/specs/jar/jar.html for more information on the JAR and manifest file formats.
+	Note: The last line in the manifest must end with a newline character. Otherwise, the manifest will not be read correctly.
+javadoc
+	javadoc generates HTML documentation from source files comments that start with the special delimiter /**.
+	Each /** . . . */ documentation comment contains free-form text followed by tags. A tag starts with an @, such as @since or @param.
+	The first sentence of the free-form text should be a summary statement. The javadoc utility automatically generates summary pages that extract these sentences.
+	In the free-form text, you can use HTML modifiers such as
+	 <em>. . .</em> for emphasis,
+	 <strong>. . .</strong> for strong emphasis,
+	 <ul>/<li> for bulleted lists,
+	 <img . . ./> to include an image.
+	To type monospaced code, use {@code . . . } instead of <code>. . .</code>—then you don’t have to worry about escaping < characters inside the code.
+	Note: If comments contain links to other files such as images (for example, diagrams or images of user interface components), place those files into a subdirectory, named doc-files, of the directory containing the source file. The javadoc utility will copy the doc-files directories and their contents from the source directory to the documentation directory. Use the doc-files directory in the link, for example <img src="doc-files/uml.png" alt="UML diagram"/>.
+	The javadoc utility extracts information for the following items:
+	 Modules
+	 Packages
+	 Public classes and interfaces
+	 Public and protected fields
+	 Public and protected constructors and methods
+	
+	Class Comments
+	Must be placed after any import statements, directly before the class definition.
+		/**
+		 * A {@code Card} object represents a playing card, such
+		 * as "Queen of Hearts". A card has a suit (Diamond, Heart,
+		 * Spade or Club) and a value (1 = Ace, 2 . . . 10, 11 = Jack,
+		 * 12 = Queen, 13 = King)
+		 */
+		public class Card { . . . }
+	
+	Method Comments
+	Must immediately precede the method that it describes.
+	In addition to the general-purpose tags, you can use the following tags:
+	 @param variable description
+	This tag adds an entry to the “parameters” section of the current method. The description can span multiple lines and can use HTML tags. All @param tags for one method must be kept together.
+	 @return description
+	This tag adds a “returns” section to the current method. The description can span multiple lines and can use HTML tags.
+	 @throws class description
+	This tag adds a note that this method may throw an exception.
+		/**
+		 * Raises the salary of an employee.
+		 * @param  byPercent the percentage by which to raise the salary (e.g., 10 means 10%)
+		 * @return  the amount of the raise
+		 */
+		public double raiseSalary(double byPercent) {... }
+	
+	Field Comments
+	Generally that means static constants.
+	
+	General Comments
+	 @since
+	The text can be any description of the version that introduced this feature.
+		@since 1.7.1.
+	 @author name
+	You can have multiple @author tags, one for each author.
+	 @version text
+	The text can be any description of the current version.
+	 @see
+	 @link
+	Hyperlinks to other relevant parts of the javadoc documentation.
+		{@link package.class#feature label}
+		@see com.horstmann.corejava.Employee#raiseSalary(double)
+		@see <a href="www.horstmann.com/corejava.html">The Core Java home page</a>
+	Note: You can add multiple @see tags for one feature, but you must keep them all together.
+	Note: since Java 9, you can use the {@index entry} tag to add an entry to the search box.
+	
+	Package Comments
+	To generate package comments, you need to add a separate file in each package directory. You have two choices:
+	1. Supply a Java file named package-info.java. The file must contain an initial Javadoc comment, delimited with /** and */, followed by a package statement. It should contain no further code or comments.
+	2. Supply an HTML file named package.html. All text between the tags <body>. . .</body> is extracted.
+	
+	Comment Extraction
+	javadoc -d docDirectory nameOfPackage1 nameOfPackage2. . .
+	javadoc -d docDirectory *.java
+	Note: online documentation https://docs.oracle.com/javase/9/javadoc/javadoc.htm.
+Class Design Hints
+	1. Keep data private;
+	2. Initialize data;
+	3. Don’t use too many basic types in a class. Replace multiple related uses of basic types with other classes.
+	4. Not all fields need individual field accessors/mutators.
+	5. Break up classes that have too many responsibilities.
+	6. Names of classes and methods should reflect their responsibilities.
+	7. Prefer immutable classes.
+this
+	this keyword has two meanings:
+	1. to denote a reference to the implicit parameter;
+	2. to call another constructor of the same class;
+		The constructor calls can only occur as the first statement in another constructor.
+super
+	the super keyword has two meanings:
+	1. to invoke a superclass method;
+	2. to invoke a superclass constructor;
+		The constructor parameters are either passed to another constructor of the same class (this) or a constructor of the superclass (super).
+covariant return types
+	A subclass may change the return type to a subtype of the original type.
+		public Employee getBuddy() { . . . } // Employee class method
+		public Manager getBuddy() { . . . } // Manager subclass can override this method return type
+access control modifiers
+	1. private - accessible in the class only.
+	2. public - accessible by the world.
+	3. protected - accessible in the package and all subclasses.
+	4. (default) - accessible in the package. No modifiers are needed.
+Object
+	Methods:
+	public boolean equals(Object otherObject) // tests whether one object is considered equal to another
+		public class Employee { . . .
+			public boolean equals(Object other) {
+				if (this == other) return true; // a quick test to see if the objects are identical
+				if (other == null) return false; // must return false if the explicit parameter is null
+				if (this.getClass() != other.getClass()) return false; // if the classes don't match, they can't be equal
+				Employee otherEmployee = (Employee) other; // now we know other object is a non-null Employee
+				// test whether the fields have identical values
+				... } }
+	Note: When you define the equals method for a subclass, first call equals on the superclass. If that test doesn’t pass, then the objects can’t be equal. If the superclass fields are equal, you are ready to compare the instance fields of the subclass.
+		public class Manager extends Employee { . . .
+			public boolean equals(Object otherObject) {
+				if (!super.equals(otherObject)) return false;
+				// super.equals checked that this and otherObject belong to the same class
+				Manager other = (Manager) otherObject;
+				... } }
+	Note: The standard Java library contains over 150 implementations of equals methods, with a mishmash of using instanceof, calling getClass, catching a ClassCastException, or doing nothing at all. Check out the API documentation of the java.sql.Timestamp class, where the implementors note with some embarrassment that they have painted themselves in a corner. The Timestamp class inherits from java.util.Date, whose equals method uses an instanceof test, and it is impossible to override equals to be both symmetric and accurate.
+	
+	public int hashCode() // returns a hash code for this object. A hash code can be any integer, positive or negative. Equal objects need to return identical hash codes.
+	If you redefine the equals method, you will also need to redefine the hashCode method for objects that users might insert into a hash table. Definitions of equals and hashCode must be compatible: If x.equals(y) is true, then x.hashCode() must return the same value as y.hashCode().
+		public int hashCode() {  return Objects.hash(name, salary, hireDay); }
+	
+	public String toString() // returns a string representing the value of this object
+		public String toString() { return getClass().getName()
+			+ "[name=" + name + ",salary=" + salary + ",hireDay=" + hireDay + "]"; }
+		Such toString method will also work for subclasses.
+		public class Manager extends Employee { . . .
+			public String toString() { return super.toString() + "[bonus=" + bonus + "]"; } }
+	
+	Class getClass() // returns a class object that contains information about the object.
+enum
+	All enumerated types are subclasses of the class Enum. They inherit a number of methods from that class. The most useful one is toString, which returns the name of the enumerated constant. The ordinal method yields the position of an enumerated constant in the enum declaration, counting from zero.
+		public enum Size { SMALL, MEDIUM, LARGE, EXTRA_LARGE } // the enumerated type Size actually extends Enum<Size>
+		Size s = Enum.valueOf(Size.class, "SMALL"); // sets s to Size.SMALL
+		Size[] values = Size.values(); // returns the array with elements Size.SMALL, Size.MEDIUM, Size.LARGE, and Size.EXTRA_LARGE
+		int i = Size.MEDIUM.ordinal(); // returns 1
+	The type defined by this declaration is actually a class. The class has exactly four instances—it is not possible to construct new objects.
+	You can add constructors, methods, and fields to an enumerated type.
+		public enum Size {
+			SMALL("S"), MEDIUM("M"), LARGE("L"), EXTRA_LARGE("XL");
+			private String abbreviation;
+			private Size(String abbreviation) { this.abbreviation = abbreviation; } // The constructor of an enumeration is always private.
+			public String getAbbreviation() { return abbreviation; }
+		}
+reflection
+	Can be used for:
+	1. Analyze the capabilities of classes at runtime;
+	2. Inspect objects at runtime (for example, to write a single toString method that works for all classes);
+	3. Implement generic array manipulation code;
+	4. Take advantage of Method objects that work just like function pointers in languages such as C++;
+	
+	Class
+	A Class object describes the properties of a particular class.
+	The getClass() method in the Object class returns an instance of Class type.
+		System.out.println(e.getClass().getName() + " " + e.getName()); // prints "Employee Harry Hacker" if e is an employee, or "Manager Harry Hacker" if e is a manager.
+	You can obtain a Class object corresponding to a class name by using the static forName method.
+		String className = "java.util.Random";
+		Class cl = Class.forName(className);
+	A third method for obtaining an object of type Class is a convenient shorthand. If T is any Java type (or the void keyword), then T.class is the matching class object.
+		Class cl1 = Random.class; // if you import java.util.*;
+	
+	The three classes Field, Method, and Constructor in the java.lang.reflect package describe the fields, methods, and constructors of a class.
+	 getName returns the name of the item.
+	 getModifiers returns an integer, with various bits turned on and off, that describes the modifiers used, such as public and static.
+	
+	The getFields, getMethods, and getConstructors methods of the Class class return arrays of the public fields, methods, and constructors that the class supports, including public members of superclasses.
+	
+	The getDeclaredFields, getDeclaredMethods, and getDeclaredConstructors methods of the Class class return arrays consisting of all fields, methods, and constructors that are declared in the class. This includes private, package, and protected members, but not members of superclasses.
+resource
+	The Java virtual machine knows how to locate a class, so it can then search for the associated resource in the same location.
+	java.lang.Class:
+	 URL getResource(String name) 1.1
+	 InputStream getResourceAsStream(String name) 1.1
+	
+	The Class class provides a useful service for locating resource files:
+	1. Get the Class object of the class that has a resource—for example, ResourceTest.class.
+	2. Some methods, such as the getImage method of the ImageIcon class, accept URLs that describe resource locations. Then you call URL url = cl.getResource("about.gif");
+	3. Otherwise, use the getResourceAsStream method to obtain an input stream for reading the data in the file.
+		package resources;
+		import java.io.*;
+		import java.net.*;
+		import java.nio.charset.*;
+		import javax.swing.*;
+		public class ResourceTest {
+			public static void main(String... args) throws IOException {
+				Class cl = ResourceTest.class;
+				var icon = new ImageIcon(cl.getResource("about.gif"));
+				var about = new String(cl.getResourceAsStream("data/about.txt").readAllBytes(), "UTF-8");
+				var title = new String(cl.getResourceAsStream("/corejava/title.txt").readAllBytes(), StandardCharsets.UTF_8);
+				JOptionPane.showMessageDialog(null, about, title, JOptionPane.INFORMATION_MESSAGE, icon);
+			}
+		}
+		Compile, build a JAR file, and execute it
+			javac resource/ResourceTest.java
+			jar cvfe ResourceTest.jar resources.ResourceTest resources/*.class resources/*.gif resources/data/*.txt corejava/*.txt
+			java -jar ResourceTest.jar
+interface
+	Default keyword
+	An important use for default methods is interface evolution. There are situations where default methods can be useful. You can supply a default implementation for any interface method. A default method can call other methods.
+		interface Collection {
+			int size(); // an abstract method
+			default boolean isEmpty() { return size() == 0; } . . . }
+	Resolving Default Method Conflicts:
+	1. Superclasses win.
+		If a superclass provides a concrete method, default methods with the same name and parameter types are simply ignored.
+	2. Interfaces clash.
+		If an interface provides a default method, and another interface contains a method with the same name and parameter types (default or not), then you must resolve the conflict by overriding that method.
+	
+	Tagging
+	A tagging interface has no methods. Its only purpose is to allow the use of instanceof in a type inquiry.
+		if (obj instanceof Cloneable) ...
+	
+	Functional Interfaces
+	An interface with a single abstract method is called a functional interface. You can supply a lambda expression whenever an object of a such an interface is expected.
+		Arrays.sort(words, (first, second) -> first.length() - second.length()); // Behind the scenes, the Arrays.sort method receives an object of some class that implements Comparator<String>.
+		Arrays.sort(strings, String::compareToIgnoreCase); // String::compareToIgnoreCase is a method reference. It directs the compiler to produce an instance of a functional interface, overriding the single abstract method of the interface to call the given method.
+	The Java API defines a number of very generic functional interfaces in the java.util.function package:
+	BiFunction<T, U, R>, describes functions with parameter types T and U and return type R.
+		BiFunction<String, String, Integer> comp = (first, second) -> first.length() - second.length();
+	Predicate<T>
+		list.removeIf(e -> e == null);
+		list.removeIf(Objects::isNull); // A bit easier to read than list.removeIf(e -> e == null);
+	Supplier<T> has no arguments and yields a value of type T when it is called. Suppliers are used for lazy evaluation.
+		LocalDate hireDay = Objects.requireNonNullOrElseGet(day, () -> new LocalDate(1970, 1, 1)); // The requireNonNullOrElseGet method only calls the supplier when the value is needed.
+	Method References:
+	1. object::instanceMethod; You can capture the this parameter in a method reference. It is also valid to use super. (The method expression super::instanceMethod uses this as the target and invokes the superclass version of the given method.)
+		System.out::println is equivalent to x -> System.out.println(x)
+		this::equals is the same as x -> this.equals(x)
+	2. Class::instanceMethod
+		String::compareToIgnoreCase is the same as (x, y) -> x.compareToIgnoreCase(y)
+	3. Class::staticMethod
+		Math::pow is equivalent to (x, y) -> Math.pow(x, y).
+	4. Class::new; Constructor reference.
+		Stream<Person> stream = names.stream().map(Person::new);
+		Person[] people = stream.toArray(Person[]::new);
+	
+	Common Functional Interfaces:
+	void Runnable.run() // Runs an action without arguments or return value
+	T Supplier<T>.get() // Supplies a value of type T
+	void Consumer<T>.accept(T value) // Consumes a value of type T (andThen)
+	void BiConsumer<T, U>.accept(T value1, U value2) // Consumes values of types T and U (andThen)
+	R Function<T, R>.apply(T argument) // A function with argument of type T (compose, andThen, identity)
+	R BiFunction<T, U, R>.apply(T argument1, U argument2) // A function with arguments of types T and U (andThen)
+	T UnaryOperator<T>.apply(T argument) // A unary operator on the type T (compose, andThen, identity)
+	T BinaryOperator<T>.apply(T argument1, U argument2) // A binary operator on the type T (andThen, maxBy, minBy)
+	boolean Predicate<T>.test(T value) // A boolean-valued function (and, or, negate, isEqual)
+	boolean BiPredicate<T, U>test(T value1, U value2) // A boolean-valued function with two arguments (and, or, negate)
+		Predicate.isEqual(a).or(Predicate.isEqual(b)) is the same as x -> a.equals(x) || b.equals(x).
+Comparator
+	The Comparator interface has a number of convenient static methods for creating comparators.
+		Arrays.sort(people, Comparator.comparing(Person::getLastName).thenComparing(Person::getFirstName));
+		Arrays.sort(people, Comparator.comparing(Person::getName, (s, t) -> Integer.compare(s.length(), t.length())));
+		Arrays.sort(people, Comparator.comparingInt(p -> p.getName().length()));
 Exceptions
 	Note: If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.
-	Error and RuntimeException classes are unchecked exceptions;
+	Error and RuntimeException classes are unchecked exceptions; all other exceptions are called checked exceptions. The compiler checks that exception handlers are provided for all checked exceptions.
 	     +-----------+
 	     | Throwable |
 	     +-----------+
@@ -17,6 +576,71 @@ Exceptions
 	                           /       |       \
 	                          \_________________/
 	                              unchecked
+assert
+	The assertion mechanism allows you to put in checks during testing and to have them automatically removed in the production code.
+	By default, assertions are disabled. Enable them by running the program with the -enableassertions or -ea option.
+		java -enableassertions MyApp
+		java -ea:MyClass -ea:com.mycompany.mylib MyApp # turn on assertions in specific classes or in entire package
+	You can also disable assertions in certain classes and packages with the -disableassertions or -da option.
+		java -ea:... -da:MyClass MyApp
+	Note: the -ea and -da switches that enable or disable all assertions do not apply to the “system classes” without class loaders. Use the -enablesystemassertions/ -esa switch to enable assertions in system classes.
+	Note: You do not have to recompile your program to enable or disable assertions. Enabling or disabling assertions is a function of the class loader. When assertions are disabled, the class loader strips out the assertion code so that it won’t slow execution.
+	There are two forms:
+	1. assert condition;
+		assert x >= 0;
+	2. assert condition : expression;
+		assert x >= 0 : x; // pass x into the AssertionError object, so that it gets displayed later.
+	The sole purpose of the expression part is to produce a message string. The AssertionError object does not store the actual expression value, so you can’t query it later.
+logging
+	Levels:
+	1. SEVERE
+	2. WARNING
+	3. INFO
+	4. CONFIG
+	5. FINE
+	6. FINER
+	7. FINEST
+		logger.setLevel(Level.FINE);
+		logger.warning(message);
+		logger.fine(message);
+		logger.log(Level.FINE, message);
+		Logger.getGlobal().info("File->Open menu item selected");
+		private static final Logger myLogger = Logger.getLogger("com.mycompany.myapp");
+	A common use for logging is to log unexpected exceptions.
+		void throwing(String className, String methodName, Throwable t)
+		void log(Level l, String message, Throwable t)
+generic
+	Translation of Java generics:
+	1. There are no generics in the virtual machine, only ordinary classes and methods.
+	2. All type parameters are replaced by their bounds.
+	3. Bridge methods are synthesized to preserve polymorphism.
+	4. Casts are inserted as necessary to preserve type safety.
+	
+	Restrictions and Limitations:
+	1. Type Parameters Cannot Be Instantiated with Primitive Types.
+	2. Runtime Type Inquiry Only Works with Raw Types.
+		if (a instanceof Pair<String>) // ERROR! No generics at runtime.
+		Pair<String> p = (Pair<String>) a; // Warning! Can only test that a is a Pair.
+	3. Cannot Create Arrays of Parameterized Types.
+		var table = new Pair<String>[10]; // ERROR!
+	Note: only the creation of these arrays is outlawed. You can declare a variable of type Pair<String>[]. But you can’t initialize it with a new Pair<String>[10].
+	4. Cannot Instantiate Type Variables.
+		public Pair() { first = new T(); second = new T(); } // ERROR!
+	Note: The best workaround, available since Java 8, is to make the caller provide a constructor expression. Or through reflection, by calling the Constructor.newInstance method.
+		Pair<String> p = Pair.makePair(String::new);
+		public static <T> Pair<T> makePair(Class<T> cl) {
+			try {
+				return new Pair<>(cl.getConstructor().newInstance(), cl.getConstructor().newInstance());
+			} catch (Exception e) { return null; }
+		}
+	5. Cannot Construct a Generic Array.
+	6. Type Variables Are Not Valid in Static Contexts of Generic Classes.
+	7. Cannot Throw or Catch Instances of a Generic Class.
+	
+	Inheritance Rule: There is no relationship between Pair<S> and Pair<T>, no matter how S and T are related.
+	
+	Wildcard
+		Pair<? extends Employee>
 Lambdas and Generics
 	List<? extends BaseClass> to read from the list (covariant)
 	List<? super BaseClass> to write to the list (contravariant)
@@ -55,6 +679,138 @@ Type Parameter Naming Conventions
 	T - Type;
 	V - Value;
 	S,U,V etc. - 2nd, 3rd, 4th types;
+Collections
+	Collection
+	java.util.Collection<E>
+	The fundamental interface for collection classes in the Java library is the Collection interface. It has two fundamental methods:
+	1) The add method adds an element to the collection. It returns true if adding the element actually changes the collection, and false if the collection is unchanged.
+	2) The iterator method returns an object that implements the Iterator interface. It can be used to visit the elements in the collection one by one.
+	A concrete collection class can extend the AbstractCollection class.
+		public interface Collection<E> {
+			boolean add(E element);
+			Iterator<E> iterator();
+			. . .
+		}
+	
+	Iterator
+	java.util.Iterator<E>
+	The Iterator interface has three methods: next, hasNext, remove.
+		public interface Iterator<E> {
+			E next();
+			boolean hasNext();
+			void remove();
+			default void forEachRemaining(Consumer<? super E> action);
+		}
+	
+	Interfaces in the Collections Framework
+	Iterable
+	|
+	Collection
+	|    |   |
+	List Set Queue - Deque
+	     |
+	     SortedSet
+	     |
+	     NavigableSet
+	
+	Map - SortedMap - NavigableMap
+	
+	Iterator - ListIterator
+	
+	RandomAccess
+	
+	Classes in the Collections Framework
+	       _______________________ AbstractCollection ______________________
+	      |                             |                     |             |
+	 ____ AbstractList ____           _ AbstractSet _         AbstractQueue ArrayQueue
+	|                      |         |       |       |        |
+	AbstractSequentialList ArrayList HashSet EnumSet TreeSet  PriorityQueue
+	|                                |
+	LinkedList                       LinkedHashSet
+	
+	 ___________ AbstractMap ___________
+	|       |       |       |           |
+	HashMap TreeMap EnumMap WeakHashMap IdentityHashMap
+	|
+	LinkedHashMap
+	
+	Concrete Collections in the Java Library:
+	ArrayList - An indexed sequence that grows and shrinks dynamically;
+	LinkedList - An ordered sequence that allows efficient insertion and removal at any location
+	ArrayDeque - A double-ended queue that is implemented as a circular array
+	HashSet - An unordered collection that rejects duplicates
+	TreeSet - A sorted set
+	EnumSet - A set of enumerated type values
+	LinkedHashSet - A set that remembers the order in which elements were inserted
+	PriorityQueue - A collection that allows efficient removal of the smallest element
+	HashMap - A data structure that stores key/value associations
+	TreeMap - A map in which the keys are sorted
+	EnumMap - A map in which the keys belong to an enumerated type
+	LinkedHashMap - A map that remembers the order in which entries were added
+	WeakHashMap - A map with values that can be reclaimed by the garbage collector if they are not used elsewhere
+	IdentityHashMap - A map with keys that are compared by ==, not equals
+	
+	Legacy Collections. The legacy collections use the Enumeration interface for traversing sequences of elements.
+	   List
+	   |
+	   AbstractList
+	   |
+	 _ Vector _
+	|          |
+	Stack      RandomAccess
+	
+	Map
+	|
+	Hashtable
+	|
+	Properties
+Properties
+	A property map is a map structure of a special type. It has three particular characteristics:
+	1. The keys and values are strings.
+	2. The map can easily be saved to a file and loaded from a file.
+	3. There is a secondary table for default values.
+	Property maps are useful in specifying configuration options for programs. The System.getProperties method yields a Properties object to describe system information.
+		String userDir = System.getProperty("user.home");
+Swing
+	The Swing classes are placed in the javax.swing package.
+	There are two technical issues that we need to address in every Swing program:
+	1. All Swing components must be configured from the event dispatch thread, the thread of control that passes events such as mouse clicks and keystrokes to the user interface components.
+		EventQueue.invokeLater(() -> {...});
+	2. We should define what happen when the user closes the application’s frame.
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+	Working with 2D Shapes
+	Graphics2D class is a subclass of the Graphics class.
+		public void paintComponent(Graphics g) { Graphics2D g2 = (Graphics2D) g; ... }
+	The Java 2D library supports: lines, rectangles, ellipses, arcs, quadratic and cubic curves, and general paths.
+	Line2D, Rectangle2D, Ellipse2D and so on implement the Shape interface.
+Component
+	                        Component
+	                        |
+	    ___________________ Container __________________
+	   |                                                |
+	 _ Window _         _______________________________ JComponent _______________________________
+	|          |       |      |              |      |           |              |                  |
+	Frame      Dialog  JPanel JTextComponent JLabel JScrollPane JComboBox  ___ AbstractButton __  JMenuBar
+	|          |              |           |                               |       |             |
+	JFrame     JDialog        JTextField  JTextArea                       JButton JToggleButton JMenuItem
+Layout
+	Each container has a default layout manager, but you can always set your own.
+		panel.setLayout(new GridLayout(4, 4));
+	
+	Border Layout
+	The border layout manager is the default layout manager of the content pane of every JFrame. It lets you choose where you want to place each component. You can place the component in the center, north, south, east, or west of the content pane. The edge components are laid out first, and the remaining available space is occupied by the center.
+	The border layout grows all components to fill the available space.
+		frame.add(component, BorderLayout.SOUTH);
+	
+	Grid Layout
+	The grid layout arranges all components in rows and columns like a spreadsheet. All components are given the same size. In the constructor of the grid layout object, you specify how many rows and columns you need.
+		panel.setLayout(new GridLayout(4, 4));
+		panel.add(new JButton("1"));
+		panel.add(new JButton("2"));
+	
+	Flow Layout
+	The default layout manager for a panel is a FlowLayout.
 TCP options
 	TCP_NODELAY, SO_TIMEOUT, SO_LINGER, SO_SNDBUF, SO_RCVBUF, and SO_KEEPALIVE.
 Channels
@@ -152,6 +908,143 @@ Threads
 	8) it can be preempted by a higher-priority thread;
 	9) it can be suspended (Thread.suspend and Thread.resume are deprecated!);
 	10) it can stop (Thread.stop is deprecated!);
+	
+	Daemon Threads
+	A daemon is a thread that serve others. When only daemon threads remain, the virtual machine exits.
+		t.setDaemon(true); // marks this thread as a daemon thread or a user thread. This method must be called before the thread is started.
+	
+	Handlers for Uncaught Exceptions
+	The run method of a thread cannot throw any checked exceptions, but it can be terminated by an unchecked exception. In that case, the thread dies. Just before the thread dies, the exception is passed to a handler for uncaught exceptions.
+	The handler must belong to a class that implements the Thread.UncaughtExceptionHandler interface.
+		void uncaughtException(Thread t, Throwable e)
+	You can install a handler into any thread with the setUncaughtExceptionHandler method.
+	You can install a default handler for all threads with the static method setDefaultUncaughtExceptionHandler of the Thread class.
+	Note: If you don’t install a default handler, the default handler is null. However, if you don’t install a handler for an individual thread, the handler is the thread’s ThreadGroup object.
+	
+	Synchronization
+	1. Lock Objects
+	1) synchronized keyword;
+	2) ReentrantLock class; As soon as one thread locks the lock object, other threads calling lock() are blocked until the first thread unlocks the lock object.
+		myLock.lock(); // a ReentrantLock object
+		try {
+			// critical section
+		} finally {
+			myLock.unlock(); // make sure the lock is unlocked even if an exception is thrown
+		}
+	Lock and Condition objects or synchronized methods usage recommendations:
+	1) It is best to use neither Lock/Condition nor the synchronized keyword. In many situations, you can use one of the mechanisms of the java.util.concurrent package that do all the locking for you.
+	2) If the synchronized keyword works for your situation use it. You’ll write less code and have less room for error.
+	3) Use Lock/Condition if you really need the additional power that these constructs give you.
+	
+	2. Volatile Fields
+	You can declare shared variables as volatile provided you perform no operations other than assignment.
+		private volatile boolean done; // The compiler will insert the appropriate code to ensure that a change to the done variable in one thread is visible from any other thread that reads the variable.
+		public boolean isDone() { return done; }
+		public void setDone() { done = true; }
+	Note: Volatile variables do not provide any atomicity.
+	
+	3. Atomics
+	java.util.concurrent.atomic package uses efficient machine-level instructions to guarantee atomicity without using locks.
+		public static AtomicLong nextNumber = new AtomicLong();
+		long id = nextNumber.incrementAndGet(); // in some thread
+	
+	4. Thread-Local Variables
+	You can avoid sharing by giving each thread its own instance, using the ThreadLocal helper class.
+		public static final ThreadLocal<SimpleDateFormat> dateFormat = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+		int random = ThreadLocalRandom.current(); // returns an instance of the Random class that is unique to the current thread.
+	
+	Thread-Safe Collections
+	1. Blocking Queues
+	A blocking queue causes a thread to block when you try to add an element when the queue is currently full or to remove an element when the queue is empty.
+	The java.util.concurrent package supplies several variations of blocking queues. LinkedBlockingQueue, LinkedBlockingDeque, ArrayBlockingQueue, PriorityBlockingQueue and so on.
+	2. Maps, Sets, and Queues
+	ConcurrentHashMap, ConcurrentSkipListMap, ConcurrentSkipListSet, and ConcurrentLinkedQueue.
+	Methods:
+	add // Adds an element. Throws an IllegalStateException if the queue is full.
+	element // Returns the head element. Throws a NoSuchElementException if the queue is empty.
+	offer // Adds an element and returns true. Returns false if the queue is full.
+	peek // Returns the head element or null if the queue is empty.
+	poll // Removes and returns the head element. Returns null if the queue is empty.
+	put // Adds an element. Blocks if the queue is full.
+	remove // Removes and returns the head element. Throws a NoSuchElementException if the queue is empty.
+	take // Removes and returns the head element. Blocks if the queue is empty.
+		boolean success = q.offer(x, 100, TimeUnit.MILLISECONDS); // tries for 100 milliseconds to insert an element to the tail of the queue.
+		Object head = q.poll(100, TimeUnit.MILLISECONDS); // tries for 100 milliseconds to remove the head of the queue.
+	
+	Callables and Futures
+	The Callable interface is a parameterized type, with a single method call.
+		public interface Callable<V> { V call() throws Exception; }
+	A Future holds the result of an asynchronous computation.
+	The Future<V> interface has the following methods:
+	V get()/(long timeout, TimeUnit unit); // blocks until the computation is finished.
+	void cancel(boolean mayInterrupt); // If the computation has not yet started, it is canceled and will never start. If the computation is currently in progress, it is interrupted if the mayInterrupt parameter is true.
+	boolean isCancelled()
+	boolean isDone(); // false if the computation is still in progress, true if it is finished.
+	One way to execute a Callable is to use a FutureTask, which implements both the Future and Runnable interfaces or pass a Callable to an executor.
+		var futureTask = new FutureTask<Integer>(task);
+	
+	Executors
+	The Executors class has a number of static factory methods for constructing thread pools:
+	newCachedThreadPool; // New threads are created as needed; idle threads are kept for 60 seconds.
+	newFixedThreadPool; // The pool contains a fixed set of threads; idle threads are kept indefinitely.
+	newWorkStealingPool; // A pool suitable for “fork-join” tasks (see Section 12.6.4) in which complex tasks are broken up into simpler tasks and idle threads “steal” simpler tasks.
+	newSingleThreadExecutor; // A “pool” with a single thread that executes the submitted tasks sequentially.
+	newScheduledThreadPool; // A fixed-thread pool for scheduled execution.
+	newSingleThreadScheduledExecutor; // A single-thread “pool” for scheduled execution.
+	You can submit a Runnable or Callable to an ExecutorService with one of the following methods:
+	Future<T> submit(Callable<T> task);
+	Future<?> submit(Runnable task);
+	Future<T> submit(Runnable task, T result);
+	When you are done with a thread pool, call shutdown. This method initiates the shutdown sequence for the pool. An executor that is shut down accepts no new tasks. When all tasks are finished, the threads in the pool die. Alternatively, you can call shutdownNow. The pool then cancels all tasks that have not yet begun.
+	The ScheduledExecutorService interface has methods for scheduled or repeated execution of tasks. It is a generalization of java.util.Timer that allows for thread pooling. The newScheduledThreadPool and newSingleThreadScheduledExecutor methods of the Executors class return objects that implement the ScheduledExecutorService interface.
+	You can schedule a Runnable or Callable to run once, after an initial delay. You can also schedule a Runnable to run periodically.
+	
+	The Fork-Join Framework
+	To put the recursive computation in a form that is usable by the framework, supply a class that extends RecursiveTask<T> (if the computation produces a result of type T) or RecursiveAction (if it doesn’t produce a result). Override the compute method to generate and invoke subtasks, and to combine their results. The invokeAll method receives a number of tasks and blocks until all of them have completed. The join method yields the result.
+		class Counter extends RecursiveTask<Integer> {
+			protected Integer compute() {
+				if (to - from < THRESHOLD) // solve problem directly
+				else {
+					int mid = (from + to) / 2;
+					var first = new Counter(values, from, mid, filter);
+					var second = new Counter(values, mid, to, filter);
+					invokeAll(first, second);
+					return first.join() + second.join();
+				}
+			}
+		}
+	
+	Asynchronous Computations
+	CompletableFuture. The CompletableFuture class implements the Future interface, and it provides a second mechanism for obtaining the result. You register a callback that will be invoked (in some thread) with the result once it is available.
+		CompletableFuture<String> f = ...;
+		f.thenAccept(s -> Process the result string s);
+	
+	User Interface Thread
+	You cannot directly update the user interface from the worker thread. User interfaces such as Swing, JavaFX, or Android are not thread-safe. JavaFX and Android throw an exception if you try to access the user interface from a thread other than the UI thread.
+	Each user interface library provides some mechanism to schedule a Runnable for execution on the UI thread. SwingWorker in Swing, Task in JavaFX, and AsyncTask in Android.
+		EventQueue.invokeLater(() -> label.setText(percentage + "% complete")); // Swing UI update
+	
+	Processes
+	To execute another program use the ProcessBuilder and Process classes.
+	The Process class executes a command in a separate operating system process and lets you interact with its standard input, output, and error streams.
+		Process p = new ProcessBuilder(command).directory(file).start();
+	The ProcessBuilder class lets you configure a Process object.
+		var builder = new ProcessBuilder("gcc", "myapp.c");
+	Note: ProcessBuilder is a more flexible replacement for the Runtime.exec calls.
+	You can modify the environment variables of the process.
+		Map<String, String> env = builder.environment();
+		env.put("LANG", "fr_FR");
+		env.remove("JAVA_HOME");
+		Process p = builder.start();
+	You can pipe the output of one process into the input of another.
+		List<Process> processes = ProcessBuilder.startPipeline(List.of(new ProcessBuilder("find", "/opt/jdk-9"), new ProcessBuilder("grep", "-o", "\\.[^./]*$"), new ProcessBuilder("sort"), new ProcessBuilder("uniq")));
+		Process last = processes.get(processes.size() - 1);
+		var result = new String(last.getInputStream().readAllBytes());
+	After configurint the builder, invoke its start method to start the process.
+		Process process = new ProcessBuilder("/bin/ls", "-l").directory(Path.of("/tmp").toFile()).start();
+		try (var in = new Scanner(process.getInputStream())) {
+			while (in.hasNextLine()) System.out.println(in.nextLine());
+		}
 java.io
 	System input and output through data streams, serialization and the file system.
 	
